@@ -1,0 +1,5 @@
+User-agent: *
+Disallow: /
+
+# Prevent all crawling and indexing
+# This application is not intended for public access

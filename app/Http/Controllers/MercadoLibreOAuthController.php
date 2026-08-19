@@ -1,0 +1,152 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\MercadoLibreAccount;
+use App\Models\MercadoLibreListing;
+use App\Models\MercadoLibreOrder;
+use App\Services\MercadoLibreService;
+use App\Services\UserService;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Session;
+
+class MercadoLibreOAuthController extends Controller
+{
+	public function redirect(Request $request)
+	{
+		$clientId = config('services.mercadolibre.client_id');
+		$redirectUri = config('services.mercadolibre.redirect');
+		$authHost = rtrim(config('services.mercadolibre.auth_host'), '/');
+
+		if (!$clientId || !$redirectUri) {
+			return response('Falta MELI_CLIENT_ID o MELI_REDIRECT_URI en .env', 500);
+		}
+
+		$state = bin2hex(random_bytes(16));
+		Cache::put('meli_oauth:' . $state, [
+			'linnwork_user_id' => $request->get('linnwork_user_id') ?: Session::get('linnworks_user_id'),
+		], now()->addMinutes(15));
+
+		$url = $authHost . '/authorization?' . http_build_query([
+			'response_type' => 'code',
+			'client_id' => $clientId,
+			'redirect_uri' => $redirectUri,
+			'state' => $state,
+		]);
+
+		return redirect()->away($url);
+	}
+
+	public function callback(Request $request, MercadoLibreService $meli)
+	{
+		$state = $request->get('state');
+		$code = $request->get('code');
+
+		if (!$code) {
+			return response('No se recibió el código de Mercado Libre.', 400);
+		}
+
+		$oauth = $state ? Cache::pull('meli_oauth:' . $state) : [];
+
+		try {
+			$tokenData = $meli->exchangeCode($code);
+
+			if (!$tokenData || empty($tokenData['access_token'])) {
+				return response('Error al obtener el access token de Mercado Libre. Revisa MELI_CLIENT_SECRET y MELI_REDIRECT_URI.', 400);
+			}
+
+			$linnworkUserId = $oauth['linnwork_user_id'] ?? null;
+			if ($linnworkUserId === '') {
+				$linnworkUserId = null;
+			}
+
+			$account = $meli->saveAccount($tokenData, null, $linnworkUserId);
+		} catch (\Throwable $e) {
+			\Illuminate\Support\Facades\Log::error('ML oauth callback failed', [
+				'message' => $e->getMessage(),
+			]);
+
+			return response(
+				'OAuth de ML ok, pero falló al guardar: '.$e->getMessage()."\n\nSi la tabla no existe, corre:\ndocker-compose exec app php artisan migrate",
+				500
+			);
+		}
+
+		return redirect('/mercadolibre');
+	}
+
+	public function dashboard(Request $request, ?string $token = null)
+	{
+		// Linnworks EUI passes token in path (/mercadolibre/[{TOKEN}]) or ?token=
+		$token = $token ?: $request->get('token');
+
+		if ($token) {
+			$user = (new UserService())->AuthorizeByApplication(
+				$token,
+				'',
+				true,
+				'',
+				0,
+				'',
+				(string) config('services.mercadolibre.linnworks_app_id'),
+				(string) config('services.mercadolibre.linnworks_app_secret'),
+			);
+			if ($user) {
+				Session::put('linnworks_iframe_token', $token);
+				Session::put('linnworks_user_id', $user->user_id);
+			}
+		}
+
+		$account = MercadoLibreAccount::query()->latest()->first();
+		$orders = collect();
+		$listings = collect();
+		$closedOrdersCount = 0;
+
+		if ($account) {
+			$all = MercadoLibreOrder::where('mercadolibre_account_id', $account->id)->latest()->limit(200)->get();
+			$orders = $all->filter(fn (MercadoLibreOrder $o) => $o->isOpen())->values();
+			$closedOrdersCount = $all->count() - $orders->count();
+			$listings = MercadoLibreListing::where('mercadolibre_account_id', $account->id)
+				->latest()
+				->limit(100)
+				->get();
+		}
+
+		$linnworkUserId = Session::get('linnworks_user_id');
+
+		return view('mercadolibre.dashboard', compact('account', 'orders', 'listings', 'closedOrdersCount', 'linnworkUserId'));
+	}
+
+	public function sync()
+	{
+		if (!MercadoLibreAccount::query()->exists()) {
+			return redirect('/mercadolibre')->withErrors(['sync' => 'Connect Mercado Libre first.']);
+		}
+
+		Artisan::call('MercadoLibreSync:task');
+		$output = trim(Artisan::output());
+
+		return redirect('/mercadolibre')->with('status', $output !== '' ? 'Sync complete. '.$output : 'Orders synced.');
+	}
+
+	public function syncInventory()
+	{
+		if (!MercadoLibreAccount::query()->exists()) {
+			return redirect('/mercadolibre')->withErrors(['sync' => 'Connect Mercado Libre first.']);
+		}
+
+		Artisan::call('MercadoLibreInventorySync:task');
+		$output = trim(Artisan::output());
+
+		return redirect('/mercadolibre')->with('status', $output !== '' ? 'Sync complete. '.$output : 'Inventory synced.');
+	}
+
+	public function disconnect()
+	{
+		MercadoLibreAccount::query()->delete();
+
+		return redirect('/mercadolibre')->with('status', 'Mercado Libre disconnected. Connect again to start the demo.');
+	}
+}
