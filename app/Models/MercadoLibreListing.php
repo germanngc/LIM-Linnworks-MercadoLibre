@@ -21,6 +21,10 @@ class MercadoLibreListing extends Model
 		'ml_updated_at',
 		'lw_updated_at',
 		'last_sync_direction',
+		'source',
+		'category_id',
+		'permalink',
+		'last_error',
 	];
 
 	protected $casts = [
@@ -34,6 +38,11 @@ class MercadoLibreListing extends Model
 		return $this->belongsTo(MercadoLibreAccount::class, 'mercadolibre_account_id');
 	}
 
+	public function isListed(): bool
+	{
+		return !empty($this->ml_item_id);
+	}
+
 	public function isLinked(): bool
 	{
 		return !empty($this->linnworks_stock_item_id) && !empty($this->sku);
@@ -44,8 +53,14 @@ class MercadoLibreListing extends Model
 		return match ($this->last_sync_direction) {
 			'ml_to_lw' => 'ML → Linnworks',
 			'lw_to_ml' => 'Linnworks → ML',
+			'create' => 'Listing created',
 			default => '—',
 		};
+	}
+
+	public static function titlesDiffer(?string $left, ?string $right): bool
+	{
+		return mb_strtolower(trim((string) $left)) !== mb_strtolower(trim((string) $right));
 	}
 
 	public function stockMismatch(): bool
@@ -58,17 +73,35 @@ class MercadoLibreListing extends Model
 	}
 
 	/**
-	 * After items are linked: Linnworks stock wins when quantities differ.
+	 * Bidirectional stock: the side that actually changed wins.
+	 * If both changed, Linnworks (warehouse) wins.
+	 * If no previous snapshot, treat as first link: LW qty is source of truth when present.
 	 * Returns: lw_to_ml | ml_to_lw | none
 	 */
-	public static function stockSyncDirection(?int $mlQty, ?int $lwQty, bool $linked): string
-	{
+	public static function stockSyncDirection(
+		?int $mlQty,
+		?int $lwQty,
+		bool $linked,
+		?int $prevMlQty = null,
+		?int $prevLwQty = null
+	): string {
 		if ($mlQty === null && $lwQty === null) {
 			return 'none';
 		}
 
 		if (!$linked) {
 			return $mlQty !== null ? 'ml_to_lw' : 'none';
+		}
+
+		$mlChanged = $prevMlQty !== null && $mlQty !== null && (int) $mlQty !== (int) $prevMlQty;
+		$lwChanged = $prevLwQty !== null && $lwQty !== null && (int) $lwQty !== (int) $prevLwQty;
+
+		if ($mlChanged && !$lwChanged) {
+			return 'ml_to_lw';
+		}
+
+		if ($lwChanged) {
+			return 'lw_to_ml';
 		}
 
 		if ($lwQty === null) {
@@ -80,5 +113,33 @@ class MercadoLibreListing extends Model
 		}
 
 		return 'none';
+	}
+
+	/**
+	 * Hard requirements before POST /items. Returns blocker messages (empty = ok).
+	 * @param string[] $imageUrls
+	 * @return string[]
+	 */
+	public static function createListingBlockers(?string $title, ?float $price, int $qty, array $imageUrls): array
+	{
+		$errors = [];
+
+		if (!$title || mb_strlen(trim($title)) < 3) {
+			$errors[] = 'Title must be at least 3 characters';
+		}
+
+		if ($price === null || $price <= 0) {
+			$errors[] = 'Retail price must be greater than 0';
+		}
+
+		if ($qty < 1) {
+			$errors[] = 'Stock must be at least 1 to list on Mercado Libre';
+		}
+
+		if (!$imageUrls) {
+			$errors[] = 'At least one image is required in Linnworks';
+		}
+
+		return $errors;
 	}
 }

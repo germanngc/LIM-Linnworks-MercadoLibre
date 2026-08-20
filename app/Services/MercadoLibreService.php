@@ -273,6 +273,329 @@ class MercadoLibreService
 		return true;
 	}
 
+	public function updateItemTitle(MercadoLibreAccount $account, string $itemId, string $title, ?array $item = null): bool
+	{
+		$this->lastError = null;
+		$title = mb_substr(trim($title), 0, 60);
+		if ($title === '') {
+			return false;
+		}
+
+		$item = is_array($item) ? $item : $this->getItem($account, $itemId);
+		$userProductId = is_array($item) ? ($item['user_product_id'] ?? null) : null;
+
+		if (!$userProductId) {
+			return $this->putJson($account, '/items/' . $itemId, ['title' => $title], 'ML update item title failed');
+		}
+
+		$familyId = $this->familyIdForUserProduct($account, (string) $userProductId);
+		if (!$familyId) {
+			$this->lastError = $this->lastError ?: 'Cannot resolve ML family to update title';
+			return false;
+		}
+
+		// User Products: family_name on PUT /items returns 400 cause 374.
+		return $this->putJson(
+			$account,
+			'/user-products-families/' . $familyId,
+			['family_name' => $title],
+			'ML update family name failed'
+		);
+	}
+
+	private function familyIdForUserProduct(MercadoLibreAccount $account, string $userProductId): ?string
+	{
+		$response = Http::withHeaders($this->authHeaders($account))
+			->get($this->api() . '/user-products/' . $userProductId);
+
+		if ($response->failed()) {
+			$this->lastError = $this->errorMessage($response);
+			Log::error('ML get user product failed', [
+				'user_product_id' => $userProductId,
+				'body' => $response->body(),
+			]);
+			return null;
+		}
+
+		$familyId = $response->json('family_id');
+		return $familyId ? (string) $familyId : null;
+	}
+
+	private function putJson(MercadoLibreAccount $account, string $path, array $payload, string $logLabel): bool
+	{
+		$response = Http::withHeaders($this->authHeaders($account))
+			->asJson()
+			->put($this->api() . $path, $payload);
+
+		if ($response->failed()) {
+			$this->lastError = $this->errorMessage($response);
+			Log::error($logLabel, ['path' => $path, 'body' => $response->body()]);
+			return false;
+		}
+
+		return true;
+	}
+
+	/**
+	 * @return array{site_id:string,currency_id:string,listing_type_id:string}|null
+	 */
+	public function listingDefaults(MercadoLibreAccount $account): ?array
+	{
+		$site = $account->site_id ?: 'MLM';
+		$siteRes = Http::acceptJson()->get($this->api() . '/sites/' . $site);
+		$currency = $siteRes->json('default_currency_id');
+		if (!$currency) {
+			$currency = match ($site) {
+				'MLA' => 'ARS',
+				'MLB' => 'BRL',
+				'MLC' => 'CLP',
+				'MCO' => 'COP',
+				'MPE' => 'PEN',
+				'MLU' => 'UYU',
+				default => 'MXN',
+			};
+		}
+
+		$typesRes = Http::acceptJson()->get($this->api() . '/sites/' . $site . '/listing_types');
+		$types = $typesRes->json();
+		$listingType = 'gold_special';
+		if (is_array($types)) {
+			$ids = array_column($types, 'id');
+			if (!in_array($listingType, $ids, true) && $ids) {
+				$listingType = (string) $ids[0];
+			}
+		}
+
+		return [
+			'site_id' => $site,
+			'currency_id' => (string) $currency,
+			'listing_type_id' => $listingType,
+		];
+	}
+
+	public function predictCategory(MercadoLibreAccount $account, string $title): ?array
+	{
+		$site = $account->site_id ?: 'MLM';
+		$response = Http::withHeaders($this->authHeaders($account))
+			->get($this->api() . '/sites/' . $site . '/domain_discovery/search', [
+				'q' => $title,
+				'limit' => 1,
+			]);
+
+		if ($response->failed()) {
+			$this->lastError = $this->errorMessage($response);
+			Log::error('ML category predictor failed', ['body' => $response->body()]);
+			return null;
+		}
+
+		$data = $response->json();
+		$first = is_array($data) ? ($data[0] ?? null) : null;
+		if (!is_array($first) || empty($first['category_id'])) {
+			$this->lastError = 'No category prediction for title';
+			return null;
+		}
+
+		return $first;
+	}
+
+	public function categoryAttributes(MercadoLibreAccount $account, string $categoryId): array
+	{
+		$response = Http::withHeaders($this->authHeaders($account))
+			->get($this->api() . '/categories/' . $categoryId . '/attributes');
+
+		if ($response->failed() || !is_array($response->json())) {
+			return [];
+		}
+
+		return $response->json();
+	}
+
+	/**
+	 * Merge predictor attrs + SKU/barcode into required category attributes.
+	 * @return array{ok:true,attributes:array}|array{ok:false,error:string}
+	 */
+	public function assembleAttributes(string $sku, ?string $barcode, array $predicted, array $categoryAttributes): array
+	{
+		$byId = [];
+		foreach ($predicted as $attr) {
+			$id = $attr['id'] ?? null;
+			if (!is_string($id) || $id === '') {
+				continue;
+			}
+			$row = ['id' => $id];
+			if (!empty($attr['value_id'])) {
+				$row['value_id'] = (string) $attr['value_id'];
+			}
+			if (!empty($attr['value_name'])) {
+				$row['value_name'] = (string) $attr['value_name'];
+			}
+			if (count($row) > 1) {
+				$byId[$id] = $row;
+			}
+		}
+
+		$byId['SELLER_SKU'] = ['id' => 'SELLER_SKU', 'value_name' => $sku];
+
+		$missing = [];
+		foreach ($categoryAttributes as $def) {
+			$id = $def['id'] ?? null;
+			if (!is_string($id) || isset($byId[$id])) {
+				continue;
+			}
+			if (!$this->attributeIsRequired($def)) {
+				continue;
+			}
+
+			$filled = $this->fillRequiredAttribute($def, $sku, $barcode);
+			if ($filled) {
+				$byId[$id] = $filled;
+			} else {
+				$missing[] = $def['name'] ?? $id;
+			}
+		}
+
+		if ($missing) {
+			return ['ok' => false, 'error' => 'Missing required attributes: '.implode(', ', $missing)];
+		}
+
+		return ['ok' => true, 'attributes' => array_values($byId)];
+	}
+
+	public function createItem(MercadoLibreAccount $account, array $payload): ?array
+	{
+		$this->lastError = null;
+		$response = Http::withHeaders($this->authHeaders($account))
+			->asJson()
+			->post($this->api() . '/items', $payload);
+
+		if ($response->failed()) {
+			$this->lastError = $this->errorMessage($response);
+			Log::error('ML create item failed', ['body' => $response->body(), 'sku' => $payload['attributes'] ?? null]);
+			return null;
+		}
+
+		return $response->json();
+	}
+
+	public function buildItemPayload(
+		array $defaults,
+		string $title,
+		string $categoryId,
+		float $price,
+		int $qty,
+		array $pictureUrls,
+		array $attributes
+	): array {
+		$pictures = [];
+		foreach (array_slice($pictureUrls, 0, 6) as $url) {
+			$pictures[] = ['source' => $url];
+		}
+
+		$title = mb_substr(trim($title), 0, 60);
+
+		return [
+			'family_name' => $title,
+			'category_id' => $categoryId,
+			'price' => round($price, 2),
+			'currency_id' => $defaults['currency_id'],
+			'available_quantity' => $qty,
+			'buying_mode' => 'buy_it_now',
+			'condition' => 'new',
+			'listing_type_id' => $defaults['listing_type_id'],
+			'pictures' => $pictures,
+			'attributes' => $attributes,
+			'sale_terms' => [
+				['id' => 'WARRANTY_TYPE', 'value_name' => 'Garantía del vendedor'],
+				['id' => 'WARRANTY_TIME', 'value_name' => '90 días'],
+			],
+		];
+	}
+
+	private function attributeIsRequired(array $def): bool
+	{
+		$tags = $def['tags'] ?? [];
+		if (isset($tags['required']) && $tags['required']) {
+			return true;
+		}
+		if (isset($tags['catalog_required']) && $tags['catalog_required']) {
+			return true;
+		}
+		if (is_array($tags) && in_array('required', $tags, true)) {
+			return true;
+		}
+
+		return false;
+	}
+
+	private function fillRequiredAttribute(array $def, string $sku, ?string $barcode): ?array
+	{
+		$id = (string) $def['id'];
+
+		if (in_array($id, ['GTIN', 'EAN', 'UPC', 'ISBN', 'JAN'], true) && $barcode) {
+			return ['id' => $id, 'value_name' => $barcode];
+		}
+
+		if ($id === 'BRAND') {
+			return $this->pickAttributeValue($def, ['Genérico', 'Generico', 'Generic', 'Otro', 'Sin marca'])
+				?? ['id' => 'BRAND', 'value_name' => 'Genérico'];
+		}
+
+		if (in_array($id, ['MODEL', 'LINE'], true)) {
+			return ['id' => $id, 'value_name' => $sku];
+		}
+
+		return $this->pickAttributeValue($def, ['Genérico', 'Generico', 'Generic', 'Otro', 'No aplica', 'Does not apply']);
+	}
+
+	private function pickAttributeValue(array $def, array $preferredNames): ?array
+	{
+		$id = (string) $def['id'];
+		foreach ($def['values'] ?? [] as $value) {
+			$name = (string) ($value['name'] ?? '');
+			foreach ($preferredNames as $preferred) {
+				if (strcasecmp($name, $preferred) === 0) {
+					$row = ['id' => $id, 'value_name' => $name];
+					if (!empty($value['id'])) {
+						$row['value_id'] = (string) $value['id'];
+					}
+					return $row;
+				}
+			}
+		}
+
+		return null;
+	}
+
+	private function errorMessage($response): string
+	{
+		$parts = [];
+		foreach (['message', 'error'] as $key) {
+			$value = $response->json($key);
+			if (is_string($value) && $value !== '' && !in_array($value, $parts, true)) {
+				$parts[] = $value;
+			}
+		}
+		$msg = implode(' — ', $parts);
+		$cause = $response->json('cause');
+		if (is_array($cause) && $cause) {
+			$bits = [];
+			foreach ($cause as $item) {
+				if (is_array($item)) {
+					$bits[] = $item['message'] ?? $item['code'] ?? json_encode($item);
+				} else {
+					$bits[] = (string) $item;
+				}
+			}
+			$msg = trim($msg . ' ' . implode('; ', $bits));
+		}
+
+		if (!$msg) {
+			$msg = $response->body();
+		}
+
+		return $response->status() . ' ' . mb_substr((string) $msg, 0, 400);
+	}
+
 	/**
 	 * SKU from ML item/variation: seller_custom_field, seller_sku, or attribute SELLER_SKU.
 	 */

@@ -45,7 +45,15 @@ class MercadoLibreOAuthController extends Controller
 		$code = $request->get('code');
 
 		if (!$code) {
-			return response('No se recibió el código de Mercado Libre.', 400);
+			$mlError = $request->get('error_description') ?: $request->get('error') ?: $request->get('message');
+
+			return response(
+				"No se recibió el código de Mercado Libre.\n\n"
+				.($mlError ? "ML dijo: {$mlError}\n\n" : "ML no mandó ?code= (suele ser redirect_uri distinto al de la app).\n\n")
+				.'En Mis aplicaciones → Maximiliano el Redirect URI tiene que ser exactamente:'."\n"
+				.config('services.mercadolibre.redirect'),
+				400
+			);
 		}
 
 		$oauth = $state ? Cache::pull('meli_oauth:' . $state) : [];
@@ -81,12 +89,13 @@ class MercadoLibreOAuthController extends Controller
 	{
 		// Linnworks EUI passes token in path (/mercadolibre/[{TOKEN}]) or ?token=
 		$token = $token ?: $request->get('token');
+		$user = null;
 
 		if ($token) {
 			$user = (new UserService())->AuthorizeByApplication(
 				$token,
 				'',
-				true,
+				false,
 				'',
 				0,
 				'',
@@ -105,10 +114,14 @@ class MercadoLibreOAuthController extends Controller
 		$closedOrdersCount = 0;
 
 		if ($account) {
+			if ($user && $account->linnwork_user_id !== $user->user_id) {
+				$account->update(['linnwork_user_id' => $user->user_id]);
+			}
 			$all = MercadoLibreOrder::where('mercadolibre_account_id', $account->id)->latest()->limit(200)->get();
 			$orders = $all->filter(fn (MercadoLibreOrder $o) => $o->isOpen())->values();
 			$closedOrdersCount = $all->count() - $orders->count();
 			$listings = MercadoLibreListing::where('mercadolibre_account_id', $account->id)
+				->orderByRaw('ml_item_id IS NULL, ml_item_id = ""')
 				->latest()
 				->limit(100)
 				->get();
@@ -141,6 +154,24 @@ class MercadoLibreOAuthController extends Controller
 		$output = trim(Artisan::output());
 
 		return redirect('/mercadolibre')->with('status', $output !== '' ? 'Sync complete. '.$output : 'Inventory synced.');
+	}
+
+	public function createListings(Request $request)
+	{
+		if (!MercadoLibreAccount::query()->exists()) {
+			return redirect('/mercadolibre')->withErrors(['sync' => 'Connect Mercado Libre first.']);
+		}
+
+		set_time_limit(120);
+		$sku = trim((string) $request->get('sku', ''));
+		$params = ['--create-listings' => true];
+		if ($sku !== '') {
+			$params['--sku'] = $sku;
+		}
+		Artisan::call('MercadoLibreInventorySync:task', $params);
+		$output = trim(Artisan::output());
+
+		return redirect('/mercadolibre')->with('status', $output !== '' ? 'Sync complete. '.$output : 'Listings created.');
 	}
 
 	public function disconnect()
