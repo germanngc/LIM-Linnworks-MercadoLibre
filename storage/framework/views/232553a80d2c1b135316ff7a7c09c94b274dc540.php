@@ -8,10 +8,21 @@
 		<link rel="preconnect" href="https://fonts.googleapis.com">
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 		<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+		<style>
+			.spin{display:inline-block;width:.9rem;height:.9rem;border:2px solid currentColor;border-right-color:transparent;border-radius:50%;animation:spin .7s linear infinite;vertical-align:-.15rem;flex-shrink:0}
+			.spin-lg{width:2rem;height:2rem;border-width:3px}
+			@keyframes spin{to{transform:rotate(360deg)}}
+			.busy-veil{display:none;position:fixed;inset:0;background:rgba(255,255,255,.45);z-index:60;align-items:center;justify-content:center}
+			body.is-busy .busy-veil{display:flex}
+			.status-pill{display:inline-flex;align-items:center;gap:.4rem;padding:.28rem .65rem;border-radius:999px;font-size:.75rem;font-weight:600;line-height:1;white-space:nowrap}
+			.status-dot{width:.45rem;height:.45rem;border-radius:50%;flex-shrink:0}
+			.status-dot.live{animation:pulse 1.6s ease-out infinite}
+			@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(22,163,74,.45)}70%{box-shadow:0 0 0 .4rem rgba(22,163,74,0)}100%{box-shadow:0 0 0 0 rgba(22,163,74,0)}}
+		</style>
 	</head>
 	<body class="bg-zinc-100" style="font-family: 'IBM Plex Sans', sans-serif;">
-		<div class="flex items-center justify-center min-h-screen w-full px-4 py-6">
-			<div class="bg-white px-8 py-6 shadow-lg w-full" style="max-width: 56rem;">
+		<div class="flex items-start justify-center min-h-screen w-full" style="padding:0.75rem 0.75rem 1.5rem;">
+			<div class="bg-white shadow-lg w-full" style="max-width:92rem;padding:1.75rem 2rem;">
 				<div class="flex gap-4 items-center justify-between">
 					<div class="flex gap-4 items-center">
 						<img class="h-10" src="<?php echo e(asset('images/Linnworks-Logo.png')); ?>" alt="Linnworks" />
@@ -44,20 +55,20 @@
 							<div style="display:grid;grid-template-columns:minmax(9.5rem,1fr) minmax(9.5rem,1fr);gap:12px;min-width:21rem;">
 								<form action="<?php echo e(url('/mercadolibre/sync')); ?>" method="post" style="margin:0;">
 									<?php echo csrf_field(); ?>
-									<button type="submit" style="appearance:none;border:0;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;width:100%;height:2.25rem;padding:0 0.95rem;border-radius:0.5rem;background:#18181b;color:#fff;font-size:0.85rem;font-weight:600;line-height:1;white-space:nowrap;">
+									<button type="submit" data-busy="Syncing orders…" style="appearance:none;border:0;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:0.4rem;width:100%;height:2.25rem;padding:0 0.95rem;border-radius:0.5rem;background:#18181b;color:#fff;font-size:0.85rem;font-weight:600;line-height:1;white-space:nowrap;">
 										Sync orders
 									</button>
 								</form>
 								<form action="<?php echo e(url('/mercadolibre/sync-inventory')); ?>" method="post" style="margin:0;">
 									<?php echo csrf_field(); ?>
-									<button type="submit" style="appearance:none;border:0;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;width:100%;height:2.25rem;padding:0 0.95rem;border-radius:0.5rem;background:#FFE600;color:#18181b;font-size:0.85rem;font-weight:600;line-height:1;white-space:nowrap;">
+									<button type="submit" data-busy="Syncing inventory…" style="appearance:none;border:0;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:0.4rem;width:100%;height:2.25rem;padding:0 0.95rem;border-radius:0.5rem;background:#FFE600;color:#18181b;font-size:0.85rem;font-weight:600;line-height:1;white-space:nowrap;">
 										Sync inventory
 									</button>
 								</form>
 								<form action="<?php echo e(url('/mercadolibre/create-listings')); ?>" method="post" style="margin:0;grid-column:1 / -1;display:grid;grid-template-columns:1fr 1fr;gap:12px;">
 									<?php echo csrf_field(); ?>
 									<input name="sku" type="text" placeholder="SKU (ej. CF9-76C-7FE)" value="<?php echo e(old('sku')); ?>" style="width:100%;min-width:0;height:2.25rem;padding:0 0.7rem;border:1px solid #d4d4d8;border-radius:0.5rem;font-size:0.8rem;background:#fff;box-sizing:border-box;">
-									<button type="submit" style="appearance:none;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;width:100%;height:2.25rem;padding:0 0.95rem;border-radius:0.5rem;background:#fff;color:#18181b;font-size:0.85rem;font-weight:600;line-height:1;white-space:nowrap;border:1px solid #d4d4d8;">
+									<button type="submit" data-busy="Publishing…" style="appearance:none;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:0.4rem;width:100%;height:2.25rem;padding:0 0.95rem;border-radius:0.5rem;background:#fff;color:#18181b;font-size:0.85rem;font-weight:600;line-height:1;white-space:nowrap;border:1px solid #d4d4d8;">
 										Create listing
 									</button>
 								</form>
@@ -72,8 +83,8 @@
 							$inv = null;
 							$lis = null;
 							$ord = null;
-							if (preg_match('/(\d+)\s+items scanned,\s+(\d+)\s+linked,\s+(\d+)\s+created in LW,\s+(\d+)\s+stock\s*→\s*ML,\s+(\d+)\s+stock\s*→\s*LW(?:,\s+(\d+)\s+title\s*→\s*ML)?/u', $rawStatus, $m)) {
-								$inv = ['scanned' => $m[1], 'linked' => $m[2], 'created' => $m[3], 'to_ml' => $m[4], 'to_lw' => $m[5], 'title_ml' => $m[6] ?? null];
+							if (preg_match('/(\d+)\s+items scanned,\s+(\d+)\s+linked,\s+(\d+)\s+created in LW,\s+(\d+)\s+stock\s*→\s*ML,\s+(\d+)\s+stock\s*→\s*LW(?:,\s+(\d+)\s+title\s*→\s*ML)?(?:,\s+(\d+)\s+price\s*→\s*ML)?(?:,\s+(\d+)\s+pictures\s*→\s*ML)?(?:,\s+(\d+)\s+description\s*→\s*ML)?/u', $rawStatus, $m)) {
+								$inv = ['scanned' => $m[1], 'linked' => $m[2], 'created' => $m[3], 'to_ml' => $m[4], 'to_lw' => $m[5], 'title_ml' => $m[6] ?? null, 'price_ml' => $m[7] ?? null, 'pictures_ml' => $m[8] ?? null, 'desc_ml' => $m[9] ?? null];
 							}
 							if (preg_match('/Create listings:\s+(\d+)\s+published,\s+(\d+)\s+skipped[^,]*,\s+(\d+)\s+failed/i', $rawStatus, $m)) {
 								$lis = ['published' => $m[1], 'skipped' => $m[2], 'failed' => $m[3]];
@@ -82,7 +93,7 @@
 								$ord = $m[1];
 							}
 							$hasCards = $inv || $lis || $ord !== null;
-							$statusTitle = $lis ? 'Listing created' : ($inv ? 'Inventory synced' : ($ord !== null ? 'Orders synced' : 'Sync complete'));
+							$statusTitle = $lis ? 'Listing created' : ($inv ? 'Inventory synced' : ($ord !== null ? 'Orders synced' : (preg_match('/^Listing /i', $rawStatus) ? rtrim($rawStatus, '.') : 'Sync complete')));
 						?>
 						<div class="mt-4 text-sm" style="display:flex;align-items:flex-start;gap:0.65rem;background:#ecfdf5;border:1px solid #a7f3d0;color:#065f46;border-radius:0.5rem;padding:0.7rem 0.9rem;">
 							<span style="display:inline-flex;align-items:center;justify-content:center;width:1.35rem;height:1.35rem;border-radius:999px;background:#10b981;color:#fff;font-size:0.7rem;font-weight:700;flex-shrink:0;margin-top:0.05rem;">✓</span>
@@ -107,6 +118,15 @@
 												<span class="font-semibold"><?php echo e($inv['to_lw']); ?></span> stock → LW
 												<?php if($inv['title_ml'] !== null): ?>
 													· <span class="font-semibold"><?php echo e($inv['title_ml']); ?></span> title → ML
+												<?php endif; ?>
+												<?php if($inv['price_ml'] !== null): ?>
+													· <span class="font-semibold"><?php echo e($inv['price_ml']); ?></span> price → ML
+												<?php endif; ?>
+												<?php if($inv['pictures_ml'] !== null): ?>
+													· <span class="font-semibold"><?php echo e($inv['pictures_ml']); ?></span> pictures → ML
+												<?php endif; ?>
+												<?php if($inv['desc_ml'] !== null): ?>
+													· <span class="font-semibold"><?php echo e($inv['desc_ml']); ?></span> description → ML
 												<?php endif; ?>
 											</div>
 										<?php endif; ?>
@@ -215,7 +235,7 @@ unset($__errorArgs, $__bag); ?>
 					<div class="flex items-center justify-between" style="margin-top:3rem;">
 						<h2 class="font-bold">Inventory / Listings <span class="font-normal text-zinc-500">(<?php echo e($listings->count()); ?>)</span></h2>
 					</div>
-					<p class="text-sm text-zinc-600" style="margin-top:0.5rem;margin-bottom:0.25rem;">Stock syncs both ways by SKU (the side that changed wins; if both change, Linnworks wins). Title changes in Linnworks push to Mercado Libre on <strong>Sync inventory</strong>. <strong>Create listing</strong> only publishes SKUs that are not yet on Mercado Libre — needs title, price, stock ≥ 1 and at least one image.</p>
+					<p class="text-sm text-zinc-600" style="margin-top:0.5rem;margin-bottom:0.25rem;">Stock syncs both ways by SKU (the side that changed wins; if both change, Linnworks wins). Title, price, pictures and description push Linnworks → Mercado Libre on <strong>Sync inventory</strong>. <strong>Pause</strong> hides the listing; <strong>Activate</strong> brings it back. <strong>Create listing</strong> only publishes SKUs that are not yet on Mercado Libre — needs title, price, stock ≥ 1 and at least one image.</p>
 
 					<?php if($listings->isEmpty()): ?>
 						<div class="mt-4 px-4 py-6 border rounded-lg text-center">
@@ -224,7 +244,7 @@ unset($__errorArgs, $__bag); ?>
 						</div>
 					<?php else: ?>
 						<div class="mt-4 overflow-x-auto">
-							<table class="w-full text-sm text-left border" style="border-collapse:collapse;min-width:40rem;">
+							<table class="w-full text-sm text-left border" style="border-collapse:collapse;min-width:56rem;">
 								<thead>
 									<tr class="bg-zinc-100">
 										<th class="px-4 py-2 border font-semibold">SKU</th>
@@ -233,6 +253,8 @@ unset($__errorArgs, $__bag); ?>
 										<th class="px-4 py-2 border font-semibold">ML qty</th>
 										<th class="px-4 py-2 border font-semibold">LW qty</th>
 										<th class="px-4 py-2 border font-semibold">Link</th>
+										<th class="px-4 py-2 border font-semibold">Status</th>
+										<th class="px-4 py-2 border font-semibold">Action</th>
 										<th class="px-4 py-2 border font-semibold">Last sync</th>
 									</tr>
 								</thead>
@@ -276,6 +298,43 @@ unset($__errorArgs, $__bag); ?>
 
 												</span>
 											</td>
+											<td class="px-4 py-2 border" style="white-space:nowrap;">
+												<?php if($listing->isListed()): ?>
+													<?php
+														$statusKey = strtolower((string) ($listing->ml_status ?: 'active'));
+														$statusUi = match ($statusKey) {
+															'paused' => ['bg' => '#fff7ed', 'fg' => '#c2410c', 'dot' => '#ea580c', 'live' => false],
+															'closed' => ['bg' => '#fef2f2', 'fg' => '#b91c1c', 'dot' => '#dc2626', 'live' => false],
+															'under_review' => ['bg' => '#eff6ff', 'fg' => '#1d4ed8', 'dot' => '#2563eb', 'live' => false],
+															default => ['bg' => '#ecfdf5', 'fg' => '#047857', 'dot' => '#16a34a', 'live' => true],
+														};
+													?>
+													<span class="status-pill" style="background:<?php echo e($statusUi['bg']); ?>;color:<?php echo e($statusUi['fg']); ?>;">
+														<span class="status-dot<?php echo e($statusUi['live'] ? ' live' : ''); ?>" style="background:<?php echo e($statusUi['dot']); ?>;"></span>
+														<?php echo e(\App\Models\MercadoLibreOrder::humanize($listing->ml_status ?: 'active')); ?>
+
+													</span>
+												<?php else: ?>
+													<span class="text-zinc-400">—</span>
+												<?php endif; ?>
+											</td>
+											<td class="px-4 py-2 border">
+												<?php if($listing->canPause()): ?>
+													<form action="<?php echo e(url('/mercadolibre/listings/'.$listing->id.'/pause')); ?>" method="post" style="margin:0;">
+														<?php echo csrf_field(); ?>
+														<button type="submit" data-busy="Pausing…" style="appearance:none;cursor:pointer;display:inline-flex;align-items:center;gap:0.35rem;height:2rem;padding:0 0.75rem;border-radius:0.45rem;border:0;background:#71717a;color:#fff;font-size:0.75rem;font-weight:600;white-space:nowrap;">Pause listing</button>
+													</form>
+												<?php elseif($listing->canActivate()): ?>
+													<form action="<?php echo e(url('/mercadolibre/listings/'.$listing->id.'/activate')); ?>" method="post" style="margin:0;">
+														<?php echo csrf_field(); ?>
+														<button type="submit" data-busy="Activating…" style="appearance:none;cursor:pointer;display:inline-flex;align-items:center;gap:0.35rem;height:2rem;padding:0 0.75rem;border-radius:0.45rem;border:0;background:#16a34a;color:#fff;font-size:0.75rem;font-weight:600;white-space:nowrap;">Activate listing</button>
+													</form>
+												<?php elseif($listing->isClosed()): ?>
+													<span class="text-xs text-zinc-500">Closed</span>
+												<?php else: ?>
+													<span class="text-zinc-400">—</span>
+												<?php endif; ?>
+											</td>
 											<td class="px-4 py-2 border text-zinc-600"><?php echo e($listing->lastSyncLabel()); ?></td>
 										</tr>
 									<?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
@@ -309,11 +368,32 @@ unset($__errorArgs, $__bag); ?>
 					<button type="button" class="px-4 py-2 text-sm text-zinc-600 hover:underline" onclick="document.getElementById('disconnect-modal').style.display='none'">Cancel</button>
 					<form action="<?php echo e(url('/mercadolibre/disconnect')); ?>" method="post">
 						<?php echo csrf_field(); ?>
-						<button type="submit" class="px-6 py-2 text-sm text-white bg-red-600 rounded-lg hover:bg-red-900">Disconnect</button>
+						<button type="submit" data-busy="Disconnecting…" class="px-6 py-2 text-sm text-white bg-red-600 rounded-lg hover:bg-red-900" style="display:inline-flex;align-items:center;gap:0.4rem;">Disconnect</button>
 					</form>
 				</div>
 			</div>
 		</div>
+		<div class="busy-veil" aria-hidden="true">
+			<span class="spin spin-lg" style="color:#18181b;border-color:#18181b;border-right-color:transparent;"></span>
+		</div>
+		<script>
+			document.addEventListener('submit', function (e) {
+				var form = e.target;
+				if (!form || form.tagName !== 'FORM') return;
+				if (form.getAttribute('data-busy') === '1') {
+					e.preventDefault();
+					return;
+				}
+				form.setAttribute('data-busy', '1');
+				var btn = form.querySelector('button[type="submit"]');
+				var label = (btn && btn.getAttribute('data-busy')) || 'Working…';
+				document.body.classList.add('is-busy');
+				document.querySelectorAll('button[type="submit"]').forEach(function (b) { b.disabled = true; });
+				if (btn) {
+					btn.innerHTML = '<span class="spin" aria-hidden="true"></span> ' + label;
+				}
+			});
+		</script>
 	</body>
 </html>
 <?php /**PATH /var/www/resources/views/mercadolibre/dashboard.blade.php ENDPATH**/ ?>

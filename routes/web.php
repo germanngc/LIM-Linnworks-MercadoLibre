@@ -34,6 +34,8 @@ Route::get('/mercadolibre', [MercadoLibreOAuthController::class, 'dashboard']);
 Route::post('/mercadolibre/sync', [MercadoLibreOAuthController::class, 'sync']);
 Route::post('/mercadolibre/sync-inventory', [MercadoLibreOAuthController::class, 'syncInventory']);
 Route::post('/mercadolibre/create-listings', [MercadoLibreOAuthController::class, 'createListings']);
+Route::post('/mercadolibre/listings/{listing}/pause', [MercadoLibreOAuthController::class, 'pauseListing']);
+Route::post('/mercadolibre/listings/{listing}/activate', [MercadoLibreOAuthController::class, 'activateListing']);
 Route::post('/mercadolibre/disconnect', [MercadoLibreOAuthController::class, 'disconnect']);
 
 /*Route::get('/', function () {

@@ -201,7 +201,7 @@ docker-compose exec app php artisan MercadoLibreInventorySync:task --create-list
 - **Full (fulfillment):** ML manda el envío; solo se lee el status y, si hay match, se copia el tracking a Linnworks.
 - No se marca `delivered` automáticamente (es irreversible en ML).
 - **Órdenes:** el sync activo solo procesa órdenes abiertas; cerradas/canceladas se guardan pero salen del listado.
-- **Inventory:** mapeo SKU (`mercadolibre_listings`). Ítem nuevo en ML → crea stock item en Linnworks. Stock **ida y vuelta**: gana el lado que cambió; si ambos cambian, Linnworks (almacén) gana. Título de Linnworks se empuja a ML en el mismo sync.
+- **Inventory:** mapeo SKU (`mercadolibre_listings`). Ítem nuevo en ML → crea stock item en Linnworks. Stock **ida y vuelta**: gana el lado que cambió; si ambos cambian, Linnworks (almacén) gana. Título, precio, fotos y descripción de Linnworks se empujan a ML en el mismo sync. **Pause / Activate** en el dashboard (no se cierra el listing).
 - **Create listings:** publica en Mercado Libre los SKUs de Linnworks que aún no tienen listing. Requiere título, precio > 0, stock ≥ 1 e imagen. Usa el predictor de categoría de ML. No corre en el cron (solo botón / `--create-listings`).
 - Endpoints LW: `AddInventoryItem`, `GetStockItems`, `GetStockItemsFull`, `SetStockLevel`. Stock Full de ML no se gestiona aquí (solo publicaciones seller).
 

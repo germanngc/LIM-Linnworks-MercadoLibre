@@ -17,6 +17,7 @@ class VerifyCsrfToken extends Middleware
 		'mercadolibre/sync',
 		'mercadolibre/sync-inventory',
 		'mercadolibre/create-listings',
+		'mercadolibre/listings/*',
 		'mercadolibre/disconnect',
 	];
 }

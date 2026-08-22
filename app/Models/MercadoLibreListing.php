@@ -24,6 +24,8 @@ class MercadoLibreListing extends Model
 		'source',
 		'category_id',
 		'permalink',
+		'ml_status',
+		'lw_pictures_hash',
 		'last_error',
 	];
 
@@ -61,6 +63,55 @@ class MercadoLibreListing extends Model
 	public static function titlesDiffer(?string $left, ?string $right): bool
 	{
 		return mb_strtolower(trim((string) $left)) !== mb_strtolower(trim((string) $right));
+	}
+
+	public static function pricesDiffer(?float $left, ?float $right): bool
+	{
+		if ($left === null || $right === null) {
+			return $left !== $right;
+		}
+
+		return (int) round($left * 100) !== (int) round($right * 100);
+	}
+
+	/** LW has images and they are not the last set we pushed. */
+	public static function picturesShouldPush(array $lwUrls, ?string $storedHash): bool
+	{
+		if (!$lwUrls) {
+			return false;
+		}
+
+		return self::picturesHash($lwUrls) !== (string) $storedHash;
+	}
+
+	public static function picturesHash(array $lwUrls): string
+	{
+		$norm = array_values(array_unique(array_map(
+			fn ($url) => rtrim(mb_strtolower(trim((string) $url)), '/'),
+			array_slice($lwUrls, 0, 6)
+		)));
+
+		return md5(implode('|', $norm));
+	}
+
+	public function isPaused(): bool
+	{
+		return strtolower((string) $this->ml_status) === 'paused';
+	}
+
+	public function isClosed(): bool
+	{
+		return strtolower((string) $this->ml_status) === 'closed';
+	}
+
+	public function canPause(): bool
+	{
+		return $this->isListed() && !$this->isPaused() && !$this->isClosed();
+	}
+
+	public function canActivate(): bool
+	{
+		return $this->isListed() && $this->isPaused();
 	}
 
 	public function stockMismatch(): bool

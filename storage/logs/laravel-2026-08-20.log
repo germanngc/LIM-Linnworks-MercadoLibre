@@ -17,3 +17,22 @@
 [2026-08-20 05:30:33] local.ERROR: Client error: `POST https://us-ext.linnworks.net/api/Main/ping` resulted in a `404 Not Found` response {"class":"App\\Services\\LinnworkApiMainPing","function":"_linnworksPing","file":"/var/www/vendor/guzzlehttp/guzzle/src/Exception/RequestException.php","line":113} 
 [2026-08-20 05:30:33] local.ERROR: :Integration error in [RefreshLinworksToken] for userlinnworks@limmedia.io {"class":"App\\Console\\Commands\\LinnworksTokenRefreshTask","function":"refreshLinnworkUser","file":"/var/www/app/Console/Commands/LinnworksTokenRefreshTask.php","line":59} 
 [2026-08-20 05:41:40] local.ERROR: ML update item title failed {"item_id":"MLM3358565583","body":"{\"cause\":374,\"message\":\"BODY_INVALID_FIELDS\",\"error\":\"The field family name is invalid\",\"status\":400}"} 
+[2026-08-20 05:45:07] local.ERROR: Client error: `POST https://us-ext.linnworks.net/api/Main/ping` resulted in a `404 Not Found` response {"class":"App\\Services\\LinnworkApiMainPing","function":"_linnworksPing","file":"/var/www/vendor/guzzlehttp/guzzle/src/Exception/RequestException.php","line":113} 
+[2026-08-20 05:45:07] local.ERROR: :Integration error in [RefreshLinworksToken] for userlinnworks@limmedia.io {"class":"App\\Console\\Commands\\LinnworksTokenRefreshTask","function":"refreshLinnworkUser","file":"/var/www/app/Console/Commands/LinnworksTokenRefreshTask.php","line":59} 
+[2026-08-20 20:45:18] local.ERROR: Client error: `POST https://us-ext.linnworks.net/api/Main/ping` resulted in a `401 Unauthorized` response:
+{"Code":null,"Message":"Token is wrong."}
+ {"class":"App\\Services\\LinnworkApiMainPing","function":"_linnworksPing","file":"/var/www/vendor/guzzlehttp/guzzle/src/Exception/RequestException.php","line":113} 
+[2026-08-20 20:45:18] local.ERROR: :Integration error in [RefreshLinworksToken] for userlinnworks@limmedia.io {"class":"App\\Console\\Commands\\LinnworksTokenRefreshTask","function":"refreshLinnworkUser","file":"/var/www/app/Console/Commands/LinnworksTokenRefreshTask.php","line":59} 
+[2026-08-20 20:45:19] local.ERROR: Client error: `POST https://us-ext.linnworks.net/api/Inventory/GetStockLocations` resulted in a `401 Unauthorized` response:
+{"Code":null,"Message":"Token is wrong."}
+ {"class":"App\\Services\\InventoryService","function":"GetStockLocations","file":"/var/www/vendor/guzzlehttp/guzzle/src/Exception/RequestException.php","line":113} 
+[2026-08-20 20:45:19] local.ERROR: :Integration error in [StockLocations] for userlinnworks@limmedia.io {"class":"App\\Console\\Commands\\IntegrationProcessedOrders","function":"handle","file":"/var/www/app/Console/Commands/IntegrationProcessedOrders.php","line":56} 
+[2026-08-20 21:00:33] local.ERROR: Client error: `POST https://us-ext.linnworks.net/api/Main/ping` resulted in a `401 Unauthorized` response:
+{"Code":null,"Message":"Token is wrong."}
+ {"class":"App\\Services\\LinnworkApiMainPing","function":"_linnworksPing","file":"/var/www/vendor/guzzlehttp/guzzle/src/Exception/RequestException.php","line":113} 
+[2026-08-20 21:00:33] local.ERROR: :Integration error in [RefreshLinworksToken] for userlinnworks@limmedia.io {"class":"App\\Console\\Commands\\LinnworksTokenRefreshTask","function":"refreshLinnworkUser","file":"/var/www/app/Console/Commands/LinnworksTokenRefreshTask.php","line":59} 
+[2026-08-20 21:00:33] local.ERROR: Client error: `POST https://us-ext.linnworks.net/api/Inventory/GetStockLocations` resulted in a `401 Unauthorized` response:
+{"Code":null,"Message":"Token is wrong."}
+ {"class":"App\\Services\\InventoryService","function":"GetStockLocations","file":"/var/www/vendor/guzzlehttp/guzzle/src/Exception/RequestException.php","line":113} 
+[2026-08-20 21:00:33] local.ERROR: :Integration error in [StockLocations] for userlinnworks@limmedia.io {"class":"App\\Console\\Commands\\IntegrationProcessedOrders","function":"handle","file":"/var/www/app/Console/Commands/IntegrationProcessedOrders.php","line":56} 
+[2026-08-20 21:00:35] local.ERROR: ML token refresh failed for user 3608229310 {"class":"App\\Console\\Commands\\MercadoLibreTokenRefreshTask","function":"handle","file":"/var/www/app/Console/Commands/MercadoLibreTokenRefreshTask.php","line":29} 

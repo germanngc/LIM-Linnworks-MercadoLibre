@@ -174,6 +174,58 @@ class MercadoLibreOAuthController extends Controller
 		return redirect('/mercadolibre')->with('status', $output !== '' ? 'Sync complete. '.$output : 'Listings created.');
 	}
 
+	public function pauseListing(MercadoLibreListing $listing, MercadoLibreService $meli)
+	{
+		return $this->setListingStatus($listing, $meli, 'paused');
+	}
+
+	public function activateListing(MercadoLibreListing $listing, MercadoLibreService $meli)
+	{
+		return $this->setListingStatus($listing, $meli, 'active');
+	}
+
+	private function setListingStatus(MercadoLibreListing $listing, MercadoLibreService $meli, string $status)
+	{
+		$account = MercadoLibreAccount::query()->latest()->first();
+		if (!$account || !$listing->isListed()) {
+			return redirect('/mercadolibre')->withErrors(['sync' => 'Listing not found.']);
+		}
+		if ($listing->mercadolibre_account_id !== $account->id) {
+			return redirect('/mercadolibre')->withErrors(['sync' => 'Listing not found.']);
+		}
+		if (!$meli->ensureToken($account)) {
+			return redirect('/mercadolibre')->withErrors(['sync' => 'Cannot refresh Mercado Libre token.']);
+		}
+
+		$ok = $meli->updateItemStatus($account, $listing->ml_item_id, $status, $listing->sku);
+		$actualById = $meli->lastStatusByItemId;
+		foreach ($actualById as $mlItemId => $actualStatus) {
+			MercadoLibreListing::query()
+				->where('mercadolibre_account_id', $account->id)
+				->where('ml_item_id', $mlItemId)
+				->update([
+					'ml_status' => $actualStatus,
+					'last_sync_direction' => 'lw_to_ml',
+					'last_error' => $ok ? null : mb_substr($meli->lastError ?: 'Status update failed', 0, 1000),
+				]);
+		}
+		if (!$ok) {
+			if (!$actualById) {
+				$listing->update(['last_error' => mb_substr($meli->lastError ?: 'Status update failed', 0, 1000)]);
+			}
+			return redirect('/mercadolibre')->withErrors(['sync' => $meli->lastError ?: 'Could not update listing status.']);
+		}
+
+		$ids = $meli->lastStatusItemIds ?: [$listing->ml_item_id];
+		$verb = $status === 'paused' ? 'paused' : 'activated';
+		$msg = 'Listing '.$verb.'.';
+		if (count($ids) > 1) {
+			$msg = 'Listing '.$verb.' on '.count($ids).' Mercado Libre channels.';
+		}
+
+		return redirect('/mercadolibre')->with('status', $msg);
+	}
+
 	public function disconnect()
 	{
 		MercadoLibreAccount::query()->delete();

@@ -13,7 +13,7 @@ use Illuminate\Support\Str;
 class MercadoLibreInventorySync extends Command
 {
 	protected $signature = 'MercadoLibreInventorySync:task {--limit=50} {--sku= : Only this Linnworks SKU} {--create-listings : Publish Linnworks SKUs that have no ML listing}';
-	protected $description = 'Bidirectional stock sync; optionally create Mercado Libre listings from Linnworks inventory.';
+	protected $description = 'Bidirectional stock sync and LW→ML catalog (title, price, pictures, description); optionally create listings.';
 
 	public function handle(MercadoLibreService $meli, InventoryService $inventory)
 	{
@@ -57,6 +57,9 @@ class MercadoLibreInventorySync extends Command
 		$toMl = 0;
 		$toLw = 0;
 		$titlesToMl = 0;
+		$pricesToMl = 0;
+		$picturesToMl = 0;
+		$descriptionsToMl = 0;
 
 		foreach ($ids as $itemId) {
 			$item = $meli->getItem($account, (string) $itemId);
@@ -79,6 +82,7 @@ class MercadoLibreInventorySync extends Command
 					'title' => $row['title'],
 					'available_quantity' => $row['available_quantity'],
 					'price' => $row['price'],
+					'ml_status' => $row['ml_status'] ?? $listing->ml_status,
 					'ml_updated_at' => $row['ml_updated_at'] ? date('Y-m-d H:i:s', strtotime($row['ml_updated_at'])) : now(),
 					'source' => $listing->source ?: 'ml',
 				]);
@@ -162,6 +166,82 @@ class MercadoLibreInventorySync extends Command
 					}
 				}
 
+				$lwPrice = $inventory->priceFromItem($lwItem);
+				if (
+					!(int) $listing->ml_variation_id
+					&& $lwPrice !== null
+					&& $lwPrice > 0
+					&& MercadoLibreListing::pricesDiffer((float) ($listing->price ?? 0), $lwPrice)
+				) {
+					if (MercadoLibreService::itemHasPriceAutomation($item)) {
+						$listing->update(['last_error' => 'Price not updated (ML price automation)']);
+					} else {
+						$ok = $meli->updateItemPrice(
+							$account,
+							$listing->ml_item_id,
+							$lwPrice,
+							(int) ($lwQty ?? $listing->available_quantity ?? 0)
+						);
+						if ($ok) {
+							$listing->update([
+								'price' => $lwPrice,
+								'last_sync_direction' => 'lw_to_ml',
+								'lw_updated_at' => now(),
+								'last_error' => null,
+							]);
+							$pricesToMl++;
+						} else {
+							$listing->update([
+								'last_error' => mb_substr($meli->lastError ?: 'Price update failed', 0, 1000),
+							]);
+						}
+					}
+				}
+
+				$lwImages = $inventory->imageUrlsFromItem($lwItem);
+				if (!$lwImages && $stockItemId) {
+					$lwImages = $inventory->GetInventoryItemImages($user->token, $user->server, (string) $stockItemId);
+				}
+				if (
+					!(int) $listing->ml_variation_id
+					&& MercadoLibreListing::picturesShouldPush($lwImages, $listing->lw_pictures_hash)
+				) {
+					$ok = $meli->updateItemPictures($account, $listing->ml_item_id, $lwImages);
+					if ($ok) {
+						$listing->update([
+							'lw_pictures_hash' => MercadoLibreListing::picturesHash($lwImages),
+							'last_sync_direction' => 'lw_to_ml',
+							'lw_updated_at' => now(),
+							'last_error' => null,
+						]);
+						$picturesToMl++;
+					} else {
+						$listing->update([
+							'last_error' => mb_substr($meli->lastError ?: 'Pictures update failed', 0, 1000),
+						]);
+					}
+				}
+
+				$lwDesc = $inventory->descriptionFromItem($lwItem);
+				if (!(int) $listing->ml_variation_id && $lwDesc !== '') {
+					$mlDesc = $meli->getItemDescription($account, $listing->ml_item_id);
+					if ($mlDesc !== null && MercadoLibreListing::titlesDiffer($mlDesc, $lwDesc)) {
+						$ok = $meli->updateItemDescription($account, $listing->ml_item_id, $lwDesc);
+						if ($ok) {
+							$listing->update([
+								'last_sync_direction' => 'lw_to_ml',
+								'lw_updated_at' => now(),
+								'last_error' => null,
+							]);
+							$descriptionsToMl++;
+						} else {
+							$listing->update([
+								'last_error' => mb_substr($meli->lastError ?: 'Description update failed', 0, 1000),
+							]);
+						}
+					}
+				}
+
 				$direction = MercadoLibreListing::stockSyncDirection(
 					(int) $listing->available_quantity,
 					(int) $lwQty,
@@ -210,14 +290,17 @@ class MercadoLibreInventorySync extends Command
 		}
 
 		$this->info(sprintf(
-			'ML user %s: %d items scanned, %d linked, %d created in LW, %d stock → ML, %d stock → LW, %d title → ML',
+			'ML user %s: %d items scanned, %d linked, %d created in LW, %d stock → ML, %d stock → LW, %d title → ML, %d price → ML, %d pictures → ML, %d description → ML',
 			$account->ml_user_id,
 			count($ids),
 			$linked,
 			$createdLw,
 			$toMl,
 			$toLw,
-			$titlesToMl
+			$titlesToMl,
+			$pricesToMl,
+			$picturesToMl,
+			$descriptionsToMl
 		));
 	}
 
@@ -394,6 +477,8 @@ class MercadoLibreInventorySync extends Command
 				'available_quantity' => (int) ($createdItem['available_quantity'] ?? $qty),
 				'linnworks_quantity' => (int) $qty,
 				'price' => (float) ($createdItem['price'] ?? $price),
+				'ml_status' => $createdItem['status'] ?? 'active',
+				'lw_pictures_hash' => MercadoLibreListing::picturesHash($images),
 				'ml_updated_at' => now(),
 				'lw_updated_at' => now(),
 				'last_sync_direction' => 'create',
@@ -403,6 +488,11 @@ class MercadoLibreInventorySync extends Command
 				'last_error' => null,
 			]
 		);
+
+		$desc = $inventory->descriptionFromItem($item);
+		if ($desc !== '') {
+			$meli->updateItemDescription($account, (string) $createdItem['id'], $desc);
+		}
 
 		MercadoLibreListing::query()
 			->where('mercadolibre_account_id', $account->id)

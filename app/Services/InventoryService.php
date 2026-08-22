@@ -181,6 +181,29 @@ class InventoryService
 		return trim((string) ($item['ItemTitle'] ?? $item['Title'] ?? $item['ItemName'] ?? ''));
 	}
 
+	public function priceFromItem(array $item): ?float
+	{
+		foreach (['RetailPrice', 'retailPrice', 'Price'] as $key) {
+			if (isset($item[$key]) && is_numeric($item[$key])) {
+				return (float) $item[$key];
+			}
+		}
+
+		return null;
+	}
+
+	public function descriptionFromItem(array $item): string
+	{
+		foreach (['ItemDescription', 'ExtendedDescription', 'ShortDescription', 'Description', 'MetaData'] as $key) {
+			$value = $item[$key] ?? null;
+			if (is_string($value) && trim($value) !== '') {
+				return trim($value);
+			}
+		}
+
+		return '';
+	}
+
 	/** @return string[] full-size image URLs, main first */
 	public function imageUrlsFromItem(array $item): array
 	{
