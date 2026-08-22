@@ -13,6 +13,11 @@ class VerifyCsrfToken extends Middleware
 	 */
 	protected $except = [
 		'auth',
-		'logout'
+		'logout',
+		'mercadolibre/sync',
+		'mercadolibre/sync-inventory',
+		'mercadolibre/create-listings',
+		'mercadolibre/listings/*',
+		'mercadolibre/disconnect',
 	];
 }
