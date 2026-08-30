@@ -1,0 +1,67 @@
+{
+  "LinnworksPermissions": [
+    "GlobalPermissions.OrderBook.ViewOrderDetailsNode",
+    "GlobalPermissions.OrderBook.ProcessedOrders.DownloadProcessedOrdersNode",
+    "GlobalPermissions.Inventory.InventorySettings.LocationsNode",
+    "GlobalPermissions.OrderBook.OpenOrders.MergeOrdersNode",
+    "GlobalPermissions.Settings.ListingConfigurators.EditListingConfiguratorsNode",
+    "GlobalPermissions.Settings.ListingConfigurators.GetListingConfiguratorsNode",
+    "GlobalPermissions.Settings.ChannelIntegration.ChannelDetailsNode",
+    "GlobalPermissions.Settings.ChannelIntegration.ChannelMappingNode",
+    "GlobalPermissions.Inventory.Stock.StockReadNode"
+  ],
+  "Modules": [
+    {
+      "RequiredPermissionId": null,
+      "moduleName": "MercadoLibreChannel",
+      "formattedName": "Mercado Libre Channel",
+      "icon": null,
+      "path": "",
+      "type": "ChannelIntegration",
+      "isHidden": false,
+      "isBeta": false,
+      "isAngularComponent": false,
+      "maxOpened": 0,
+      "group": [],
+      "parameters": [
+        { "name": "ChannelName", "value": "MercadoLibreChannel" },
+        { "name": "ChannelFriendlyName", "value": "Mercado Libre" },
+        { "name": "ChannelLogoURL", "value": "https://dummyimage.com/80x60/ffe600/111111.png&text=ML" },
+        { "name": "AddNewUserEndpoint", "value": "{APP_URL}/api/Config/AddNewUser" },
+        { "name": "UserConfigEndpoint", "value": "{APP_URL}/api/Config/UserConfig" },
+        { "name": "SaveConfigEndpoint", "value": "{APP_URL}/api/Config/SaveUserConfig" },
+        { "name": "ShippingTagsEndpoint", "value": "{APP_URL}/api/Config/ShippingTags" },
+        { "name": "PaymentTagsEndpoint", "value": "{APP_URL}/api/Config/PaymentTags" },
+        { "name": "ConfigDeletedEndpoint", "value": "{APP_URL}/api/Config/ConfigDeleted" },
+        { "name": "ConfigTestEndpoint", "value": "{APP_URL}/api/Config/ConfigTest" },
+        { "name": "OrdersEndpoint", "value": "{APP_URL}/api/Order/Orders" },
+        { "name": "DespatchEndpoint", "value": "{APP_URL}/api/Order/Despatch" },
+        { "name": "CancelEndpoint", "value": "{APP_URL}/api/Order/Cancel" },
+        { "name": "RefundEndpoint", "value": "{APP_URL}/api/Order/Refund" },
+        { "name": "PostSaleOptionsEndpoint", "value": "{APP_URL}/api/Order/PostSaleOptions" },
+        { "name": "ProductsEndpoint", "value": "{APP_URL}/api/Product/Products" },
+        { "name": "InventoryUpdateEndpoint", "value": "{APP_URL}/api/Product/InventoryUpdate" },
+        { "name": "PriceUpdateEndpoint", "value": "{APP_URL}/api/Product/PriceUpdate" },
+        { "name": "GetConfiguratorSettingsEndpoint", "value": "{APP_URL}/api/Listing/GetConfiguratorSettings" },
+        { "name": "GetCategoriesEndpoint", "value": "{APP_URL}/api/Listing/GetCategories" },
+        { "name": "GetAttributesByCategoryEndpoint", "value": "{APP_URL}/api/Listing/GetAttributesByCategory" },
+        { "name": "GetVariationsByCategoryEndpoint", "value": "{APP_URL}/api/Listing/GetVariationsByCategory" },
+        { "name": "ListingUpdateEndpoint", "value": "{APP_URL}/api/Listing/ListingUpdate" },
+        { "name": "ListingDeleteEndpoint", "value": "{APP_URL}/api/Listing/ListingDelete" },
+        { "name": "CheckFeedEndpoint", "value": "{APP_URL}/api/Listing/CheckFeed" },
+        { "name": "IsListingSupported", "value": "True" },
+        { "name": "InventoryUpdateBatchSize", "value": "1000" },
+        { "name": "DespatchUpdateBatchSize", "value": "100" },
+        { "name": "PriceUpdateBatchSize", "value": "1000" },
+        { "name": "ListingUpdateBatchSize", "value": "50" },
+        { "name": "AllowRefundOnCancel", "value": "False" }
+      ],
+      "files": {
+        "scripts": [],
+        "style": null,
+        "styles": []
+      }
+    }
+  ],
+  "ScriptUrl": null
+}

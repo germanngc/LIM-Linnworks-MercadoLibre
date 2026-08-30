@@ -269,6 +269,7 @@ class MercadoLibreService
 
 	public function updateItemQuantity(MercadoLibreAccount $account, string $itemId, int $quantity, ?int $variationId = null): bool
 	{
+		$this->lastError = null;
 		$payload = $variationId
 			? ['variations' => [['id' => $variationId, 'available_quantity' => $quantity]]]
 			: ['available_quantity' => $quantity];
@@ -278,6 +279,7 @@ class MercadoLibreService
 			->put($this->api() . '/items/' . $itemId, $payload);
 
 		if ($response->failed()) {
+			$this->lastError = $this->errorMessage($response);
 			Log::error('ML update item quantity failed', [
 				'item_id' => $itemId,
 				'variation_id' => $variationId,
