@@ -106,7 +106,7 @@ class InventoryService
 					'loadVariationParents' => 'false',
 					'entriesPerPage' => 20,
 					'pageNumber' => 1,
-					'dataRequirements' => '["StockLevels"]',
+					'dataRequirements' => '["StockLevels","Images","Pricing"]',
 					'searchTypes' => '["SKU"]',
 				],
 				$this->lwHeaders($token),
@@ -129,6 +129,130 @@ class InventoryService
 		} catch (RequestException $e) {
 			self::log($e, 'error', __CLASS__, __FUNCTION__);
 			return false;
+		}
+	}
+
+	/**
+	 * Paged inventory scan for listing creation. Empty page = [].
+	 * @return array<int, array>|false
+	 */
+	public function GetStockItemsPage(string $token, string $server, int $pageNumber = 1, int $entriesPerPage = 50)
+	{
+		$this->baseUri = $server;
+
+		try {
+			$result = json_decode($this->request(
+				'POST',
+				'/api/Stock/GetStockItemsFull',
+				[
+					'keyword' => '',
+					'loadCompositeParents' => 'false',
+					'loadVariationParents' => 'false',
+					'entriesPerPage' => $entriesPerPage,
+					'pageNumber' => $pageNumber,
+					'dataRequirements' => '["StockLevels","Images"]',
+				],
+				$this->lwHeaders($token),
+				true
+			), true);
+
+			if (!is_array($result)) {
+				return [];
+			}
+
+			$items = $result['Data'] ?? $result;
+			if (!is_array($items)) {
+				return [];
+			}
+
+			if (isset($items['ItemNumber']) || isset($items['StockItemId'])) {
+				return [$items];
+			}
+
+			return array_values(array_filter($items, 'is_array'));
+		} catch (RequestException $e) {
+			self::log($e, 'error', __CLASS__, __FUNCTION__);
+			return false;
+		}
+	}
+
+	public function titleFromItem(array $item): string
+	{
+		return trim((string) ($item['ItemTitle'] ?? $item['Title'] ?? $item['ItemName'] ?? ''));
+	}
+
+	public function priceFromItem(array $item): ?float
+	{
+		foreach (['RetailPrice', 'retailPrice', 'Price'] as $key) {
+			if (isset($item[$key]) && is_numeric($item[$key])) {
+				return (float) $item[$key];
+			}
+		}
+
+		return null;
+	}
+
+	public function descriptionFromItem(array $item): string
+	{
+		foreach (['ItemDescription', 'ExtendedDescription', 'ShortDescription', 'Description', 'MetaData'] as $key) {
+			$value = $item[$key] ?? null;
+			if (is_string($value) && trim($value) !== '') {
+				return trim($value);
+			}
+		}
+
+		return '';
+	}
+
+	/** @return string[] full-size image URLs, main first */
+	public function imageUrlsFromItem(array $item): array
+	{
+		$images = $item['Images'] ?? $item['images'] ?? [];
+		if (!is_array($images) || !$images) {
+			return [];
+		}
+
+		usort($images, function ($a, $b) {
+			$mainA = !empty($a['IsMain']) ? 0 : 1;
+			$mainB = !empty($b['IsMain']) ? 0 : 1;
+			return $mainA <=> $mainB;
+		});
+
+		$urls = [];
+		foreach ($images as $image) {
+			$url = $image['FullSource'] ?? $image['Source'] ?? $image['Url'] ?? null;
+			if (is_string($url) && preg_match('#^https?://#i', $url)) {
+				$urls[] = $url;
+			}
+		}
+
+		return array_values(array_unique($urls));
+	}
+
+	/** @return string[] */
+	public function GetInventoryItemImages(string $token, string $server, string $stockItemId): array
+	{
+		$this->baseUri = $server;
+
+		try {
+			$result = json_decode($this->request(
+				'POST',
+				'/api/Inventory/GetInventoryItemImages',
+				['inventoryItemId' => $stockItemId],
+				$this->lwHeaders($token),
+				true
+			), true);
+
+			if (!is_array($result)) {
+				return [];
+			}
+
+			$images = isset($result[0]) || $result === [] ? $result : [$result];
+
+			return $this->imageUrlsFromItem(['Images' => $images]);
+		} catch (RequestException $e) {
+			self::log($e, 'error', __CLASS__, __FUNCTION__);
+			return [];
 		}
 	}
 
