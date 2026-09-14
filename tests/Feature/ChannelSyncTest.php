@@ -70,7 +70,7 @@ class ChannelSyncTest extends TestCase
 	public function test_inventory_update_pushes_quantity_to_ml(): void
 	{
 		Http::fake([
-			'https://api.mercadolibre.com/items/MLM6130153220' => Http::response(['id' => 'MLM6130153220', 'available_quantity' => 5]),
+			'https://api.mercadolibre.com/global/items/MLM6130153220' => Http::response(['id' => 'MLM6130153220', 'available_quantity' => 5]),
 			'*' => Http::response(['error' => 'unexpected'], 500),
 		]);
 
@@ -87,7 +87,7 @@ class ChannelSyncTest extends TestCase
 			->assertJsonPath('Products.0.Error', null);
 
 		Http::assertSent(fn ($request) => $request->method() === 'PUT'
-			&& $request->url() === 'https://api.mercadolibre.com/items/MLM6130153220'
+			&& $request->url() === 'https://api.mercadolibre.com/global/items/MLM6130153220'
 			&& $request['available_quantity'] === 5);
 
 		$this->assertSame(5, MercadoLibreListing::query()->first()->available_quantity);
@@ -154,6 +154,12 @@ class ChannelSyncTest extends TestCase
 			'shipment_id' => 9002,
 			'logistic_type' => 'fulfillment',
 		]);
+		MercadoLibreOrder::create([
+			'mercadolibre_account_id' => $account->id,
+			'ml_order_id' => 2000003,
+			'shipment_id' => 9003,
+			'logistic_type' => 'remote',
+		]);
 
 		Http::fake([
 			'https://api.mercadolibre.com/shipments/9001/seller_notifications' => Http::response(['status' => 'ok']),
@@ -165,11 +171,79 @@ class ChannelSyncTest extends TestCase
 			'Orders' => [
 				['ReferenceNumber' => '2000001', 'TrackingNumber' => 'TRACK1'],
 				['ReferenceNumber' => '2000002', 'TrackingNumber' => 'TRACK2'],
+				['ReferenceNumber' => '2000003', 'TrackingNumber' => 'TRACK3'],
 			],
 		])->assertOk()->assertJsonPath('Error', null);
 
 		Http::assertSent(fn ($request) => str_contains($request->url(), '/shipments/9001/seller_notifications')
 			&& $request['tracking_number'] === 'TRACK1');
 		Http::assertNotSent(fn ($request) => str_contains($request->url(), '/shipments/9002/'));
+		Http::assertNotSent(fn ($request) => str_contains($request->url(), '/shipments/9003/'));
+	}
+
+	public function test_price_automation_posts_min_max_to_ml(): void
+	{
+		Http::fake([
+			'https://api.mercadolibre.com/marketplace/items/MLM6130153220/prices/automate' => Http::sequence([
+				Http::response(['error' => 'not_found'], 404),
+				Http::response(['status' => 'ACTIVE', 'item_id' => 'MLM6130153220'], 201),
+			]),
+			'*' => Http::response(['error' => 'unexpected'], 500),
+		]);
+
+		$this->postJson('/api/Product/PriceAutomation', [
+			'AuthorizationToken' => $this->token,
+			'Products' => [[
+				'SKU' => 'MLM-NTB-001',
+				'Reference' => 'MLM6130153220',
+				'MinPrice' => 10,
+				'MaxPrice' => 40,
+				'RuleId' => 'INT',
+			]],
+		])->assertOk()
+			->assertJsonPath('Error', null)
+			->assertJsonPath('Products.0.Error', null);
+
+		Http::assertSent(fn ($request) => $request->method() === 'POST'
+			&& $request->url() === 'https://api.mercadolibre.com/marketplace/items/MLM6130153220/prices/automate'
+			&& (float) $request['min_price'] === 10.0
+			&& (float) $request['max_price'] === 40.0
+			&& $request['rule_id'] === 'INT');
+	}
+
+	public function test_promotions_list_and_join(): void
+	{
+		Http::fake([
+			'https://api.mercadolibre.com/marketplace/seller-promotions/users/3608229310*' => Http::response([
+				'results' => [['id' => 'P-MLM1', 'type' => 'MARKETPLACE_CAMPAIGN']],
+			]),
+			'https://api.mercadolibre.com/marketplace/seller-promotions/items/*' => Http::response(['ok' => true], 201),
+			'*' => Http::response(['error' => 'unexpected'], 500),
+		]);
+
+		$this->postJson('/api/Product/Promotions', [
+			'AuthorizationToken' => $this->token,
+			'Action' => 'list',
+		])->assertOk()
+			->assertJsonPath('Error', null)
+			->assertJsonPath('Promotions.0.id', 'P-MLM1');
+
+		$this->postJson('/api/Product/Promotions', [
+			'AuthorizationToken' => $this->token,
+			'Action' => 'join',
+			'Products' => [[
+				'SKU' => 'MLM-NTB-001',
+				'Reference' => 'MLM6130153220',
+				'PromotionId' => 'P-MLM1',
+				'PromotionType' => 'MARKETPLACE_CAMPAIGN',
+			]],
+		])->assertOk()
+			->assertJsonPath('Error', null)
+			->assertJsonPath('Products.0.Error', null);
+
+		Http::assertSent(fn ($request) => $request->method() === 'POST'
+			&& str_contains($request->url(), '/marketplace/seller-promotions/items/MLM6130153220')
+			&& $request['promotion_id'] === 'P-MLM1'
+			&& $request['promotion_type'] === 'MARKETPLACE_CAMPAIGN');
 	}
 }

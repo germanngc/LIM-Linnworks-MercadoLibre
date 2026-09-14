@@ -52,9 +52,9 @@ class ChannelIntegrationController extends Controller
 			->filter(fn ($item) => is_array($item) && isset($item['ConfigItemId']))
 			->mapWithKeys(fn (array $item) => [(string) $item['ConfigItemId'] => (string) ($item['SelectedValue'] ?? '')]);
 
-		$site = strtoupper((string) ($items->get('Site') ?: $request->input('Site') ?: $tenant->site_id ?: 'MLM'));
-		if (!in_array($site, ['MLM', 'MLA', 'MLB', 'MLC', 'MCO', 'MLU', 'MPE'], true)) {
-			$site = 'MLM';
+		$site = strtoupper((string) ($items->get('Site') ?: $request->input('Site') ?: $tenant->site_id ?: $this->defaultMlSite()));
+		if (!in_array($site, ['CBT', 'MLM', 'MLA', 'MLB', 'MLC', 'MCO', 'MLU', 'MPE'], true)) {
+			$site = $this->defaultMlSite();
 		}
 
 		$tenant->update(['site_id' => $site, 'active' => true]);
@@ -72,7 +72,7 @@ class ChannelIntegrationController extends Controller
 		$account = MercadoLibreAccount::query()->latest()->first();
 		if (!$account || !$meli->ensureToken($account)) {
 			return response()->json([
-				'Error' => 'Connect Mercado Libre in the existing SI app first (Connect Mercado Libre), then Test again.',
+				'Error' => 'Connect a Global Selling Mercado Libre seller in the SI app first (Connect Mercado Libre), then Test again.',
 				'Success' => false,
 				'Message' => 'No Mercado Libre token.',
 			]);
@@ -90,7 +90,9 @@ class ChannelIntegrationController extends Controller
 		return response()->json([
 			'Error' => null,
 			'ShippingTags' => [
-				['Tag' => 'drop_off', 'FriendlyName' => 'Drop off', 'Site' => ''],
+				['Tag' => 'remote', 'FriendlyName' => 'Remote (Global Selling)', 'Site' => ''],
+				['Tag' => 'us_fulfillment', 'FriendlyName' => 'US fulfillment', 'Site' => ''],
+				['Tag' => 'drop_off', 'FriendlyName' => 'Drop off (local MX)', 'Site' => ''],
 				['Tag' => 'xd_drop_off', 'FriendlyName' => 'Xd drop off', 'Site' => ''],
 				['Tag' => 'fulfillment', 'FriendlyName' => 'Full', 'Site' => ''],
 			],
@@ -177,7 +179,7 @@ class ChannelIntegrationController extends Controller
 				continue;
 			}
 			$record = MercadoLibreOrder::query()->where('ml_order_id', $ref)->first();
-			if ($record && $record->isFullFulfillment()) {
+			if ($record && $record->skipChannelDespatch()) {
 				continue;
 			}
 			$shipmentId = $record?->shipment_id;
@@ -302,6 +304,91 @@ class ChannelIntegrationController extends Controller
 				$listing->update(['price' => $price, 'lw_updated_at' => now()]);
 			}
 			$results[] = ['SKU' => $sku, 'Error' => $ok ? null : ($meli->lastError ?: 'Price update failed')];
+		}
+
+		return response()->json(['Error' => null, 'Products' => $results]);
+	}
+
+	public function priceAutomation(Request $request, MercadoLibreService $meli): JsonResponse
+	{
+		$account = $this->mlAccount($meli);
+		$results = [];
+		foreach ((array) $request->input('Products', []) as $item) {
+			if (!is_array($item)) {
+				continue;
+			}
+			$sku = trim((string) ($item['SKU'] ?? ''));
+			$reference = trim((string) ($item['Reference'] ?? ''));
+			$action = strtolower((string) ($item['Action'] ?? $request->input('Action') ?? 'upsert'));
+			if ($sku === '') {
+				$results[] = ['SKU' => '', 'Error' => 'Missing SKU'];
+				continue;
+			}
+			$listing = $this->findListing($sku, $reference);
+			if (!$account || !$listing) {
+				$results[] = ['SKU' => $sku, 'Error' => 'SKU is not mapped to a Mercado Libre listing'];
+				continue;
+			}
+			$ok = $action === 'delete'
+				? $meli->deletePriceAutomation($account, (string) $listing->ml_item_id)
+				: $meli->upsertPriceAutomation(
+					$account,
+					(string) $listing->ml_item_id,
+					(float) ($item['MinPrice'] ?? 0),
+					isset($item['MaxPrice']) ? (float) $item['MaxPrice'] : null,
+					(string) ($item['RuleId'] ?? 'INT')
+				);
+			$results[] = ['SKU' => $sku, 'Error' => $ok ? null : ($meli->lastError ?: 'Price automation failed')];
+		}
+
+		return response()->json(['Error' => null, 'Products' => $results]);
+	}
+
+	public function promotions(Request $request, MercadoLibreService $meli): JsonResponse
+	{
+		$account = $this->mlAccount($meli);
+		$products = (array) $request->input('Products', []);
+		$action = strtolower((string) $request->input('Action', $products === [] ? 'list' : 'join'));
+		if ($products === [] || $action === 'list') {
+			if (!$account) {
+				return response()->json(['Error' => 'Connect Mercado Libre in the SI app first.', 'Promotions' => []]);
+			}
+			$list = $meli->listSellerPromotions($account);
+
+			return response()->json([
+				'Error' => $list === null ? ($meli->lastError ?: 'Promotions list failed') : null,
+				'Promotions' => $list ?? [],
+			]);
+		}
+		$results = [];
+		foreach ($products as $item) {
+			if (!is_array($item)) {
+				continue;
+			}
+			$sku = trim((string) ($item['SKU'] ?? ''));
+			$rowAction = strtolower((string) ($item['Action'] ?? $action));
+			if ($sku === '') {
+				$results[] = ['SKU' => '', 'Error' => 'Missing SKU'];
+				continue;
+			}
+			$listing = $this->findListing($sku, trim((string) ($item['Reference'] ?? '')));
+			if (!$account || !$listing) {
+				$results[] = ['SKU' => $sku, 'Error' => 'SKU is not mapped to a Mercado Libre listing'];
+				continue;
+			}
+			$promotionId = trim((string) ($item['PromotionId'] ?? ''));
+			$promotionType = trim((string) ($item['PromotionType'] ?? 'MARKETPLACE_CAMPAIGN'));
+			if ($rowAction === 'leave' || $rowAction === 'optout' || $rowAction === 'delete') {
+				$ok = $meli->leaveItemPromotion($account, (string) $listing->ml_item_id, $promotionId ?: null, $promotionType ?: null);
+			} else {
+				if ($promotionId === '') {
+					$results[] = ['SKU' => $sku, 'Error' => 'Missing PromotionId'];
+					continue;
+				}
+				$deal = isset($item['DealPrice']) ? (float) $item['DealPrice'] : null;
+				$ok = $meli->joinItemPromotion($account, (string) $listing->ml_item_id, $promotionId, $promotionType, $deal);
+			}
+			$results[] = ['SKU' => $sku, 'Error' => $ok ? null : ($meli->lastError ?: 'Promotion update failed')];
 		}
 
 		return response()->json(['Error' => null, 'Products' => $results]);
@@ -510,7 +597,7 @@ class ChannelIntegrationController extends Controller
 		if ($token === '') {
 			return $bootstrap ? new ChannelTenant([
 				'linnworks_email' => '',
-				'site_id' => 'MLM',
+				'site_id' => $this->defaultMlSite(),
 			]) : null;
 		}
 
@@ -527,9 +614,16 @@ class ChannelIntegrationController extends Controller
 			'linnworks_user_id' => 'lw-token-'.substr(md5($token), 0, 24),
 			'linnworks_email' => (string) ($request->input('Email') ?? ''),
 			'authorization_token' => $token,
-			'site_id' => 'MLM',
+			'site_id' => $this->defaultMlSite(),
 			'active' => true,
 		]);
+	}
+
+	private function defaultMlSite(): string
+	{
+		return strtolower((string) config('services.mercadolibre.channel_mode', 'global')) === 'global'
+			? 'CBT'
+			: 'MLM';
 	}
 
 	private function mlAccount(MercadoLibreService $meli): ?MercadoLibreAccount
@@ -636,8 +730,8 @@ class ChannelIntegrationController extends Controller
 			'Town' => (string) ($addr['city']['name'] ?? $addr['city'] ?? ''),
 			'Region' => (string) ($addr['state']['name'] ?? $addr['state'] ?? ''),
 			'PostCode' => (string) ($addr['zip_code'] ?? ''),
-			'Country' => 'Mexico',
-			'CountryCode' => 'MX',
+			'Country' => (string) ($addr['country']['name'] ?? $addr['country'] ?? 'United States'),
+			'CountryCode' => (string) ($addr['country']['id'] ?? 'US'),
 			'PhoneNumber' => (string) ($addr['receiver_phone'] ?? ''),
 			'EmailAddress' => (string) ($buyer['email'] ?? ''),
 		];
@@ -669,18 +763,18 @@ class ChannelIntegrationController extends Controller
 
 		return [
 			'Source' => 'MercadoLibreChannel',
-			'SubSource' => 'MLM Tester',
+			'SubSource' => $this->defaultMlSite() === 'CBT' ? 'Global Selling' : 'MLM Tester',
 			'ReferenceNumber' => (string) ($order['id'] ?? ''),
 			'ExternalReference' => (string) ($order['pack_id'] ?? $order['id'] ?? ''),
 			'PaymentStatus' => str_contains($status, 'cancel') ? 'CANCELLED' : 'PAID',
 			'OrderStatusType' => 'Unshipped',
-			'Currency' => (string) ($order['currency_id'] ?? 'MXN'),
+			'Currency' => (string) ($order['currency_id'] ?? ($this->defaultMlSite() === 'CBT' ? 'USD' : 'MXN')),
 			'ReceivedDate' => $received,
 			'DispatchBy' => $received,
 			'PostalServiceCost' => (float) ($ship['cost'] ?? 0),
 			'PostalServiceTaxRate' => 0,
 			'UseChannelTax' => false,
-			'MatchPostalServiceTag' => MercadoLibreOrder::isFullLogisticType($logistic) ? 'fulfillment' : 'drop_off',
+			'MatchPostalServiceTag' => MercadoLibreOrder::postalServiceTag($logistic),
 			'MatchPaymentMethodTag' => 'mercadopago',
 			'ChannelBuyerName' => $name,
 			'BillingAddress' => $mappedAddr,
@@ -943,26 +1037,29 @@ class ChannelIntegrationController extends Controller
 			'linnworks_user_id' => $resolvedUserId,
 			'linnworks_email' => $email,
 			'authorization_token' => ChannelTenant::generateAuthorizationToken(),
-			'site_id' => 'MLM',
+			'site_id' => $this->defaultMlSite(),
 			'active' => true,
 		]);
 	}
 
 	private function buildUserConfigResponse(?ChannelTenant $tenant): array
 	{
-		$site = $tenant && $tenant->site_id ? $tenant->site_id : 'MLM';
+		$site = $tenant && $tenant->site_id ? $tenant->site_id : $this->defaultMlSite();
 		$configured = $tenant && $tenant->exists;
+		$global = $this->defaultMlSite() === 'CBT';
 
 		return [
 			'Error' => null,
 			'StepName' => $configured ? 'UserConfig' : 'AddCredentials',
 			'AccountName' => (string) (($tenant->linnworks_email ?? '') ?: 'Mercado Libre'),
 			'WizardStepTitle' => $configured ? 'Configuration Complete' : 'Mercado Libre site',
-			'WizardStepDescription' => 'Mexico (MLM) is the default. Save, then Test — Mercado Libre must already be connected in the SI app.',
+			'WizardStepDescription' => $global
+				? 'Global Selling (CBT) is the default. Save, then Test — a US Global Selling seller must already be connected in the SI app.'
+				: 'Mexico (MLM) is the default. Save, then Test — Mercado Libre must already be connected in the SI app.',
 			'ConfigItems' => [[
 				'ConfigItemId' => 'Site',
 				'Name' => 'Mercado Libre site',
-				'Description' => 'Marketplace site ID.',
+				'Description' => $global ? 'Parent merchant site for Global Selling.' : 'Marketplace site ID.',
 				'GroupName' => 'Account',
 				'SortOrder' => 1,
 				'SelectedValue' => $site,
@@ -970,9 +1067,9 @@ class ChannelIntegrationController extends Controller
 				'RegExError' => null,
 				'MustBeSpecified' => true,
 				'ReadOnly' => false,
-				'ListValues' => [
-					['Display' => 'Mexico (MLM)', 'Value' => 'MLM'],
-				],
+				'ListValues' => $global
+					? [['Display' => 'Global Selling (CBT)', 'Value' => 'CBT']]
+					: [['Display' => 'Mexico (MLM)', 'Value' => 'MLM']],
 				'ValueType' => 'LIST',
 				'HidesHeaderAttribute' => false,
 			]],

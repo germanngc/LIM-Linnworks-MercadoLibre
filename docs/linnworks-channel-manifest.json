@@ -42,6 +42,8 @@
         { "name": "ProductsEndpoint", "value": "{APP_URL}/api/Product/Products" },
         { "name": "InventoryUpdateEndpoint", "value": "{APP_URL}/api/Product/InventoryUpdate" },
         { "name": "PriceUpdateEndpoint", "value": "{APP_URL}/api/Product/PriceUpdate" },
+        { "name": "PriceAutomationEndpoint", "value": "{APP_URL}/api/Product/PriceAutomation" },
+        { "name": "PromotionsEndpoint", "value": "{APP_URL}/api/Product/Promotions" },
         { "name": "GetConfiguratorSettingsEndpoint", "value": "{APP_URL}/api/Listing/GetConfiguratorSettings" },
         { "name": "GetCategoriesEndpoint", "value": "{APP_URL}/api/Listing/GetCategories" },
         { "name": "GetAttributesByCategoryEndpoint", "value": "{APP_URL}/api/Listing/GetAttributesByCategory" },

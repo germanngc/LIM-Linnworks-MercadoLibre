@@ -47,15 +47,13 @@ class ChannelListingTest extends TestCase
 		]);
 
 		Http::fake([
-			'https://api.mercadolibre.com/sites/MLM' => Http::response(['default_currency_id' => 'MXN']),
-			'https://api.mercadolibre.com/sites/MLM/listing_types' => Http::response([['id' => 'gold_special']]),
 			'https://api.mercadolibre.com/categories/MLM437616/attributes' => Http::response([]),
-			'https://api.mercadolibre.com/items' => Http::response([
-				'id' => 'MLM3360000001',
+			'https://api.mercadolibre.com/marketplace/items' => Http::response([
+				'id' => 'CBT3360000001',
 				'title' => 'Notebook test',
 				'available_quantity' => 4,
 				'price' => 99.5,
-				'permalink' => 'https://articulo.mercadolibre.com.mx/MLM-3360000001',
+				'permalink' => 'https://www.mercadolibre.com/CBT-3360000001',
 				'status' => 'active',
 			], 201),
 		]);
@@ -85,13 +83,15 @@ class ChannelListingTest extends TestCase
 		])->assertOk()
 			->assertJsonPath('IsFeedReady', true)
 			->assertJsonPath('ProductFeeds.0.SKU', 'LW-TEST-SKU')
-			->assertJsonPath('ProductFeeds.0.ExternalListingId', 'MLM3360000001')
+			->assertJsonPath('ProductFeeds.0.ExternalListingId', 'CBT3360000001')
 			->assertJsonPath('ProductFeeds.0.Messages', null);
 
 		Http::assertSent(fn ($request) => $request->method() === 'POST'
-			&& $request->url() === 'https://api.mercadolibre.com/items'
+			&& $request->url() === 'https://api.mercadolibre.com/marketplace/items'
 			&& $request['available_quantity'] === 1
-			&& $request['family_name'] === 'Notebook test'
-			&& $request['category_id'] === 'MLM437616');
+			&& $request['title'] === 'Notebook test'
+			&& $request['currency_id'] === 'USD'
+			&& $request['category_id'] === 'MLM437616'
+			&& isset($request['sites_to_sell'][0]['logistic_type']));
 	}
 }

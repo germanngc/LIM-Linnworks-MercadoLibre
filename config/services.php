@@ -44,6 +44,9 @@ return [
         'api_url' => env('MELI_API_URL', 'https://api.mercadolibre.com'),
         'linnworks_app_id' => env('MELI_LINNWORKS_APP_ID'),
         'linnworks_app_secret' => env('MELI_LINNWORKS_APP_SECRET'),
+        'channel_mode' => env('MELI_CHANNEL_MODE', 'global'), // global = Global Selling (CBT); local = Mexico marketplace
+        'gs_sites' => env('MELI_GS_SITES', 'MLM,MLB,MLC,MCO'),
+        'gs_logistic' => env('MELI_GS_LOGISTIC', 'remote'),
     ],
 
 ];

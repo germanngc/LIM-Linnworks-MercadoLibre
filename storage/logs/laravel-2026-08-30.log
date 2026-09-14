@@ -1,0 +1,507 @@
+[2026-08-30 00:00:14] local.ERROR: Client error: `POST https://us-ext.linnworks.net/api/Main/ping` resulted in a `401 Unauthorized` response:
+{"Code":null,"Message":"Token is wrong."}
+ {"class":"App\\Services\\LinnworkApiMainPing","function":"_linnworksPing","file":"/var/www/vendor/guzzlehttp/guzzle/src/Exception/RequestException.php","line":113} 
+[2026-08-30 00:00:14] local.ERROR: :Integration error in [RefreshLinworksToken] for userlinnworks@limmedia.io {"class":"App\\Console\\Commands\\LinnworksTokenRefreshTask","function":"refreshLinnworkUser","file":"/var/www/app/Console/Commands/LinnworksTokenRefreshTask.php","line":59} 
+[2026-08-30 00:00:17] local.ERROR: Client error: `POST https://us-ext.linnworks.net/api/Inventory/GetStockLocations` resulted in a `401 Unauthorized` response:
+{"Code":null,"Message":"Token is wrong."}
+ {"class":"App\\Services\\InventoryService","function":"GetStockLocations","file":"/var/www/vendor/guzzlehttp/guzzle/src/Exception/RequestException.php","line":113} 
+[2026-08-30 00:00:17] local.ERROR: :Integration error in [StockLocations] for userlinnworks@limmedia.io {"class":"App\\Console\\Commands\\IntegrationProcessedOrders","function":"handle","file":"/var/www/app/Console/Commands/IntegrationProcessedOrders.php","line":56} 
+[2026-08-30 00:00:25] local.ERROR: Client error: `POST https://us-ext.linnworks.net/api/Inventory/GetStockLocations` resulted in a `401 Unauthorized` response:
+{"Code":null,"Message":"Token is wrong."}
+ {"class":"App\\Services\\InventoryService","function":"GetStockLocations","file":"/var/www/vendor/guzzlehttp/guzzle/src/Exception/RequestException.php","line":113} 
+[2026-08-30 00:00:29] local.ERROR: Client error: `POST https://us-ext.linnworks.net/api/Inventory/GetStockLocations` resulted in a `401 Unauthorized` response:
+{"Code":null,"Message":"Token is wrong."}
+ {"class":"App\\Services\\InventoryService","function":"GetStockLocations","file":"/var/www/vendor/guzzlehttp/guzzle/src/Exception/RequestException.php","line":113} 
+[2026-08-30 00:05:43] testing.INFO: Channel ListingUpdate {"tenant_id":1,"operation":"create","skus":["LW-TEST-SKU"]} 
+[2026-08-30 00:05:43] testing.ERROR: ML update item description failed {"item_id":"MLM3360000001","body":"{\"cause\":[],\"message\":\"User must be logged to perform this operation.\",\"error\":\"forbidden\",\"status\":403}"} 
+[2026-08-30 00:05:54] testing.INFO: Channel AddNewUser {"tenant_id":1,"user_id":"lw-user-1"} 
+[2026-08-30 00:05:55] testing.WARNING: Channel missing AuthorizationToken {"path":"api/Config/ConfigTest"} 
+[2026-08-30 00:15:59] local.ERROR: Client error: `POST https://us-ext.linnworks.net/api/Main/ping` resulted in a `401 Unauthorized` response:
+{"Code":null,"Message":"Token is wrong."}
+ {"class":"App\\Services\\LinnworkApiMainPing","function":"_linnworksPing","file":"/var/www/vendor/guzzlehttp/guzzle/src/Exception/RequestException.php","line":113} 
+[2026-08-30 00:15:59] local.ERROR: :Integration error in [RefreshLinworksToken] for userlinnworks@limmedia.io {"class":"App\\Console\\Commands\\LinnworksTokenRefreshTask","function":"refreshLinnworkUser","file":"/var/www/app/Console/Commands/LinnworksTokenRefreshTask.php","line":59} 
+[2026-08-30 00:16:01] local.ERROR: Client error: `POST https://us-ext.linnworks.net/api/Inventory/GetStockLocations` resulted in a `401 Unauthorized` response:
+{"Code":null,"Message":"Token is wrong."}
+ {"class":"App\\Services\\InventoryService","function":"GetStockLocations","file":"/var/www/vendor/guzzlehttp/guzzle/src/Exception/RequestException.php","line":113} 
+[2026-08-30 00:16:01] local.ERROR: :Integration error in [StockLocations] for userlinnworks@limmedia.io {"class":"App\\Console\\Commands\\IntegrationProcessedOrders","function":"handle","file":"/var/www/app/Console/Commands/IntegrationProcessedOrders.php","line":56} 
+[2026-08-30 00:16:05] local.ERROR: Client error: `POST https://us-ext.linnworks.net/api/Inventory/GetStockLocations` resulted in a `401 Unauthorized` response:
+{"Code":null,"Message":"Token is wrong."}
+ {"class":"App\\Services\\InventoryService","function":"GetStockLocations","file":"/var/www/vendor/guzzlehttp/guzzle/src/Exception/RequestException.php","line":113} 
+[2026-08-30 00:16:08] local.ERROR: Client error: `POST https://us-ext.linnworks.net/api/Inventory/GetStockLocations` resulted in a `401 Unauthorized` response:
+{"Code":null,"Message":"Token is wrong."}
+ {"class":"App\\Services\\InventoryService","function":"GetStockLocations","file":"/var/www/vendor/guzzlehttp/guzzle/src/Exception/RequestException.php","line":113} 
+[2026-08-30 00:30:39] local.ERROR: Client error: `POST https://us-ext.linnworks.net/api/Main/ping` resulted in a `401 Unauthorized` response:
+{"Code":null,"Message":"Token is wrong."}
+ {"class":"App\\Services\\LinnworkApiMainPing","function":"_linnworksPing","file":"/var/www/vendor/guzzlehttp/guzzle/src/Exception/RequestException.php","line":113} 
+[2026-08-30 00:30:39] local.ERROR: :Integration error in [RefreshLinworksToken] for userlinnworks@limmedia.io {"class":"App\\Console\\Commands\\LinnworksTokenRefreshTask","function":"refreshLinnworkUser","file":"/var/www/app/Console/Commands/LinnworksTokenRefreshTask.php","line":59} 
+[2026-08-30 00:30:41] local.ERROR: Client error: `POST https://us-ext.linnworks.net/api/Inventory/GetStockLocations` resulted in a `401 Unauthorized` response:
+{"Code":null,"Message":"Token is wrong."}
+ {"class":"App\\Services\\InventoryService","function":"GetStockLocations","file":"/var/www/vendor/guzzlehttp/guzzle/src/Exception/RequestException.php","line":113} 
+[2026-08-30 00:30:41] local.ERROR: :Integration error in [StockLocations] for userlinnworks@limmedia.io {"class":"App\\Console\\Commands\\IntegrationProcessedOrders","function":"handle","file":"/var/www/app/Console/Commands/IntegrationProcessedOrders.php","line":56} 
+[2026-08-30 00:30:45] local.ERROR: Client error: `POST https://us-ext.linnworks.net/api/Inventory/GetStockLocations` resulted in a `401 Unauthorized` response:
+{"Code":null,"Message":"Token is wrong."}
+ {"class":"App\\Services\\InventoryService","function":"GetStockLocations","file":"/var/www/vendor/guzzlehttp/guzzle/src/Exception/RequestException.php","line":113} 
+[2026-08-30 00:30:48] local.ERROR: Client error: `POST https://us-ext.linnworks.net/api/Inventory/GetStockLocations` resulted in a `401 Unauthorized` response:
+{"Code":null,"Message":"Token is wrong."}
+ {"class":"App\\Services\\InventoryService","function":"GetStockLocations","file":"/var/www/vendor/guzzlehttp/guzzle/src/Exception/RequestException.php","line":113} 
+[2026-08-30 00:45:14] local.ERROR: Client error: `POST https://us-ext.linnworks.net/api/Main/ping` resulted in a `401 Unauthorized` response:
+{"Code":null,"Message":"Token is wrong."}
+ {"class":"App\\Services\\LinnworkApiMainPing","function":"_linnworksPing","file":"/var/www/vendor/guzzlehttp/guzzle/src/Exception/RequestException.php","line":113} 
+[2026-08-30 00:45:14] local.ERROR: :Integration error in [RefreshLinworksToken] for userlinnworks@limmedia.io {"class":"App\\Console\\Commands\\LinnworksTokenRefreshTask","function":"refreshLinnworkUser","file":"/var/www/app/Console/Commands/LinnworksTokenRefreshTask.php","line":59} 
+[2026-08-30 00:45:17] local.ERROR: Client error: `POST https://us-ext.linnworks.net/api/Inventory/GetStockLocations` resulted in a `401 Unauthorized` response:
+{"Code":null,"Message":"Token is wrong."}
+ {"class":"App\\Services\\InventoryService","function":"GetStockLocations","file":"/var/www/vendor/guzzlehttp/guzzle/src/Exception/RequestException.php","line":113} 
+[2026-08-30 00:45:17] local.ERROR: :Integration error in [StockLocations] for userlinnworks@limmedia.io {"class":"App\\Console\\Commands\\IntegrationProcessedOrders","function":"handle","file":"/var/www/app/Console/Commands/IntegrationProcessedOrders.php","line":56} 
+[2026-08-30 00:45:22] local.ERROR: Client error: `POST https://us-ext.linnworks.net/api/Inventory/GetStockLocations` resulted in a `401 Unauthorized` response:
+{"Code":null,"Message":"Token is wrong."}
+ {"class":"App\\Services\\InventoryService","function":"GetStockLocations","file":"/var/www/vendor/guzzlehttp/guzzle/src/Exception/RequestException.php","line":113} 
+[2026-08-30 00:45:26] local.ERROR: Client error: `POST https://us-ext.linnworks.net/api/Inventory/GetStockLocations` resulted in a `401 Unauthorized` response:
+{"Code":null,"Message":"Token is wrong."}
+ {"class":"App\\Services\\InventoryService","function":"GetStockLocations","file":"/var/www/vendor/guzzlehttp/guzzle/src/Exception/RequestException.php","line":113} 
+[2026-08-30 01:00:56] local.ERROR: Client error: `POST https://us-ext.linnworks.net/api/Main/ping` resulted in a `401 Unauthorized` response:
+{"Code":null,"Message":"Token is wrong."}
+ {"class":"App\\Services\\LinnworkApiMainPing","function":"_linnworksPing","file":"/var/www/vendor/guzzlehttp/guzzle/src/Exception/RequestException.php","line":113} 
+[2026-08-30 01:00:56] local.ERROR: :Integration error in [RefreshLinworksToken] for userlinnworks@limmedia.io {"class":"App\\Console\\Commands\\LinnworksTokenRefreshTask","function":"refreshLinnworkUser","file":"/var/www/app/Console/Commands/LinnworksTokenRefreshTask.php","line":59} 
+[2026-08-30 01:00:58] local.ERROR: Client error: `POST https://us-ext.linnworks.net/api/Inventory/GetStockLocations` resulted in a `401 Unauthorized` response:
+{"Code":null,"Message":"Token is wrong."}
+ {"class":"App\\Services\\InventoryService","function":"GetStockLocations","file":"/var/www/vendor/guzzlehttp/guzzle/src/Exception/RequestException.php","line":113} 
+[2026-08-30 01:00:58] local.ERROR: :Integration error in [StockLocations] for userlinnworks@limmedia.io {"class":"App\\Console\\Commands\\IntegrationProcessedOrders","function":"handle","file":"/var/www/app/Console/Commands/IntegrationProcessedOrders.php","line":56} 
+[2026-08-30 01:01:03] local.ERROR: Client error: `POST https://us-ext.linnworks.net/api/Inventory/GetStockLocations` resulted in a `401 Unauthorized` response:
+{"Code":null,"Message":"Token is wrong."}
+ {"class":"App\\Services\\InventoryService","function":"GetStockLocations","file":"/var/www/vendor/guzzlehttp/guzzle/src/Exception/RequestException.php","line":113} 
+[2026-08-30 01:01:06] local.ERROR: Client error: `POST https://us-ext.linnworks.net/api/Inventory/GetStockLocations` resulted in a `401 Unauthorized` response:
+{"Code":null,"Message":"Token is wrong."}
+ {"class":"App\\Services\\InventoryService","function":"GetStockLocations","file":"/var/www/vendor/guzzlehttp/guzzle/src/Exception/RequestException.php","line":113} 
+[2026-08-30 01:04:42] local.INFO: Channel ListingUpdate {"tenant_id":1,"operation":"create","skus":["MLM-NTB-001"]} 
+[2026-08-30 01:15:30] local.ERROR: Client error: `POST https://us-ext.linnworks.net/api/Main/ping` resulted in a `401 Unauthorized` response:
+{"Code":null,"Message":"Token is wrong."}
+ {"class":"App\\Services\\LinnworkApiMainPing","function":"_linnworksPing","file":"/var/www/vendor/guzzlehttp/guzzle/src/Exception/RequestException.php","line":113} 
+[2026-08-30 01:15:30] local.ERROR: :Integration error in [RefreshLinworksToken] for userlinnworks@limmedia.io {"class":"App\\Console\\Commands\\LinnworksTokenRefreshTask","function":"refreshLinnworkUser","file":"/var/www/app/Console/Commands/LinnworksTokenRefreshTask.php","line":59} 
+[2026-08-30 01:15:31] local.ERROR: Client error: `POST https://us-ext.linnworks.net/api/Inventory/GetStockLocations` resulted in a `401 Unauthorized` response:
+{"Code":null,"Message":"Token is wrong."}
+ {"class":"App\\Services\\InventoryService","function":"GetStockLocations","file":"/var/www/vendor/guzzlehttp/guzzle/src/Exception/RequestException.php","line":113} 
+[2026-08-30 01:15:31] local.ERROR: :Integration error in [StockLocations] for userlinnworks@limmedia.io {"class":"App\\Console\\Commands\\IntegrationProcessedOrders","function":"handle","file":"/var/www/app/Console/Commands/IntegrationProcessedOrders.php","line":56} 
+[2026-08-30 01:15:34] local.ERROR: Client error: `POST https://us-ext.linnworks.net/api/Inventory/GetStockLocations` resulted in a `401 Unauthorized` response:
+{"Code":null,"Message":"Token is wrong."}
+ {"class":"App\\Services\\InventoryService","function":"GetStockLocations","file":"/var/www/vendor/guzzlehttp/guzzle/src/Exception/RequestException.php","line":113} 
+[2026-08-30 01:15:36] local.ERROR: Client error: `POST https://us-ext.linnworks.net/api/Inventory/GetStockLocations` resulted in a `401 Unauthorized` response:
+{"Code":null,"Message":"Token is wrong."}
+ {"class":"App\\Services\\InventoryService","function":"GetStockLocations","file":"/var/www/vendor/guzzlehttp/guzzle/src/Exception/RequestException.php","line":113} 
+[2026-08-30 01:18:25] local.INFO: Channel ListingUpdate {"tenant_id":1,"operation":"create","skus":["MLM-NTB-001.1"]} 
+[2026-08-30 01:18:26] local.ERROR: ML create item failed {"body":"{\"cause\":[],\"message\":\"Category MLM437616 does not exist.\",\"error\":\"item.category_id.invalid\",\"status\":400}","sku":[{"id":"SELLER_SKU","value_name":"MLM-NTB-001.1"}]} 
+[2026-08-30 01:19:56] testing.INFO: Channel ListingUpdate {"tenant_id":1,"operation":"create","skus":["LW-TEST-SKU"],"quantities":[0]} 
+[2026-08-30 01:19:56] testing.ERROR: ML update item description failed {"item_id":"MLM3360000001","body":"{\"cause\":[],\"message\":\"User must be logged to perform this operation.\",\"error\":\"forbidden\",\"status\":403}"} 
+[2026-08-30 01:23:53] testing.INFO: Channel ListingUpdate {"tenant_id":1,"operation":"create","skus":["LW-TEST-SKU"],"quantities":[0]} 
+[2026-08-30 01:23:53] testing.ERROR: ML update item description failed {"item_id":"MLM3360000001","body":"{\"cause\":[],\"message\":\"User must be logged to perform this operation.\",\"error\":\"forbidden\",\"status\":403}"} 
+[2026-08-30 01:26:41] local.INFO: Channel ListingUpdate {"tenant_id":1,"operation":"create","skus":["MLM-NTB-001"],"quantities":[0]} 
+[2026-08-30 01:26:42] local.ERROR: ML create item failed {"body":"{\"cause\":[],\"message\":\"Category MLM437616 does not exist.\",\"error\":\"item.category_id.invalid\",\"status\":400}","sku":[{"id":"SELLER_SKU","value_name":"MLM-NTB-001"}]} 
+[2026-08-30 01:30:04] local.ERROR: Client error: `POST https://us-ext.linnworks.net/api/Main/ping` resulted in a `401 Unauthorized` response:
+{"Code":null,"Message":"Token is wrong."}
+ {"class":"App\\Services\\LinnworkApiMainPing","function":"_linnworksPing","file":"/var/www/vendor/guzzlehttp/guzzle/src/Exception/RequestException.php","line":113} 
+[2026-08-30 01:30:04] local.ERROR: :Integration error in [RefreshLinworksToken] for userlinnworks@limmedia.io {"class":"App\\Console\\Commands\\LinnworksTokenRefreshTask","function":"refreshLinnworkUser","file":"/var/www/app/Console/Commands/LinnworksTokenRefreshTask.php","line":59} 
+[2026-08-30 01:30:06] local.ERROR: Client error: `POST https://us-ext.linnworks.net/api/Inventory/GetStockLocations` resulted in a `401 Unauthorized` response:
+{"Code":null,"Message":"Token is wrong."}
+ {"class":"App\\Services\\InventoryService","function":"GetStockLocations","file":"/var/www/vendor/guzzlehttp/guzzle/src/Exception/RequestException.php","line":113} 
+[2026-08-30 01:30:06] local.ERROR: :Integration error in [StockLocations] for userlinnworks@limmedia.io {"class":"App\\Console\\Commands\\IntegrationProcessedOrders","function":"handle","file":"/var/www/app/Console/Commands/IntegrationProcessedOrders.php","line":56} 
+[2026-08-30 01:30:10] local.ERROR: Client error: `POST https://us-ext.linnworks.net/api/Inventory/GetStockLocations` resulted in a `401 Unauthorized` response:
+{"Code":null,"Message":"Token is wrong."}
+ {"class":"App\\Services\\InventoryService","function":"GetStockLocations","file":"/var/www/vendor/guzzlehttp/guzzle/src/Exception/RequestException.php","line":113} 
+[2026-08-30 01:30:13] local.ERROR: Client error: `POST https://us-ext.linnworks.net/api/Inventory/GetStockLocations` resulted in a `401 Unauthorized` response:
+{"Code":null,"Message":"Token is wrong."}
+ {"class":"App\\Services\\InventoryService","function":"GetStockLocations","file":"/var/www/vendor/guzzlehttp/guzzle/src/Exception/RequestException.php","line":113} 
+[2026-08-30 01:45:37] local.ERROR: Client error: `POST https://us-ext.linnworks.net/api/Main/ping` resulted in a `401 Unauthorized` response:
+{"Code":null,"Message":"Token is wrong."}
+ {"class":"App\\Services\\LinnworkApiMainPing","function":"_linnworksPing","file":"/var/www/vendor/guzzlehttp/guzzle/src/Exception/RequestException.php","line":113} 
+[2026-08-30 01:45:37] local.ERROR: :Integration error in [RefreshLinworksToken] for userlinnworks@limmedia.io {"class":"App\\Console\\Commands\\LinnworksTokenRefreshTask","function":"refreshLinnworkUser","file":"/var/www/app/Console/Commands/LinnworksTokenRefreshTask.php","line":59} 
+[2026-08-30 01:45:39] local.ERROR: Client error: `POST https://us-ext.linnworks.net/api/Inventory/GetStockLocations` resulted in a `401 Unauthorized` response:
+{"Code":null,"Message":"Token is wrong."}
+ {"class":"App\\Services\\InventoryService","function":"GetStockLocations","file":"/var/www/vendor/guzzlehttp/guzzle/src/Exception/RequestException.php","line":113} 
+[2026-08-30 01:45:39] local.ERROR: :Integration error in [StockLocations] for userlinnworks@limmedia.io {"class":"App\\Console\\Commands\\IntegrationProcessedOrders","function":"handle","file":"/var/www/app/Console/Commands/IntegrationProcessedOrders.php","line":56} 
+[2026-08-30 01:45:41] local.ERROR: Client error: `POST https://us-ext.linnworks.net/api/Inventory/GetStockLocations` resulted in a `401 Unauthorized` response:
+{"Code":null,"Message":"Token is wrong."}
+ {"class":"App\\Services\\InventoryService","function":"GetStockLocations","file":"/var/www/vendor/guzzlehttp/guzzle/src/Exception/RequestException.php","line":113} 
+[2026-08-30 01:45:43] local.ERROR: Client error: `POST https://us-ext.linnworks.net/api/Inventory/GetStockLocations` resulted in a `401 Unauthorized` response:
+{"Code":null,"Message":"Token is wrong."}
+ {"class":"App\\Services\\InventoryService","function":"GetStockLocations","file":"/var/www/vendor/guzzlehttp/guzzle/src/Exception/RequestException.php","line":113} 
+[2026-08-30 01:50:57] testing.INFO: Channel AddNewUser {"tenant_id":1,"user_id":"lw-user-1"} 
+[2026-08-30 01:50:57] testing.WARNING: Channel missing AuthorizationToken {"path":"api/Config/ConfigTest"} 
+[2026-08-30 01:51:09] testing.INFO: Channel ListingUpdate {"tenant_id":1,"operation":"create","skus":["LW-TEST-SKU"],"quantities":[0]} 
+[2026-08-30 01:51:09] testing.ERROR: cURL error 56: CONNECT tunnel failed, response 403 (see https://curl.haxx.se/libcurl/c/libcurl-errors.html) for https://api.mercadolibre.com/items/MLM3360000001/description {"exception":"[object] (GuzzleHttp\\Exception\\RequestException(code: 403): cURL error 56: CONNECT tunnel failed, response 403 (see https://curl.haxx.se/libcurl/c/libcurl-errors.html) for https://api.mercadolibre.com/items/MLM3360000001/description at /Users/maxmancera/Documentos - Local/NEW NINA CODE/LIM-Linnworks-MercadoLibre/vendor/guzzlehttp/guzzle/src/Handler/CurlFactory.php:211)
+[stacktrace]
+#0 /Users/maxmancera/Documentos - Local/NEW NINA CODE/LIM-Linnworks-MercadoLibre/vendor/guzzlehttp/guzzle/src/Handler/CurlFactory.php(158): GuzzleHttp\\Handler\\CurlFactory::createRejection(Object(GuzzleHttp\\Handler\\EasyHandle), Array)
+#1 /Users/maxmancera/Documentos - Local/NEW NINA CODE/LIM-Linnworks-MercadoLibre/vendor/guzzlehttp/guzzle/src/Handler/CurlFactory.php(110): GuzzleHttp\\Handler\\CurlFactory::finishError(Object(GuzzleHttp\\Handler\\CurlHandler), Object(GuzzleHttp\\Handler\\EasyHandle), Object(GuzzleHttp\\Handler\\CurlFactory))
+#2 /Users/maxmancera/Documentos - Local/NEW NINA CODE/LIM-Linnworks-MercadoLibre/vendor/guzzlehttp/guzzle/src/Handler/CurlHandler.php(47): GuzzleHttp\\Handler\\CurlFactory::finish(Object(GuzzleHttp\\Handler\\CurlHandler), Object(GuzzleHttp\\Handler\\EasyHandle), Object(GuzzleHttp\\Handler\\CurlFactory))
+#3 /Users/maxmancera/Documentos - Local/NEW NINA CODE/LIM-Linnworks-MercadoLibre/vendor/guzzlehttp/guzzle/src/Handler/Proxy.php(28): GuzzleHttp\\Handler\\CurlHandler->__invoke(Object(GuzzleHttp\\Psr7\\Request), Array)
+#4 /Users/maxmancera/Documentos - Local/NEW NINA CODE/LIM-Linnworks-MercadoLibre/vendor/guzzlehttp/guzzle/src/Handler/Proxy.php(48): GuzzleHttp\\Handler\\Proxy::{closure:GuzzleHttp\\Handler\\Proxy::wrapSync():27}(Object(GuzzleHttp\\Psr7\\Request), Array)
+#5 /Users/maxmancera/Documentos - Local/NEW NINA CODE/LIM-Linnworks-MercadoLibre/vendor/laravel/framework/src/Illuminate/Http/Client/PendingRequest.php(1150): GuzzleHttp\\Handler\\Proxy::{closure:GuzzleHttp\\Handler\\Proxy::wrapStreaming():47}(Object(GuzzleHttp\\Psr7\\Request), Array)
+#6 /Users/maxmancera/Documentos - Local/NEW NINA CODE/LIM-Linnworks-MercadoLibre/vendor/laravel/framework/src/Illuminate/Http/Client/PendingRequest.php(1116): Illuminate\\Http\\Client\\PendingRequest->{closure:{closure:Illuminate\\Http\\Client\\PendingRequest::buildStubHandler():1137}:1138}(Object(GuzzleHttp\\Psr7\\Request), Array)
+#7 /Users/maxmancera/Documentos - Local/NEW NINA CODE/LIM-Linnworks-MercadoLibre/vendor/laravel/framework/src/Illuminate/Http/Client/PendingRequest.php(1102): Illuminate\\Http\\Client\\PendingRequest->{closure:{closure:Illuminate\\Http\\Client\\PendingRequest::buildRecorderHandler():1114}:1115}(Object(GuzzleHttp\\Psr7\\Request), Array)
+#8 /Users/maxmancera/Documentos - Local/NEW NINA CODE/LIM-Linnworks-MercadoLibre/vendor/guzzlehttp/guzzle/src/PrepareBodyMiddleware.php(64): Illuminate\\Http\\Client\\PendingRequest->{closure:{closure:Illuminate\\Http\\Client\\PendingRequest::buildBeforeSendingHandler():1100}:1101}(Object(GuzzleHttp\\Psr7\\Request), Array)
+#9 /Users/maxmancera/Documentos - Local/NEW NINA CODE/LIM-Linnworks-MercadoLibre/vendor/guzzlehttp/guzzle/src/Middleware.php(37): GuzzleHttp\\PrepareBodyMiddleware->__invoke(Object(GuzzleHttp\\Psr7\\Request), Array)
+#10 /Users/maxmancera/Documentos - Local/NEW NINA CODE/LIM-Linnworks-MercadoLibre/vendor/guzzlehttp/guzzle/src/RedirectMiddleware.php(71): GuzzleHttp\\Middleware::{closure:{closure:GuzzleHttp\\Middleware::cookies():28}:29}(Object(GuzzleHttp\\Psr7\\Request), Array)
+#11 /Users/maxmancera/Documentos - Local/NEW NINA CODE/LIM-Linnworks-MercadoLibre/vendor/guzzlehttp/guzzle/src/Middleware.php(61): GuzzleHttp\\RedirectMiddleware->__invoke(Object(GuzzleHttp\\Psr7\\Request), Array)
+#12 /Users/maxmancera/Documentos - Local/NEW NINA CODE/LIM-Linnworks-MercadoLibre/vendor/guzzlehttp/guzzle/src/HandlerStack.php(75): GuzzleHttp\\Middleware::{closure:{closure:GuzzleHttp\\Middleware::httpErrors():58}:59}(Object(GuzzleHttp\\Psr7\\Request), Array)
+#13 /Users/maxmancera/Documentos - Local/NEW NINA CODE/LIM-Linnworks-MercadoLibre/vendor/guzzlehttp/guzzle/src/Client.php(331): GuzzleHttp\\HandlerStack->__invoke(Object(GuzzleHttp\\Psr7\\Request), Array)
+#14 /Users/maxmancera/Documentos - Local/NEW NINA CODE/LIM-Linnworks-MercadoLibre/vendor/guzzlehttp/guzzle/src/Client.php(168): GuzzleHttp\\Client->transfer(Object(GuzzleHttp\\Psr7\\Request), Array)
+#15 /Users/maxmancera/Documentos - Local/NEW NINA CODE/LIM-Linnworks-MercadoLibre/vendor/guzzlehttp/guzzle/src/Client.php(187): GuzzleHttp\\Client->requestAsync('PUT', Object(GuzzleHttp\\Psr7\\Uri), Array)
+#16 /Users/maxmancera/Documentos - Local/NEW NINA CODE/LIM-Linnworks-MercadoLibre/vendor/laravel/framework/src/Illuminate/Http/Client/PendingRequest.php(961): GuzzleHttp\\Client->request('PUT', 'https://api.mer...', Array)
+#17 /Users/maxmancera/Documentos - Local/NEW NINA CODE/LIM-Linnworks-MercadoLibre/vendor/laravel/framework/src/Illuminate/Http/Client/PendingRequest.php(823): Illuminate\\Http\\Client\\PendingRequest->sendRequest('PUT', 'https://api.mer...', Array)
+#18 /Users/maxmancera/Documentos - Local/NEW NINA CODE/LIM-Linnworks-MercadoLibre/vendor/laravel/framework/src/Illuminate/Support/helpers.php(247): Illuminate\\Http\\Client\\PendingRequest->{closure:Illuminate\\Http\\Client\\PendingRequest::send():821}(1)
+#19 /Users/maxmancera/Documentos - Local/NEW NINA CODE/LIM-Linnworks-MercadoLibre/vendor/laravel/framework/src/Illuminate/Http/Client/PendingRequest.php(821): retry(0, Object(Closure), 100, Object(Closure))
+#20 /Users/maxmancera/Documentos - Local/NEW NINA CODE/LIM-Linnworks-MercadoLibre/vendor/laravel/framework/src/Illuminate/Http/Client/PendingRequest.php(755): Illuminate\\Http\\Client\\PendingRequest->send('PUT', 'https://api.mer...', Array)
+#21 /Users/maxmancera/Documentos - Local/NEW NINA CODE/LIM-Linnworks-MercadoLibre/app/Services/MercadoLibreService.php(531): Illuminate\\Http\\Client\\PendingRequest->put('https://api.mer...', Array)
+#22 /Users/maxmancera/Documentos - Local/NEW NINA CODE/LIM-Linnworks-MercadoLibre/app/Http/Controllers/ChannelIntegrationController.php(895): App\\Services\\MercadoLibreService->updateItemDescription(Object(App\\Models\\MercadoLibreAccount), 'MLM3360000001', 'From Linnworks')
+#23 /Users/maxmancera/Documentos - Local/NEW NINA CODE/LIM-Linnworks-MercadoLibre/app/Http/Controllers/ChannelIntegrationController.php(430): App\\Http\\Controllers\\ChannelIntegrationController->pushListingToMercadoLibre(Object(App\\Services\\MercadoLibreService), Object(App\\Models\\MercadoLibreAccount), Array, Array, 'create')
+#24 /Users/maxmancera/Documentos - Local/NEW NINA CODE/LIM-Linnworks-MercadoLibre/vendor/laravel/framework/src/Illuminate/Routing/Controller.php(54): App\\Http\\Controllers\\ChannelIntegrationController->listingUpdate(Object(Illuminate\\Http\\Request), Object(App\\Services\\MercadoLibreService))
+#25 /Users/maxmancera/Documentos - Local/NEW NINA CODE/LIM-Linnworks-MercadoLibre/vendor/laravel/framework/src/Illuminate/Routing/ControllerDispatcher.php(43): Illuminate\\Routing\\Controller->callAction('listingUpdate', Array)
+#26 /Users/maxmancera/Documentos - Local/NEW NINA CODE/LIM-Linnworks-MercadoLibre/vendor/laravel/framework/src/Illuminate/Routing/Route.php(259): Illuminate\\Routing\\ControllerDispatcher->dispatch(Object(Illuminate\\Routing\\Route), Object(App\\Http\\Controllers\\ChannelIntegrationController), 'listingUpdate')
+#27 /Users/maxmancera/Documentos - Local/NEW NINA CODE/LIM-Linnworks-MercadoLibre/vendor/laravel/framework/src/Illuminate/Routing/Route.php(205): Illuminate\\Routing\\Route->runController()
+#28 /Users/maxmancera/Documentos - Local/NEW NINA CODE/LIM-Linnworks-MercadoLibre/vendor/laravel/framework/src/Illuminate/Routing/Router.php(798): Illuminate\\Routing\\Route->run()
+#29 /Users/maxmancera/Documentos - Local/NEW NINA CODE/LIM-Linnworks-MercadoLibre/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(141): Illuminate\\Routing\\Router->{closure:Illuminate\\Routing\\Router::runRouteWithinStack():797}(Object(Illuminate\\Http\\Request))
+#30 /Users/maxmancera/Documentos - Local/NEW NINA CODE/LIM-Linnworks-MercadoLibre/app/Http/Middleware/ResolveChannelToken.php(39): Illuminate\\Pipeline\\Pipeline->{closure:Illuminate\\Pipeline\\Pipeline::prepareDestination():139}(Object(Illuminate\\Http\\Request))
+#31 /Users/maxmancera/Documentos - Local/NEW NINA CODE/LIM-Linnworks-MercadoLibre/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(180): App\\Http\\Middleware\\ResolveChannelToken->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#32 /Users/maxmancera/Documentos - Local/NEW NINA CODE/LIM-Linnworks-MercadoLibre/vendor/laravel/framework/src/Illuminate/Routing/Middleware/SubstituteBindings.php(50): Illuminate\\Pipeline\\Pipeline->{closure:{closure:Illuminate\\Pipeline\\Pipeline::carry():155}:156}(Object(Illuminate\\Http\\Request))
+#33 /Users/maxmancera/Documentos - Local/NEW NINA CODE/LIM-Linnworks-MercadoLibre/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(180): Illuminate\\Routing\\Middleware\\SubstituteBindings->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#34 /Users/maxmancera/Documentos - Local/NEW NINA CODE/LIM-Linnworks-MercadoLibre/vendor/laravel/framework/src/Illuminate/Routing/Middleware/ThrottleRequests.php(126): Illuminate\\Pipeline\\Pipeline->{closure:{closure:Illuminate\\Pipeline\\Pipeline::carry():155}:156}(Object(Illuminate\\Http\\Request))
+#35 /Users/maxmancera/Documentos - Local/NEW NINA CODE/LIM-Linnworks-MercadoLibre/vendor/laravel/framework/src/Illuminate/Routing/Middleware/ThrottleRequests.php(92): Illuminate\\Routing\\Middleware\\ThrottleRequests->handleRequest(Object(Illuminate\\Http\\Request), Object(Closure), Array)
+#36 /Users/maxmancera/Documentos - Local/NEW NINA CODE/LIM-Linnworks-MercadoLibre/vendor/laravel/framework/src/Illuminate/Routing/Middleware/ThrottleRequests.php(54): Illuminate\\Routing\\Middleware\\ThrottleRequests->handleRequestUsingNamedLimiter(Object(Illuminate\\Http\\Request), Object(Closure), 'api', Object(Closure))
+#37 /Users/maxmancera/Documentos - Local/NEW NINA CODE/LIM-Linnworks-MercadoLibre/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(180): Illuminate\\Routing\\Middleware\\ThrottleRequests->handle(Object(Illuminate\\Http\\Request), Object(Closure), 'api')
+#38 /Users/maxmancera/Documentos - Local/NEW NINA CODE/LIM-Linnworks-MercadoLibre/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(116): Illuminate\\Pipeline\\Pipeline->{closure:{closure:Illuminate\\Pipeline\\Pipeline::carry():155}:156}(Object(Illuminate\\Http\\Request))
+#39 /Users/maxmancera/Documentos - Local/NEW NINA CODE/LIM-Linnworks-MercadoLibre/vendor/laravel/framework/src/Illuminate/Routing/Router.php(797): Illuminate\\Pipeline\\Pipeline->then(Object(Closure))
+#40 /Users/maxmancera/Documentos - Local/NEW NINA CODE/LIM-Linnworks-MercadoLibre/vendor/laravel/framework/src/Illuminate/Routing/Router.php(776): Illuminate\\Routing\\Router->runRouteWithinStack(Object(Illuminate\\Routing\\Route), Object(Illuminate\\Http\\Request))
+#41 /Users/maxmancera/Documentos - Local/NEW NINA CODE/LIM-Linnworks-MercadoLibre/vendor/laravel/framework/src/Illuminate/Routing/Router.php(740): Illuminate\\Routing\\Router->runRoute(Object(Illuminate\\Http\\Request), Object(Illuminate\\Routing\\Route))
+#42 /Users/maxmancera/Documentos - Local/NEW NINA CODE/LIM-Linnworks-MercadoLibre/vendor/laravel/framework/src/Illuminate/Routing/Router.php(729): Illuminate\\Routing\\Router->dispatchToRoute(Object(Illuminate\\Http\\Request))
+#43 /Users/maxmancera/Documentos - Local/NEW NINA CODE/LIM-Linnworks-MercadoLibre/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(190): Illuminate\\Routing\\Router->dispatch(Object(Illuminate\\Http\\Request))
+#44 /Users/maxmancera/Documentos - Local/NEW NINA CODE/LIM-Linnworks-MercadoLibre/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(141): Illuminate\\Foundation\\Http\\Kernel->{closure:Illuminate\\Foundation\\Http\\Kernel::dispatchToRouter():187}(Object(Illuminate\\Http\\Request))
+#45 /Users/maxmancera/Documentos - Local/NEW NINA CODE/LIM-Linnworks-MercadoLibre/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TransformsRequest.php(21): Illuminate\\Pipeline\\Pipeline->{closure:Illuminate\\Pipeline\\Pipeline::prepareDestination():139}(Object(Illuminate\\Http\\Request))
+#46 /Users/maxmancera/Documentos - Local/NEW NINA CODE/LIM-Linnworks-MercadoLibre/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/ConvertEmptyStringsToNull.php(31): Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#47 /Users/maxmancera/Documentos - Local/NEW NINA CODE/LIM-Linnworks-MercadoLibre/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(180): Illuminate\\Foundation\\Http\\Middleware\\ConvertEmptyStringsToNull->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#48 /Users/maxmancera/Documentos - Local/NEW NINA CODE/LIM-Linnworks-MercadoLibre/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TransformsRequest.php(21): Illuminate\\Pipeline\\Pipeline->{closure:{closure:Illuminate\\Pipeline\\Pipeline::carry():155}:156}(Object(Illuminate\\Http\\Request))
+#49 /Users/maxmancera/Documentos - Local/NEW NINA CODE/LIM-Linnworks-MercadoLibre/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TrimStrings.php(40): Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#50 /Users/maxmancera/Documentos - Local/NEW NINA CODE/LIM-Linnworks-MercadoLibre/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(180): Illuminate\\Foundation\\Http\\Middleware\\TrimStrings->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#51 /Users/maxmancera/Documentos - Local/NEW NINA CODE/LIM-Linnworks-MercadoLibre/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/ValidatePostSize.php(27): Illuminate\\Pipeline\\Pipeline->{closure:{closure:Illuminate\\Pipeline\\Pipeline::carry():155}:156}(Object(Illuminate\\Http\\Request))
+#52 /Users/maxmancera/Documentos - Local/NEW NINA CODE/LIM-Linnworks-MercadoLibre/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(180): Illuminate\\Foundation\\Http\\Middleware\\ValidatePostSize->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#53 /Users/maxmancera/Documentos - Local/NEW NINA CODE/LIM-Linnworks-MercadoLibre/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/PreventRequestsDuringMaintenance.php(86): Illuminate\\Pipeline\\Pipeline->{closure:{closure:Illuminate\\Pipeline\\Pipeline::carry():155}:156}(Object(Illuminate\\Http\\Request))
+#54 /Users/maxmancera/Documentos - Local/NEW NINA CODE/LIM-Linnworks-MercadoLibre/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(180): Illuminate\\Foundation\\Http\\Middleware\\PreventRequestsDuringMaintenance->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#55 /Users/maxmancera/Documentos - Local/NEW NINA CODE/LIM-Linnworks-MercadoLibre/vendor/fruitcake/laravel-cors/src/HandleCors.php(52): Illuminate\\Pipeline\\Pipeline->{closure:{closure:Illuminate\\Pipeline\\Pipeline::carry():155}:156}(Object(Illuminate\\Http\\Request))
+#56 /Users/maxmancera/Documentos - Local/NEW NINA CODE/LIM-Linnworks-MercadoLibre/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(180): Fruitcake\\Cors\\HandleCors->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#57 /Users/maxmancera/Documentos - Local/NEW NINA CODE/LIM-Linnworks-MercadoLibre/vendor/laravel/framework/src/Illuminate/Http/Middleware/TrustProxies.php(39): Illuminate\\Pipeline\\Pipeline->{closure:{closure:Illuminate\\Pipeline\\Pipeline::carry():155}:156}(Object(Illuminate\\Http\\Request))
+#58 /Users/maxmancera/Documentos - Local/NEW NINA CODE/LIM-Linnworks-MercadoLibre/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(180): Illuminate\\Http\\Middleware\\TrustProxies->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#59 /Users/maxmancera/Documentos - Local/NEW NINA CODE/LIM-Linnworks-MercadoLibre/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(116): Illuminate\\Pipeline\\Pipeline->{closure:{closure:Illuminate\\Pipeline\\Pipeline::carry():155}:156}(Object(Illuminate\\Http\\Request))
+#60 /Users/maxmancera/Documentos - Local/NEW NINA CODE/LIM-Linnworks-MercadoLibre/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(165): Illuminate\\Pipeline\\Pipeline->then(Object(Closure))
+#61 /Users/maxmancera/Documentos - Local/NEW NINA CODE/LIM-Linnworks-MercadoLibre/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(134): Illuminate\\Foundation\\Http\\Kernel->sendRequestThroughRouter(Object(Illuminate\\Http\\Request))
+#62 /Users/maxmancera/Documentos - Local/NEW NINA CODE/LIM-Linnworks-MercadoLibre/vendor/laravel/framework/src/Illuminate/Foundation/Testing/Concerns/MakesHttpRequests.php(556): Illuminate\\Foundation\\Http\\Kernel->handle(Object(Illuminate\\Http\\Request))
+#63 /Users/maxmancera/Documentos - Local/NEW NINA CODE/LIM-Linnworks-MercadoLibre/vendor/laravel/framework/src/Illuminate/Foundation/Testing/Concerns/MakesHttpRequests.php(522): Illuminate\\Foundation\\Testing\\TestCase->call('POST', '/api/Listing/Li...', Array, Array, Array, Array, '{\"Authorization...')
+#64 /Users/maxmancera/Documentos - Local/NEW NINA CODE/LIM-Linnworks-MercadoLibre/vendor/laravel/framework/src/Illuminate/Foundation/Testing/Concerns/MakesHttpRequests.php(365): Illuminate\\Foundation\\Testing\\TestCase->json('POST', '/api/Listing/Li...', Array, Array)
+#65 /Users/maxmancera/Documentos - Local/NEW NINA CODE/LIM-Linnworks-MercadoLibre/tests/Feature/ChannelListingTest.php(63): Illuminate\\Foundation\\Testing\\TestCase->postJson('/api/Listing/Li...', Array)
+#66 /Users/maxmancera/Documentos - Local/NEW NINA CODE/LIM-Linnworks-MercadoLibre/vendor/phpunit/phpunit/src/Framework/TestCase.php(1608): Tests\\Feature\\ChannelListingTest->test_listing_update_creates_ml_item_and_check_feed()
+#67 /Users/maxmancera/Documentos - Local/NEW NINA CODE/LIM-Linnworks-MercadoLibre/vendor/phpunit/phpunit/src/Framework/TestCase.php(1214): PHPUnit\\Framework\\TestCase->runTest()
+#68 /Users/maxmancera/Documentos - Local/NEW NINA CODE/LIM-Linnworks-MercadoLibre/vendor/phpunit/phpunit/src/Framework/TestResult.php(728): PHPUnit\\Framework\\TestCase->runBare()
+#69 /Users/maxmancera/Documentos - Local/NEW NINA CODE/LIM-Linnworks-MercadoLibre/vendor/phpunit/phpunit/src/Framework/TestCase.php(964): PHPUnit\\Framework\\TestResult->run(Object(Tests\\Feature\\ChannelListingTest))
+#70 /Users/maxmancera/Documentos - Local/NEW NINA CODE/LIM-Linnworks-MercadoLibre/vendor/phpunit/phpunit/src/Framework/TestSuite.php(684): PHPUnit\\Framework\\TestCase->run(Object(PHPUnit\\Framework\\TestResult))
+#71 /Users/maxmancera/Documentos - Local/NEW NINA CODE/LIM-Linnworks-MercadoLibre/vendor/phpunit/phpunit/src/TextUI/TestRunner.php(653): PHPUnit\\Framework\\TestSuite->run(Object(PHPUnit\\Framework\\TestResult))
+#72 /Users/maxmancera/Documentos - Local/NEW NINA CODE/LIM-Linnworks-MercadoLibre/vendor/phpunit/phpunit/src/TextUI/Command.php(144): PHPUnit\\TextUI\\TestRunner->run(Object(PHPUnit\\Framework\\TestSuite), Array, Array, true)
+#73 /Users/maxmancera/Documentos - Local/NEW NINA CODE/LIM-Linnworks-MercadoLibre/vendor/phpunit/phpunit/src/TextUI/Command.php(97): PHPUnit\\TextUI\\Command->run(Array, true)
+#74 /Users/maxmancera/Documentos - Local/NEW NINA CODE/LIM-Linnworks-MercadoLibre/vendor/phpunit/phpunit/phpunit(98): PHPUnit\\TextUI\\Command::main()
+#75 /Users/maxmancera/Documentos - Local/NEW NINA CODE/LIM-Linnworks-MercadoLibre/vendor/bin/phpunit(122): include('/Users/maxmance...')
+#76 {main}
+"} 
+[2026-08-30 01:51:26] testing.INFO: Channel Orders {"page":1,"count":1} 
+[2026-08-30 01:51:31] testing.INFO: Channel Orders {"page":1,"count":1} 
+[2026-08-30 01:56:46] local.ERROR: ML orders/search failed {"body":"{\"message\":\"Date order.date_created.from has an invalid date format\",\"error\":\"invalid_date_format\",\"status\":400,\"cause\":[]}"} 
+[2026-08-30 01:56:46] local.INFO: Channel Orders {"page":1,"count":0} 
+[2026-08-30 02:00:11] local.ERROR: Client error: `POST https://us-ext.linnworks.net/api/Main/ping` resulted in a `401 Unauthorized` response:
+{"Code":null,"Message":"Token is wrong."}
+ {"class":"App\\Services\\LinnworkApiMainPing","function":"_linnworksPing","file":"/var/www/vendor/guzzlehttp/guzzle/src/Exception/RequestException.php","line":113} 
+[2026-08-30 02:00:11] local.ERROR: :Integration error in [RefreshLinworksToken] for userlinnworks@limmedia.io {"class":"App\\Console\\Commands\\LinnworksTokenRefreshTask","function":"refreshLinnworkUser","file":"/var/www/app/Console/Commands/LinnworksTokenRefreshTask.php","line":59} 
+[2026-08-30 02:00:12] local.ERROR: Client error: `POST https://us-ext.linnworks.net/api/Inventory/GetStockLocations` resulted in a `401 Unauthorized` response:
+{"Code":null,"Message":"Token is wrong."}
+ {"class":"App\\Services\\InventoryService","function":"GetStockLocations","file":"/var/www/vendor/guzzlehttp/guzzle/src/Exception/RequestException.php","line":113} 
+[2026-08-30 02:00:12] local.ERROR: :Integration error in [StockLocations] for userlinnworks@limmedia.io {"class":"App\\Console\\Commands\\IntegrationProcessedOrders","function":"handle","file":"/var/www/app/Console/Commands/IntegrationProcessedOrders.php","line":56} 
+[2026-08-30 02:00:17] local.ERROR: Client error: `POST https://us-ext.linnworks.net/api/Inventory/GetStockLocations` resulted in a `401 Unauthorized` response:
+{"Code":null,"Message":"Token is wrong."}
+ {"class":"App\\Services\\InventoryService","function":"GetStockLocations","file":"/var/www/vendor/guzzlehttp/guzzle/src/Exception/RequestException.php","line":113} 
+[2026-08-30 02:00:19] local.ERROR: Client error: `POST https://us-ext.linnworks.net/api/Inventory/GetStockLocations` resulted in a `401 Unauthorized` response:
+{"Code":null,"Message":"Token is wrong."}
+ {"class":"App\\Services\\InventoryService","function":"GetStockLocations","file":"/var/www/vendor/guzzlehttp/guzzle/src/Exception/RequestException.php","line":113} 
+[2026-08-30 02:06:50] local.ERROR: ML orders/search failed {"body":"{\"message\":\"Date order.date_created.from has an invalid date format\",\"error\":\"invalid_date_format\",\"status\":400,\"cause\":[]}"} 
+[2026-08-30 02:06:50] local.INFO: Channel Orders {"page":1,"count":0} 
+[2026-08-30 02:15:44] local.ERROR: Client error: `POST https://us-ext.linnworks.net/api/Main/ping` resulted in a `401 Unauthorized` response:
+{"Code":null,"Message":"Token is wrong."}
+ {"class":"App\\Services\\LinnworkApiMainPing","function":"_linnworksPing","file":"/var/www/vendor/guzzlehttp/guzzle/src/Exception/RequestException.php","line":113} 
+[2026-08-30 02:15:44] local.ERROR: :Integration error in [RefreshLinworksToken] for userlinnworks@limmedia.io {"class":"App\\Console\\Commands\\LinnworksTokenRefreshTask","function":"refreshLinnworkUser","file":"/var/www/app/Console/Commands/LinnworksTokenRefreshTask.php","line":59} 
+[2026-08-30 02:15:46] local.ERROR: Client error: `POST https://us-ext.linnworks.net/api/Inventory/GetStockLocations` resulted in a `401 Unauthorized` response:
+{"Code":null,"Message":"Token is wrong."}
+ {"class":"App\\Services\\InventoryService","function":"GetStockLocations","file":"/var/www/vendor/guzzlehttp/guzzle/src/Exception/RequestException.php","line":113} 
+[2026-08-30 02:15:46] local.ERROR: :Integration error in [StockLocations] for userlinnworks@limmedia.io {"class":"App\\Console\\Commands\\IntegrationProcessedOrders","function":"handle","file":"/var/www/app/Console/Commands/IntegrationProcessedOrders.php","line":56} 
+[2026-08-30 02:15:50] local.ERROR: Client error: `POST https://us-ext.linnworks.net/api/Inventory/GetStockLocations` resulted in a `401 Unauthorized` response:
+{"Code":null,"Message":"Token is wrong."}
+ {"class":"App\\Services\\InventoryService","function":"GetStockLocations","file":"/var/www/vendor/guzzlehttp/guzzle/src/Exception/RequestException.php","line":113} 
+[2026-08-30 02:15:54] local.ERROR: Client error: `POST https://us-ext.linnworks.net/api/Inventory/GetStockLocations` resulted in a `401 Unauthorized` response:
+{"Code":null,"Message":"Token is wrong."}
+ {"class":"App\\Services\\InventoryService","function":"GetStockLocations","file":"/var/www/vendor/guzzlehttp/guzzle/src/Exception/RequestException.php","line":113} 
+[2026-08-30 02:16:56] local.ERROR: ML orders/search failed {"body":"{\"message\":\"Date order.date_created.from has an invalid date format\",\"error\":\"invalid_date_format\",\"status\":400,\"cause\":[]}"} 
+[2026-08-30 02:16:56] local.INFO: Channel Orders {"page":1,"count":0} 
+[2026-08-30 02:32:24] local.ERROR: PHP Parse error: Syntax error, unexpected T_OBJECT_OPERATOR on line 7 {"exception":"[object] (Psy\\Exception\\ParseErrorException(code: 0): PHP Parse error: Syntax error, unexpected T_OBJECT_OPERATOR on line 7 at /var/www/vendor/psy/psysh/src/Exception/ParseErrorException.php:38)
+[stacktrace]
+#0 /var/www/vendor/psy/psysh/src/CodeCleaner.php(335): Psy\\Exception\\ParseErrorException::fromParseError(Object(PhpParser\\Error))
+#1 /var/www/vendor/psy/psysh/src/CodeCleaner.php(264): Psy\\CodeCleaner->parse('<?php \\n$a = App...', false)
+#2 /var/www/vendor/psy/psysh/src/Shell.php(860): Psy\\CodeCleaner->clean(Array, false)
+#3 /var/www/vendor/psy/psysh/src/Shell.php(889): Psy\\Shell->addCode('\\n$a = App\\\\Model...', true)
+#4 /var/www/vendor/psy/psysh/src/Shell.php(1343): Psy\\Shell->setCode('\\n$a = App\\\\Model...', true)
+#5 /var/www/vendor/laravel/tinker/src/Console/TinkerCommand.php(76): Psy\\Shell->execute('\\n$a = App\\\\Model...')
+#6 /var/www/vendor/laravel/framework/src/Illuminate/Container/BoundMethod.php(36): Laravel\\Tinker\\Console\\TinkerCommand->handle()
+#7 /var/www/vendor/laravel/framework/src/Illuminate/Container/Util.php(41): Illuminate\\Container\\BoundMethod::Illuminate\\Container\\{closure}()
+#8 /var/www/vendor/laravel/framework/src/Illuminate/Container/BoundMethod.php(93): Illuminate\\Container\\Util::unwrapIfClosure(Object(Closure))
+#9 /var/www/vendor/laravel/framework/src/Illuminate/Container/BoundMethod.php(37): Illuminate\\Container\\BoundMethod::callBoundMethod(Object(Illuminate\\Foundation\\Application), Array, Object(Closure))
+#10 /var/www/vendor/laravel/framework/src/Illuminate/Container/Container.php(661): Illuminate\\Container\\BoundMethod::call(Object(Illuminate\\Foundation\\Application), Array, Array, NULL)
+#11 /var/www/vendor/laravel/framework/src/Illuminate/Console/Command.php(183): Illuminate\\Container\\Container->call(Array)
+#12 /var/www/vendor/symfony/console/Command/Command.php(312): Illuminate\\Console\\Command->execute(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Illuminate\\Console\\OutputStyle))
+#13 /var/www/vendor/laravel/framework/src/Illuminate/Console/Command.php(153): Symfony\\Component\\Console\\Command\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Illuminate\\Console\\OutputStyle))
+#14 /var/www/vendor/symfony/console/Application.php(1022): Illuminate\\Console\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#15 /var/www/vendor/symfony/console/Application.php(314): Symfony\\Component\\Console\\Application->doRunCommand(Object(Laravel\\Tinker\\Console\\TinkerCommand), Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#16 /var/www/vendor/symfony/console/Application.php(168): Symfony\\Component\\Console\\Application->doRun(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#17 /var/www/vendor/laravel/framework/src/Illuminate/Console/Application.php(102): Symfony\\Component\\Console\\Application->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#18 /var/www/vendor/laravel/framework/src/Illuminate/Foundation/Console/Kernel.php(155): Illuminate\\Console\\Application->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#19 /var/www/artisan(37): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#20 {main}
+"} 
+[2026-08-30 02:36:18] testing.INFO: Channel Orders {"page":1,"count":1} 
+[2026-08-30 02:37:00] local.INFO: Channel Orders {"page":1,"count":0} 
+[2026-08-30 02:45:41] local.ERROR: Client error: `POST https://us-ext.linnworks.net/api/Main/ping` resulted in a `401 Unauthorized` response:
+{"Code":null,"Message":"Token is wrong."}
+ {"class":"App\\Services\\LinnworkApiMainPing","function":"_linnworksPing","file":"/var/www/vendor/guzzlehttp/guzzle/src/Exception/RequestException.php","line":113} 
+[2026-08-30 02:45:41] local.ERROR: :Integration error in [RefreshLinworksToken] for userlinnworks@limmedia.io {"class":"App\\Console\\Commands\\LinnworksTokenRefreshTask","function":"refreshLinnworkUser","file":"/var/www/app/Console/Commands/LinnworksTokenRefreshTask.php","line":59} 
+[2026-08-30 02:45:44] local.ERROR: Client error: `POST https://us-ext.linnworks.net/api/Inventory/GetStockLocations` resulted in a `401 Unauthorized` response:
+{"Code":null,"Message":"Token is wrong."}
+ {"class":"App\\Services\\InventoryService","function":"GetStockLocations","file":"/var/www/vendor/guzzlehttp/guzzle/src/Exception/RequestException.php","line":113} 
+[2026-08-30 02:45:44] local.ERROR: :Integration error in [StockLocations] for userlinnworks@limmedia.io {"class":"App\\Console\\Commands\\IntegrationProcessedOrders","function":"handle","file":"/var/www/app/Console/Commands/IntegrationProcessedOrders.php","line":56} 
+[2026-08-30 02:45:47] local.ERROR: Client error: `POST https://us-ext.linnworks.net/api/Inventory/GetStockLocations` resulted in a `401 Unauthorized` response:
+{"Code":null,"Message":"Token is wrong."}
+ {"class":"App\\Services\\InventoryService","function":"GetStockLocations","file":"/var/www/vendor/guzzlehttp/guzzle/src/Exception/RequestException.php","line":113} 
+[2026-08-30 02:45:50] local.ERROR: Client error: `POST https://us-ext.linnworks.net/api/Inventory/GetStockLocations` resulted in a `401 Unauthorized` response:
+{"Code":null,"Message":"Token is wrong."}
+ {"class":"App\\Services\\InventoryService","function":"GetStockLocations","file":"/var/www/vendor/guzzlehttp/guzzle/src/Exception/RequestException.php","line":113} 
+[2026-08-30 02:47:03] local.INFO: Channel Orders {"page":1,"count":1} 
+[2026-08-30 02:57:10] local.INFO: Channel Orders {"page":1,"count":2} 
+[2026-08-30 03:00:13] local.ERROR: Client error: `POST https://us-ext.linnworks.net/api/Main/ping` resulted in a `401 Unauthorized` response:
+{"Code":null,"Message":"Token is wrong."}
+ {"class":"App\\Services\\LinnworkApiMainPing","function":"_linnworksPing","file":"/var/www/vendor/guzzlehttp/guzzle/src/Exception/RequestException.php","line":113} 
+[2026-08-30 03:00:13] local.ERROR: :Integration error in [RefreshLinworksToken] for userlinnworks@limmedia.io {"class":"App\\Console\\Commands\\LinnworksTokenRefreshTask","function":"refreshLinnworkUser","file":"/var/www/app/Console/Commands/LinnworksTokenRefreshTask.php","line":59} 
+[2026-08-30 03:00:15] local.ERROR: Client error: `POST https://us-ext.linnworks.net/api/Inventory/GetStockLocations` resulted in a `401 Unauthorized` response:
+{"Code":null,"Message":"Token is wrong."}
+ {"class":"App\\Services\\InventoryService","function":"GetStockLocations","file":"/var/www/vendor/guzzlehttp/guzzle/src/Exception/RequestException.php","line":113} 
+[2026-08-30 03:00:15] local.ERROR: :Integration error in [StockLocations] for userlinnworks@limmedia.io {"class":"App\\Console\\Commands\\IntegrationProcessedOrders","function":"handle","file":"/var/www/app/Console/Commands/IntegrationProcessedOrders.php","line":56} 
+[2026-08-30 03:00:20] local.ERROR: Client error: `POST https://us-ext.linnworks.net/api/Inventory/GetStockLocations` resulted in a `401 Unauthorized` response:
+{"Code":null,"Message":"Token is wrong."}
+ {"class":"App\\Services\\InventoryService","function":"GetStockLocations","file":"/var/www/vendor/guzzlehttp/guzzle/src/Exception/RequestException.php","line":113} 
+[2026-08-30 03:00:23] local.ERROR: Client error: `POST https://us-ext.linnworks.net/api/Inventory/GetStockLocations` resulted in a `401 Unauthorized` response:
+{"Code":null,"Message":"Token is wrong."}
+ {"class":"App\\Services\\InventoryService","function":"GetStockLocations","file":"/var/www/vendor/guzzlehttp/guzzle/src/Exception/RequestException.php","line":113} 
+[2026-08-30 03:07:15] local.INFO: Channel Orders {"page":1,"count":2} 
+[2026-08-30 03:15:42] local.ERROR: Client error: `POST https://us-ext.linnworks.net/api/Main/ping` resulted in a `401 Unauthorized` response:
+{"Code":null,"Message":"Token is wrong."}
+ {"class":"App\\Services\\LinnworkApiMainPing","function":"_linnworksPing","file":"/var/www/vendor/guzzlehttp/guzzle/src/Exception/RequestException.php","line":113} 
+[2026-08-30 03:15:42] local.ERROR: :Integration error in [RefreshLinworksToken] for userlinnworks@limmedia.io {"class":"App\\Console\\Commands\\LinnworksTokenRefreshTask","function":"refreshLinnworkUser","file":"/var/www/app/Console/Commands/LinnworksTokenRefreshTask.php","line":59} 
+[2026-08-30 03:15:43] local.ERROR: Client error: `POST https://us-ext.linnworks.net/api/Inventory/GetStockLocations` resulted in a `401 Unauthorized` response:
+{"Code":null,"Message":"Token is wrong."}
+ {"class":"App\\Services\\InventoryService","function":"GetStockLocations","file":"/var/www/vendor/guzzlehttp/guzzle/src/Exception/RequestException.php","line":113} 
+[2026-08-30 03:15:43] local.ERROR: :Integration error in [StockLocations] for userlinnworks@limmedia.io {"class":"App\\Console\\Commands\\IntegrationProcessedOrders","function":"handle","file":"/var/www/app/Console/Commands/IntegrationProcessedOrders.php","line":56} 
+[2026-08-30 03:15:46] local.ERROR: Client error: `POST https://us-ext.linnworks.net/api/Inventory/GetStockLocations` resulted in a `401 Unauthorized` response:
+{"Code":null,"Message":"Token is wrong."}
+ {"class":"App\\Services\\InventoryService","function":"GetStockLocations","file":"/var/www/vendor/guzzlehttp/guzzle/src/Exception/RequestException.php","line":113} 
+[2026-08-30 03:15:48] local.ERROR: Client error: `POST https://us-ext.linnworks.net/api/Inventory/GetStockLocations` resulted in a `401 Unauthorized` response:
+{"Code":null,"Message":"Token is wrong."}
+ {"class":"App\\Services\\InventoryService","function":"GetStockLocations","file":"/var/www/vendor/guzzlehttp/guzzle/src/Exception/RequestException.php","line":113} 
+[2026-08-30 03:17:18] local.INFO: Channel Orders {"page":1,"count":0} 
+[2026-08-30 03:27:21] local.INFO: Channel Orders {"page":1,"count":0} 
+[2026-08-30 03:30:04] local.ERROR: Client error: `POST https://us-ext.linnworks.net/api/Main/ping` resulted in a `401 Unauthorized` response:
+{"Code":null,"Message":"Token is wrong."}
+ {"class":"App\\Services\\LinnworkApiMainPing","function":"_linnworksPing","file":"/var/www/vendor/guzzlehttp/guzzle/src/Exception/RequestException.php","line":113} 
+[2026-08-30 03:30:04] local.ERROR: :Integration error in [RefreshLinworksToken] for userlinnworks@limmedia.io {"class":"App\\Console\\Commands\\LinnworksTokenRefreshTask","function":"refreshLinnworkUser","file":"/var/www/app/Console/Commands/LinnworksTokenRefreshTask.php","line":59} 
+[2026-08-30 03:30:06] local.ERROR: Client error: `POST https://us-ext.linnworks.net/api/Inventory/GetStockLocations` resulted in a `401 Unauthorized` response:
+{"Code":null,"Message":"Token is wrong."}
+ {"class":"App\\Services\\InventoryService","function":"GetStockLocations","file":"/var/www/vendor/guzzlehttp/guzzle/src/Exception/RequestException.php","line":113} 
+[2026-08-30 03:30:06] local.ERROR: :Integration error in [StockLocations] for userlinnworks@limmedia.io {"class":"App\\Console\\Commands\\IntegrationProcessedOrders","function":"handle","file":"/var/www/app/Console/Commands/IntegrationProcessedOrders.php","line":56} 
+[2026-08-30 03:30:09] local.ERROR: Client error: `POST https://us-ext.linnworks.net/api/Inventory/GetStockLocations` resulted in a `401 Unauthorized` response:
+{"Code":null,"Message":"Token is wrong."}
+ {"class":"App\\Services\\InventoryService","function":"GetStockLocations","file":"/var/www/vendor/guzzlehttp/guzzle/src/Exception/RequestException.php","line":113} 
+[2026-08-30 03:30:11] local.ERROR: Client error: `POST https://us-ext.linnworks.net/api/Inventory/GetStockLocations` resulted in a `401 Unauthorized` response:
+{"Code":null,"Message":"Token is wrong."}
+ {"class":"App\\Services\\InventoryService","function":"GetStockLocations","file":"/var/www/vendor/guzzlehttp/guzzle/src/Exception/RequestException.php","line":113} 
+[2026-08-30 03:37:24] local.INFO: Channel Orders {"page":1,"count":0} 
+[2026-08-30 03:45:32] local.ERROR: Client error: `POST https://us-ext.linnworks.net/api/Main/ping` resulted in a `401 Unauthorized` response:
+{"Code":null,"Message":"Token is wrong."}
+ {"class":"App\\Services\\LinnworkApiMainPing","function":"_linnworksPing","file":"/var/www/vendor/guzzlehttp/guzzle/src/Exception/RequestException.php","line":113} 
+[2026-08-30 03:45:32] local.ERROR: :Integration error in [RefreshLinworksToken] for userlinnworks@limmedia.io {"class":"App\\Console\\Commands\\LinnworksTokenRefreshTask","function":"refreshLinnworkUser","file":"/var/www/app/Console/Commands/LinnworksTokenRefreshTask.php","line":59} 
+[2026-08-30 03:45:33] local.ERROR: Client error: `POST https://us-ext.linnworks.net/api/Inventory/GetStockLocations` resulted in a `401 Unauthorized` response:
+{"Code":null,"Message":"Token is wrong."}
+ {"class":"App\\Services\\InventoryService","function":"GetStockLocations","file":"/var/www/vendor/guzzlehttp/guzzle/src/Exception/RequestException.php","line":113} 
+[2026-08-30 03:45:33] local.ERROR: :Integration error in [StockLocations] for userlinnworks@limmedia.io {"class":"App\\Console\\Commands\\IntegrationProcessedOrders","function":"handle","file":"/var/www/app/Console/Commands/IntegrationProcessedOrders.php","line":56} 
+[2026-08-30 03:45:36] local.ERROR: Client error: `POST https://us-ext.linnworks.net/api/Inventory/GetStockLocations` resulted in a `401 Unauthorized` response:
+{"Code":null,"Message":"Token is wrong."}
+ {"class":"App\\Services\\InventoryService","function":"GetStockLocations","file":"/var/www/vendor/guzzlehttp/guzzle/src/Exception/RequestException.php","line":113} 
+[2026-08-30 03:45:38] local.ERROR: Client error: `POST https://us-ext.linnworks.net/api/Inventory/GetStockLocations` resulted in a `401 Unauthorized` response:
+{"Code":null,"Message":"Token is wrong."}
+ {"class":"App\\Services\\InventoryService","function":"GetStockLocations","file":"/var/www/vendor/guzzlehttp/guzzle/src/Exception/RequestException.php","line":113} 
+[2026-08-30 03:47:27] local.INFO: Channel Orders {"page":1,"count":0} 
+[2026-08-30 03:57:32] local.INFO: Channel Orders {"page":1,"count":0} 
+[2026-08-30 04:00:58] local.ERROR: Client error: `POST https://us-ext.linnworks.net/api/Main/ping` resulted in a `401 Unauthorized` response:
+{"Code":null,"Message":"Token is wrong."}
+ {"class":"App\\Services\\LinnworkApiMainPing","function":"_linnworksPing","file":"/var/www/vendor/guzzlehttp/guzzle/src/Exception/RequestException.php","line":113} 
+[2026-08-30 04:00:58] local.ERROR: :Integration error in [RefreshLinworksToken] for userlinnworks@limmedia.io {"class":"App\\Console\\Commands\\LinnworksTokenRefreshTask","function":"refreshLinnworkUser","file":"/var/www/app/Console/Commands/LinnworksTokenRefreshTask.php","line":59} 
+[2026-08-30 04:00:59] local.ERROR: Client error: `POST https://us-ext.linnworks.net/api/Inventory/GetStockLocations` resulted in a `401 Unauthorized` response:
+{"Code":null,"Message":"Token is wrong."}
+ {"class":"App\\Services\\InventoryService","function":"GetStockLocations","file":"/var/www/vendor/guzzlehttp/guzzle/src/Exception/RequestException.php","line":113} 
+[2026-08-30 04:00:59] local.ERROR: :Integration error in [StockLocations] for userlinnworks@limmedia.io {"class":"App\\Console\\Commands\\IntegrationProcessedOrders","function":"handle","file":"/var/www/app/Console/Commands/IntegrationProcessedOrders.php","line":56} 
+[2026-08-30 04:01:02] local.ERROR: Client error: `POST https://us-ext.linnworks.net/api/Inventory/GetStockLocations` resulted in a `401 Unauthorized` response:
+{"Code":null,"Message":"Token is wrong."}
+ {"class":"App\\Services\\InventoryService","function":"GetStockLocations","file":"/var/www/vendor/guzzlehttp/guzzle/src/Exception/RequestException.php","line":113} 
+[2026-08-30 04:01:04] local.ERROR: Client error: `POST https://us-ext.linnworks.net/api/Inventory/GetStockLocations` resulted in a `401 Unauthorized` response:
+{"Code":null,"Message":"Token is wrong."}
+ {"class":"App\\Services\\InventoryService","function":"GetStockLocations","file":"/var/www/vendor/guzzlehttp/guzzle/src/Exception/RequestException.php","line":113} 
+[2026-08-30 04:37:42] local.INFO: Channel Orders {"page":1,"count":0} 
+[2026-08-30 04:45:37] local.ERROR: Client error: `POST https://us-ext.linnworks.net/api/Main/ping` resulted in a `401 Unauthorized` response:
+{"Code":null,"Message":"Token is wrong."}
+ {"class":"App\\Services\\LinnworkApiMainPing","function":"_linnworksPing","file":"/var/www/vendor/guzzlehttp/guzzle/src/Exception/RequestException.php","line":113} 
+[2026-08-30 04:45:37] local.ERROR: :Integration error in [RefreshLinworksToken] for userlinnworks@limmedia.io {"class":"App\\Console\\Commands\\LinnworksTokenRefreshTask","function":"refreshLinnworkUser","file":"/var/www/app/Console/Commands/LinnworksTokenRefreshTask.php","line":59} 
+[2026-08-30 04:45:38] local.ERROR: Client error: `POST https://us-ext.linnworks.net/api/Inventory/GetStockLocations` resulted in a `401 Unauthorized` response:
+{"Code":null,"Message":"Token is wrong."}
+ {"class":"App\\Services\\InventoryService","function":"GetStockLocations","file":"/var/www/vendor/guzzlehttp/guzzle/src/Exception/RequestException.php","line":113} 
+[2026-08-30 04:45:38] local.ERROR: :Integration error in [StockLocations] for userlinnworks@limmedia.io {"class":"App\\Console\\Commands\\IntegrationProcessedOrders","function":"handle","file":"/var/www/app/Console/Commands/IntegrationProcessedOrders.php","line":56} 
+[2026-08-30 04:45:40] local.ERROR: Client error: `POST https://us-ext.linnworks.net/api/Inventory/GetStockLocations` resulted in a `401 Unauthorized` response:
+{"Code":null,"Message":"Token is wrong."}
+ {"class":"App\\Services\\InventoryService","function":"GetStockLocations","file":"/var/www/vendor/guzzlehttp/guzzle/src/Exception/RequestException.php","line":113} 
+[2026-08-30 04:45:43] local.ERROR: Client error: `POST https://us-ext.linnworks.net/api/Inventory/GetStockLocations` resulted in a `401 Unauthorized` response:
+{"Code":null,"Message":"Token is wrong."}
+ {"class":"App\\Services\\InventoryService","function":"GetStockLocations","file":"/var/www/vendor/guzzlehttp/guzzle/src/Exception/RequestException.php","line":113} 
+[2026-08-30 04:47:46] local.INFO: Channel Orders {"page":1,"count":0} 
+[2026-08-30 04:57:49] local.INFO: Channel Orders {"page":1,"count":0} 
+[2026-08-30 05:01:00] local.ERROR: Client error: `POST https://us-ext.linnworks.net/api/Main/ping` resulted in a `401 Unauthorized` response:
+{"Code":null,"Message":"Token is wrong."}
+ {"class":"App\\Services\\LinnworkApiMainPing","function":"_linnworksPing","file":"/var/www/vendor/guzzlehttp/guzzle/src/Exception/RequestException.php","line":113} 
+[2026-08-30 05:01:00] local.ERROR: :Integration error in [RefreshLinworksToken] for userlinnworks@limmedia.io {"class":"App\\Console\\Commands\\LinnworksTokenRefreshTask","function":"refreshLinnworkUser","file":"/var/www/app/Console/Commands/LinnworksTokenRefreshTask.php","line":59} 
+[2026-08-30 05:01:02] local.ERROR: Client error: `POST https://us-ext.linnworks.net/api/Inventory/GetStockLocations` resulted in a `401 Unauthorized` response:
+{"Code":null,"Message":"Token is wrong."}
+ {"class":"App\\Services\\InventoryService","function":"GetStockLocations","file":"/var/www/vendor/guzzlehttp/guzzle/src/Exception/RequestException.php","line":113} 
+[2026-08-30 05:01:02] local.ERROR: :Integration error in [StockLocations] for userlinnworks@limmedia.io {"class":"App\\Console\\Commands\\IntegrationProcessedOrders","function":"handle","file":"/var/www/app/Console/Commands/IntegrationProcessedOrders.php","line":56} 
+[2026-08-30 05:01:05] local.ERROR: Client error: `POST https://us-ext.linnworks.net/api/Inventory/GetStockLocations` resulted in a `401 Unauthorized` response:
+{"Code":null,"Message":"Token is wrong."}
+ {"class":"App\\Services\\InventoryService","function":"GetStockLocations","file":"/var/www/vendor/guzzlehttp/guzzle/src/Exception/RequestException.php","line":113} 
+[2026-08-30 05:01:07] local.ERROR: Client error: `POST https://us-ext.linnworks.net/api/Inventory/GetStockLocations` resulted in a `401 Unauthorized` response:
+{"Code":null,"Message":"Token is wrong."}
+ {"class":"App\\Services\\InventoryService","function":"GetStockLocations","file":"/var/www/vendor/guzzlehttp/guzzle/src/Exception/RequestException.php","line":113} 
+[2026-08-30 05:07:53] local.INFO: Channel Orders {"page":1,"count":0} 
+[2026-08-30 05:15:25] local.ERROR: Client error: `POST https://us-ext.linnworks.net/api/Main/ping` resulted in a `401 Unauthorized` response:
+{"Code":null,"Message":"Token is wrong."}
+ {"class":"App\\Services\\LinnworkApiMainPing","function":"_linnworksPing","file":"/var/www/vendor/guzzlehttp/guzzle/src/Exception/RequestException.php","line":113} 
+[2026-08-30 05:15:25] local.ERROR: :Integration error in [RefreshLinworksToken] for userlinnworks@limmedia.io {"class":"App\\Console\\Commands\\LinnworksTokenRefreshTask","function":"refreshLinnworkUser","file":"/var/www/app/Console/Commands/LinnworksTokenRefreshTask.php","line":59} 
+[2026-08-30 05:15:27] local.ERROR: Client error: `POST https://us-ext.linnworks.net/api/Inventory/GetStockLocations` resulted in a `401 Unauthorized` response:
+{"Code":null,"Message":"Token is wrong."}
+ {"class":"App\\Services\\InventoryService","function":"GetStockLocations","file":"/var/www/vendor/guzzlehttp/guzzle/src/Exception/RequestException.php","line":113} 
+[2026-08-30 05:15:27] local.ERROR: :Integration error in [StockLocations] for userlinnworks@limmedia.io {"class":"App\\Console\\Commands\\IntegrationProcessedOrders","function":"handle","file":"/var/www/app/Console/Commands/IntegrationProcessedOrders.php","line":56} 
+[2026-08-30 05:15:30] local.ERROR: Client error: `POST https://us-ext.linnworks.net/api/Inventory/GetStockLocations` resulted in a `401 Unauthorized` response:
+{"Code":null,"Message":"Token is wrong."}
+ {"class":"App\\Services\\InventoryService","function":"GetStockLocations","file":"/var/www/vendor/guzzlehttp/guzzle/src/Exception/RequestException.php","line":113} 
+[2026-08-30 05:15:32] local.ERROR: Client error: `POST https://us-ext.linnworks.net/api/Inventory/GetStockLocations` resulted in a `401 Unauthorized` response:
+{"Code":null,"Message":"Token is wrong."}
+ {"class":"App\\Services\\InventoryService","function":"GetStockLocations","file":"/var/www/vendor/guzzlehttp/guzzle/src/Exception/RequestException.php","line":113} 
+[2026-08-30 05:17:56] local.INFO: Channel Orders {"page":1,"count":0} 
+[2026-08-30 05:28:00] local.INFO: Channel Orders {"page":1,"count":0} 
+[2026-08-30 05:30:50] local.ERROR: Client error: `POST https://us-ext.linnworks.net/api/Main/ping` resulted in a `401 Unauthorized` response:
+{"Code":null,"Message":"Token is wrong."}
+ {"class":"App\\Services\\LinnworkApiMainPing","function":"_linnworksPing","file":"/var/www/vendor/guzzlehttp/guzzle/src/Exception/RequestException.php","line":113} 
+[2026-08-30 05:30:50] local.ERROR: :Integration error in [RefreshLinworksToken] for userlinnworks@limmedia.io {"class":"App\\Console\\Commands\\LinnworksTokenRefreshTask","function":"refreshLinnworkUser","file":"/var/www/app/Console/Commands/LinnworksTokenRefreshTask.php","line":59} 
+[2026-08-30 05:30:52] local.ERROR: Client error: `POST https://us-ext.linnworks.net/api/Inventory/GetStockLocations` resulted in a `401 Unauthorized` response:
+{"Code":null,"Message":"Token is wrong."}
+ {"class":"App\\Services\\InventoryService","function":"GetStockLocations","file":"/var/www/vendor/guzzlehttp/guzzle/src/Exception/RequestException.php","line":113} 
+[2026-08-30 05:30:52] local.ERROR: :Integration error in [StockLocations] for userlinnworks@limmedia.io {"class":"App\\Console\\Commands\\IntegrationProcessedOrders","function":"handle","file":"/var/www/app/Console/Commands/IntegrationProcessedOrders.php","line":56} 
+[2026-08-30 05:30:54] local.ERROR: Client error: `POST https://us-ext.linnworks.net/api/Inventory/GetStockLocations` resulted in a `401 Unauthorized` response:
+{"Code":null,"Message":"Token is wrong."}
+ {"class":"App\\Services\\InventoryService","function":"GetStockLocations","file":"/var/www/vendor/guzzlehttp/guzzle/src/Exception/RequestException.php","line":113} 
+[2026-08-30 05:30:57] local.ERROR: Client error: `POST https://us-ext.linnworks.net/api/Inventory/GetStockLocations` resulted in a `401 Unauthorized` response:
+{"Code":null,"Message":"Token is wrong."}
+ {"class":"App\\Services\\InventoryService","function":"GetStockLocations","file":"/var/www/vendor/guzzlehttp/guzzle/src/Exception/RequestException.php","line":113} 
+[2026-08-30 05:38:05] local.INFO: Channel Orders {"page":1,"count":0} 
+[2026-08-30 05:45:15] local.ERROR: Client error: `POST https://us-ext.linnworks.net/api/Main/ping` resulted in a `401 Unauthorized` response:
+{"Code":null,"Message":"Token is wrong."}
+ {"class":"App\\Services\\LinnworkApiMainPing","function":"_linnworksPing","file":"/var/www/vendor/guzzlehttp/guzzle/src/Exception/RequestException.php","line":113} 
+[2026-08-30 05:45:15] local.ERROR: :Integration error in [RefreshLinworksToken] for userlinnworks@limmedia.io {"class":"App\\Console\\Commands\\LinnworksTokenRefreshTask","function":"refreshLinnworkUser","file":"/var/www/app/Console/Commands/LinnworksTokenRefreshTask.php","line":59} 
+[2026-08-30 05:45:16] local.ERROR: Client error: `POST https://us-ext.linnworks.net/api/Inventory/GetStockLocations` resulted in a `401 Unauthorized` response:
+{"Code":null,"Message":"Token is wrong."}
+ {"class":"App\\Services\\InventoryService","function":"GetStockLocations","file":"/var/www/vendor/guzzlehttp/guzzle/src/Exception/RequestException.php","line":113} 
+[2026-08-30 05:45:16] local.ERROR: :Integration error in [StockLocations] for userlinnworks@limmedia.io {"class":"App\\Console\\Commands\\IntegrationProcessedOrders","function":"handle","file":"/var/www/app/Console/Commands/IntegrationProcessedOrders.php","line":56} 
+[2026-08-30 05:45:19] local.ERROR: Client error: `POST https://us-ext.linnworks.net/api/Inventory/GetStockLocations` resulted in a `401 Unauthorized` response:
+{"Code":null,"Message":"Token is wrong."}
+ {"class":"App\\Services\\InventoryService","function":"GetStockLocations","file":"/var/www/vendor/guzzlehttp/guzzle/src/Exception/RequestException.php","line":113} 
+[2026-08-30 05:45:22] local.ERROR: Client error: `POST https://us-ext.linnworks.net/api/Inventory/GetStockLocations` resulted in a `401 Unauthorized` response:
+{"Code":null,"Message":"Token is wrong."}
+ {"class":"App\\Services\\InventoryService","function":"GetStockLocations","file":"/var/www/vendor/guzzlehttp/guzzle/src/Exception/RequestException.php","line":113} 
+[2026-08-30 05:48:08] local.INFO: Channel Orders {"page":1,"count":0} 
+[2026-08-30 06:00:42] local.ERROR: Client error: `POST https://us-ext.linnworks.net/api/Main/ping` resulted in a `401 Unauthorized` response:
+{"Code":null,"Message":"Token is wrong."}
+ {"class":"App\\Services\\LinnworkApiMainPing","function":"_linnworksPing","file":"/var/www/vendor/guzzlehttp/guzzle/src/Exception/RequestException.php","line":113} 
+[2026-08-30 06:00:42] local.ERROR: :Integration error in [RefreshLinworksToken] for userlinnworks@limmedia.io {"class":"App\\Console\\Commands\\LinnworksTokenRefreshTask","function":"refreshLinnworkUser","file":"/var/www/app/Console/Commands/LinnworksTokenRefreshTask.php","line":59} 
+[2026-08-30 06:00:44] local.ERROR: Client error: `POST https://us-ext.linnworks.net/api/Inventory/GetStockLocations` resulted in a `401 Unauthorized` response:
+{"Code":null,"Message":"Token is wrong."}
+ {"class":"App\\Services\\InventoryService","function":"GetStockLocations","file":"/var/www/vendor/guzzlehttp/guzzle/src/Exception/RequestException.php","line":113} 
+[2026-08-30 06:00:44] local.ERROR: :Integration error in [StockLocations] for userlinnworks@limmedia.io {"class":"App\\Console\\Commands\\IntegrationProcessedOrders","function":"handle","file":"/var/www/app/Console/Commands/IntegrationProcessedOrders.php","line":56} 
+[2026-08-30 06:00:46] local.ERROR: ML token refresh failed for user 3608229310 {"class":"App\\Console\\Commands\\MercadoLibreTokenRefreshTask","function":"handle","file":"/var/www/app/Console/Commands/MercadoLibreTokenRefreshTask.php","line":29} 
+[2026-08-30 06:15:03] local.ERROR: Client error: `POST https://us-ext.linnworks.net/api/Main/ping` resulted in a `401 Unauthorized` response:
+{"Code":null,"Message":"Token is wrong."}
+ {"class":"App\\Services\\LinnworkApiMainPing","function":"_linnworksPing","file":"/var/www/vendor/guzzlehttp/guzzle/src/Exception/RequestException.php","line":113} 
+[2026-08-30 06:15:03] local.ERROR: :Integration error in [RefreshLinworksToken] for userlinnworks@limmedia.io {"class":"App\\Console\\Commands\\LinnworksTokenRefreshTask","function":"refreshLinnworkUser","file":"/var/www/app/Console/Commands/LinnworksTokenRefreshTask.php","line":59} 
+[2026-08-30 06:15:04] local.ERROR: Client error: `POST https://us-ext.linnworks.net/api/Inventory/GetStockLocations` resulted in a `401 Unauthorized` response:
+{"Code":null,"Message":"Token is wrong."}
+ {"class":"App\\Services\\InventoryService","function":"GetStockLocations","file":"/var/www/vendor/guzzlehttp/guzzle/src/Exception/RequestException.php","line":113} 
+[2026-08-30 06:15:04] local.ERROR: :Integration error in [StockLocations] for userlinnworks@limmedia.io {"class":"App\\Console\\Commands\\IntegrationProcessedOrders","function":"handle","file":"/var/www/app/Console/Commands/IntegrationProcessedOrders.php","line":56} 
+[2026-08-30 06:45:41] local.ERROR: Client error: `POST https://us-ext.linnworks.net/api/Main/ping` resulted in a `401 Unauthorized` response:
+{"Code":null,"Message":"Token is wrong."}
+ {"class":"App\\Services\\LinnworkApiMainPing","function":"_linnworksPing","file":"/var/www/vendor/guzzlehttp/guzzle/src/Exception/RequestException.php","line":113} 
+[2026-08-30 06:45:41] local.ERROR: :Integration error in [RefreshLinworksToken] for userlinnworks@limmedia.io {"class":"App\\Console\\Commands\\LinnworksTokenRefreshTask","function":"refreshLinnworkUser","file":"/var/www/app/Console/Commands/LinnworksTokenRefreshTask.php","line":59} 
+[2026-08-30 06:45:42] local.ERROR: Client error: `POST https://us-ext.linnworks.net/api/Inventory/GetStockLocations` resulted in a `401 Unauthorized` response:
+{"Code":null,"Message":"Token is wrong."}
+ {"class":"App\\Services\\InventoryService","function":"GetStockLocations","file":"/var/www/vendor/guzzlehttp/guzzle/src/Exception/RequestException.php","line":113} 
+[2026-08-30 06:45:42] local.ERROR: :Integration error in [StockLocations] for userlinnworks@limmedia.io {"class":"App\\Console\\Commands\\IntegrationProcessedOrders","function":"handle","file":"/var/www/app/Console/Commands/IntegrationProcessedOrders.php","line":56} 
+[2026-08-30 07:01:01] local.ERROR: Client error: `POST https://us-ext.linnworks.net/api/Main/ping` resulted in a `401 Unauthorized` response:
+{"Code":null,"Message":"Token is wrong."}
+ {"class":"App\\Services\\LinnworkApiMainPing","function":"_linnworksPing","file":"/var/www/vendor/guzzlehttp/guzzle/src/Exception/RequestException.php","line":113} 
+[2026-08-30 07:01:01] local.ERROR: :Integration error in [RefreshLinworksToken] for userlinnworks@limmedia.io {"class":"App\\Console\\Commands\\LinnworksTokenRefreshTask","function":"refreshLinnworkUser","file":"/var/www/app/Console/Commands/LinnworksTokenRefreshTask.php","line":59} 
+[2026-08-30 07:01:02] local.ERROR: Client error: `POST https://us-ext.linnworks.net/api/Inventory/GetStockLocations` resulted in a `401 Unauthorized` response:
+{"Code":null,"Message":"Token is wrong."}
+ {"class":"App\\Services\\InventoryService","function":"GetStockLocations","file":"/var/www/vendor/guzzlehttp/guzzle/src/Exception/RequestException.php","line":113} 
+[2026-08-30 07:01:02] local.ERROR: :Integration error in [StockLocations] for userlinnworks@limmedia.io {"class":"App\\Console\\Commands\\IntegrationProcessedOrders","function":"handle","file":"/var/www/app/Console/Commands/IntegrationProcessedOrders.php","line":56} 
+[2026-08-30 07:01:05] local.ERROR: ML token refresh failed for user 3608229310 {"class":"App\\Console\\Commands\\MercadoLibreTokenRefreshTask","function":"handle","file":"/var/www/app/Console/Commands/MercadoLibreTokenRefreshTask.php","line":29} 
+[2026-08-30 07:15:20] local.ERROR: Client error: `POST https://us-ext.linnworks.net/api/Main/ping` resulted in a `401 Unauthorized` response:
+{"Code":null,"Message":"Token is wrong."}
+ {"class":"App\\Services\\LinnworkApiMainPing","function":"_linnworksPing","file":"/var/www/vendor/guzzlehttp/guzzle/src/Exception/RequestException.php","line":113} 
+[2026-08-30 07:15:20] local.ERROR: :Integration error in [RefreshLinworksToken] for userlinnworks@limmedia.io {"class":"App\\Console\\Commands\\LinnworksTokenRefreshTask","function":"refreshLinnworkUser","file":"/var/www/app/Console/Commands/LinnworksTokenRefreshTask.php","line":59} 
+[2026-08-30 07:15:22] local.ERROR: Client error: `POST https://us-ext.linnworks.net/api/Inventory/GetStockLocations` resulted in a `401 Unauthorized` response:
+{"Code":null,"Message":"Token is wrong."}
+ {"class":"App\\Services\\InventoryService","function":"GetStockLocations","file":"/var/www/vendor/guzzlehttp/guzzle/src/Exception/RequestException.php","line":113} 
+[2026-08-30 07:15:22] local.ERROR: :Integration error in [StockLocations] for userlinnworks@limmedia.io {"class":"App\\Console\\Commands\\IntegrationProcessedOrders","function":"handle","file":"/var/www/app/Console/Commands/IntegrationProcessedOrders.php","line":56} 
+[2026-08-30 17:30:04] local.ERROR: Client error: `POST https://us-ext.linnworks.net/api/Main/ping` resulted in a `401 Unauthorized` response:
+{"Code":null,"Message":"Token is wrong."}
+ {"class":"App\\Services\\LinnworkApiMainPing","function":"_linnworksPing","file":"/var/www/vendor/guzzlehttp/guzzle/src/Exception/RequestException.php","line":113} 
+[2026-08-30 17:30:04] local.ERROR: :Integration error in [RefreshLinworksToken] for userlinnworks@limmedia.io {"class":"App\\Console\\Commands\\LinnworksTokenRefreshTask","function":"refreshLinnworkUser","file":"/var/www/app/Console/Commands/LinnworksTokenRefreshTask.php","line":59} 
+[2026-08-30 17:30:07] local.ERROR: Client error: `POST https://us-ext.linnworks.net/api/Inventory/GetStockLocations` resulted in a `401 Unauthorized` response:
+{"Code":null,"Message":"Token is wrong."}
+ {"class":"App\\Services\\InventoryService","function":"GetStockLocations","file":"/var/www/vendor/guzzlehttp/guzzle/src/Exception/RequestException.php","line":113} 
+[2026-08-30 17:30:07] local.ERROR: :Integration error in [StockLocations] for userlinnworks@limmedia.io {"class":"App\\Console\\Commands\\IntegrationProcessedOrders","function":"handle","file":"/var/www/app/Console/Commands/IntegrationProcessedOrders.php","line":56} 
+[2026-08-30 17:45:28] local.ERROR: Client error: `POST https://us-ext.linnworks.net/api/Main/ping` resulted in a `401 Unauthorized` response:
+{"Code":null,"Message":"Token is wrong."}
+ {"class":"App\\Services\\LinnworkApiMainPing","function":"_linnworksPing","file":"/var/www/vendor/guzzlehttp/guzzle/src/Exception/RequestException.php","line":113} 
+[2026-08-30 17:45:28] local.ERROR: :Integration error in [RefreshLinworksToken] for userlinnworks@limmedia.io {"class":"App\\Console\\Commands\\LinnworksTokenRefreshTask","function":"refreshLinnworkUser","file":"/var/www/app/Console/Commands/LinnworksTokenRefreshTask.php","line":59} 
+[2026-08-30 17:45:29] local.ERROR: Client error: `POST https://us-ext.linnworks.net/api/Inventory/GetStockLocations` resulted in a `401 Unauthorized` response:
+{"Code":null,"Message":"Token is wrong."}
+ {"class":"App\\Services\\InventoryService","function":"GetStockLocations","file":"/var/www/vendor/guzzlehttp/guzzle/src/Exception/RequestException.php","line":113} 
+[2026-08-30 17:45:29] local.ERROR: :Integration error in [StockLocations] for userlinnworks@limmedia.io {"class":"App\\Console\\Commands\\IntegrationProcessedOrders","function":"handle","file":"/var/www/app/Console/Commands/IntegrationProcessedOrders.php","line":56} 
+[2026-08-30 19:00:50] local.ERROR: Client error: `POST https://us-ext.linnworks.net/api/Main/ping` resulted in a `401 Unauthorized` response:
+{"Code":null,"Message":"Token is wrong."}
+ {"class":"App\\Services\\LinnworkApiMainPing","function":"_linnworksPing","file":"/var/www/vendor/guzzlehttp/guzzle/src/Exception/RequestException.php","line":113} 
+[2026-08-30 19:00:50] local.ERROR: :Integration error in [RefreshLinworksToken] for userlinnworks@limmedia.io {"class":"App\\Console\\Commands\\LinnworksTokenRefreshTask","function":"refreshLinnworkUser","file":"/var/www/app/Console/Commands/LinnworksTokenRefreshTask.php","line":59} 
+[2026-08-30 19:00:54] local.ERROR: Client error: `POST https://us-ext.linnworks.net/api/Inventory/GetStockLocations` resulted in a `401 Unauthorized` response:
+{"Code":null,"Message":"Token is wrong."}
+ {"class":"App\\Services\\InventoryService","function":"GetStockLocations","file":"/var/www/vendor/guzzlehttp/guzzle/src/Exception/RequestException.php","line":113} 
+[2026-08-30 19:00:54] local.ERROR: :Integration error in [StockLocations] for userlinnworks@limmedia.io {"class":"App\\Console\\Commands\\IntegrationProcessedOrders","function":"handle","file":"/var/www/app/Console/Commands/IntegrationProcessedOrders.php","line":56} 
+[2026-08-30 19:01:03] local.ERROR: ML token refresh failed for user 3608229310 {"class":"App\\Console\\Commands\\MercadoLibreTokenRefreshTask","function":"handle","file":"/var/www/app/Console/Commands/MercadoLibreTokenRefreshTask.php","line":29} 

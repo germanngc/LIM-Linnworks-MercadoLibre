@@ -5,7 +5,7 @@ namespace Tests\Unit;
 use App\Models\MercadoLibreListing;
 use App\Models\MercadoLibreOrder;
 use App\Services\MercadoLibreService;
-use PHPUnit\Framework\TestCase;
+use Tests\TestCase;
 
 class MercadoLibreOrderTest extends TestCase
 {
@@ -16,6 +16,9 @@ class MercadoLibreOrderTest extends TestCase
 		$this->assertFalse(MercadoLibreOrder::isFullLogisticType('drop_off'));
 		$this->assertFalse(MercadoLibreOrder::isFullLogisticType('custom'));
 		$this->assertFalse(MercadoLibreOrder::isFullLogisticType(null));
+		$this->assertSame('remote', MercadoLibreOrder::postalServiceTag('remote'));
+		$this->assertSame('fulfillment', MercadoLibreOrder::postalServiceTag('us_fulfillment'));
+		$this->assertSame('drop_off', MercadoLibreOrder::postalServiceTag('drop_off'));
 	}
 
 	public function test_open_vs_terminal_orders()
@@ -89,6 +92,7 @@ class MercadoLibreOrderTest extends TestCase
 
 	public function test_build_item_payload_truncates_title_and_caps_pictures()
 	{
+		config(['services.mercadolibre.channel_mode' => 'local']);
 		$meli = new MercadoLibreService();
 		$payload = $meli->buildItemPayload(
 			['currency_id' => 'MXN', 'listing_type_id' => 'gold_special'],
@@ -105,6 +109,31 @@ class MercadoLibreOrderTest extends TestCase
 		$this->assertSame('MLM123', $payload['category_id']);
 		$this->assertCount(2, $payload['pictures']);
 		$this->assertSame('buy_it_now', $payload['buying_mode']);
+	}
+
+	public function test_global_item_payload_uses_sites_to_sell()
+	{
+		config([
+			'services.mercadolibre.channel_mode' => 'global',
+			'services.mercadolibre.gs_sites' => 'MLM,MLB',
+			'services.mercadolibre.gs_logistic' => 'remote',
+		]);
+		$meli = new MercadoLibreService();
+		$payload = $meli->buildItemPayload(
+			['listing_type_id' => 'gold_special'],
+			str_repeat('A', 80),
+			'MLM123',
+			99.9,
+			4,
+			['https://a.jpg'],
+			[['id' => 'SELLER_SKU', 'value_name' => 'X']]
+		);
+
+		$this->assertSame(80, mb_strlen($payload['title']));
+		$this->assertSame('USD', $payload['currency_id']);
+		$this->assertCount(2, $payload['sites_to_sell']);
+		$this->assertSame('remote', $payload['sites_to_sell'][0]['logistic_type']);
+		$this->assertArrayNotHasKey('family_name', $payload);
 	}
 
 	public function test_image_urls_prefer_full_source_and_main()

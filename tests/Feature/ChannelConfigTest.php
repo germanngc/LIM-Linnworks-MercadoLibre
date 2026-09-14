@@ -71,7 +71,7 @@ class ChannelConfigTest extends TestCase
 
 		$this->postJson('/api/Config/SaveUserConfig', [
 			'AuthorizationToken' => $token,
-			'ConfigItems' => [['ConfigItemId' => 'Site', 'SelectedValue' => 'MLM']],
+			'ConfigItems' => [['ConfigItemId' => 'Site', 'SelectedValue' => 'CBT']],
 		])->assertOk()->assertJsonPath('Error', null);
 
 		$this->postJson('/api/Order/Orders', ['AuthorizationToken' => $token])

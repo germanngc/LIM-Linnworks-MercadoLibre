@@ -37,9 +37,29 @@ class MercadoLibreOrder extends Model
 		return MercadoLibreOrder::isFullLogisticType($this->logistic_type);
 	}
 
+	/** Full / Remote / US fulfillment: labels and dispatch stay in Mercado Libre. */
+	public function skipChannelDespatch(): bool
+	{
+		return self::isFullLogisticType($this->logistic_type)
+			|| in_array(strtolower((string) $this->logistic_type), ['remote', 'us_fulfillment'], true);
+	}
+
 	public static function isFullLogisticType(?string $type): bool
 	{
 		return in_array($type, ['fulfillment', 'fulfillment_lite'], true);
+	}
+
+	public static function postalServiceTag(?string $logistic): string
+	{
+		$logistic = strtolower((string) $logistic);
+		if (self::isFullLogisticType($logistic) || $logistic === 'us_fulfillment') {
+			return 'fulfillment';
+		}
+		if ($logistic === 'remote') {
+			return 'remote';
+		}
+
+		return 'drop_off';
 	}
 
 	/** Terminal ML order / shipping states — sync leaves these alone after upsert. */
