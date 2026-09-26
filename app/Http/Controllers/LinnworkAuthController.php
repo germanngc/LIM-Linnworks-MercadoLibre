@@ -11,7 +11,6 @@ use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Artisan;
-use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 
@@ -31,29 +30,16 @@ class LinnworkAuthController extends Controller
 	{
 		$validator = Validator::make($request->all(), [
 			'token' => 'max:36|min:32|required|string',
-			'klaviyo_token' => 'max:6|min:6|required|string',
 		]);
 
 		if ($validator->fails()) {
-			$returnErrrors = [];
-
-			if (count($validator->errors()) > 0) {
-				if ($validator->errors()->has('token')) {
-					$returnErrrors['bad_request'] = 'Bad request, missing token, please contact support.';
-				}
-
-				if ($validator->errors()->has('klaviyo_token')) {
-					$returnErrrors['bad_token'] = 'The Klaviyo Public API Token is required, check its format.';
-				}
-
-				return redirect()
-					->back()
-					->withErrors($returnErrrors);
-			}
+			return redirect()
+				->back()
+				->withErrors(['bad_request' => 'Bad request, missing token, please contact support.']);
 		}
 
 		$LinnworkUserService = new UserService();
-		$LinnworkUser = $LinnworkUserService->AuthorizeByApplication($request->get('token'), $request->get('klaviyo_token'), false);
+		$LinnworkUser = $LinnworkUserService->AuthorizeByApplication($request->get('token'), false);
 		
 		if ($LinnworkUser) {
 			Artisan::call('IntegrationRefresh:task', ['user_id' => $LinnworkUser->user_id]);
@@ -90,41 +76,6 @@ class LinnworkAuthController extends Controller
 		}
 	}
 
-	/**
-	 * Revoca el refresh_token de Klaviyo
-	 * @param string $refresh_token
-	 * @return bool
-	 */
-	public function revokeToken(string $refresh_token)
-	{
-		$clientId = config('services.klaviyo.client_id');
-		$clientSecret = config('services.klaviyo.client_secret');
-		$server = 'https://a.klaviyo.com';
-
-		$response = Http::withBasicAuth($clientId, $clientSecret)
-			->asForm()
-			->post($server . '/oauth/revoke', [
-				'token_type_hint' => 'refresh_token',
-				'token' => $refresh_token,
-			]);
-
-		if ($response->successful()) {
-			return true;
-		}
-
-		Log::error('Klaviyo revoke token failed', [
-			'status' => $response->status(),
-			'body' => $response->body(),
-		]);
-		return false;
-	}
-
-	/**
-	 * loggout
-	 * 
-	 * @param Request $request
-	 * @return Redirect
-	 */
 	public function logout(Request $request)
 	{
 		$validator = Validator::make($request->all(), [
@@ -145,14 +96,9 @@ class LinnworkAuthController extends Controller
 			$LinnworkUser = LinnworkUser::where('email', $request->get('email'))->where('login_status', true)->first();
 
 			if ($LinnworkUser) {
-				// Revocar el token de Klaviyo si existe
-				if ($LinnworkUser->refresh_token) {
-					$this->revokeToken($LinnworkUser->refresh_token);
-				}
-				
-				$LinnworkUser->update(['login_status' => false, 'klaviyo_token' => '', 'access_token' => '', 'expires_in' => Carbon::now()->subDays(1), 'refresh_token' => '']);
+				$LinnworkUser->update(['login_status' => false]);
 
-				return view('klaviyo.disconnected');
+				return view('disconnected');
 			} else {
 				throw new \Exception('We cannot log you out... are you sure you are already logged in?');
 			}
@@ -183,7 +129,7 @@ class LinnworkAuthController extends Controller
 
 		if (!$token) {
 			$errMessage = 'No token provided in the request.';
-			return view('klaviyo.uninstalled', compact('errMessage', 'successMessage'));
+			return view('uninstalled', compact('errMessage', 'successMessage'));
 		}
 
 		$LinnworkUserService = new UserService();
@@ -191,11 +137,7 @@ class LinnworkAuthController extends Controller
 
 		if (!$LinnworkUser) {
 			$errMessage = 'Invalid token provided in the request.';
-			return view('klaviyo.uninstalled', compact('errMessage', 'successMessage'));
-		}
-
-		if ($LinnworkUser->refresh_token) {
-			$this->revokeToken($LinnworkUser->refresh_token);
+			return view('uninstalled', compact('errMessage', 'successMessage'));
 		}
 
 		try {
@@ -210,6 +152,6 @@ class LinnworkAuthController extends Controller
 			self::log($e, 'error', __CLASS__, __FUNCTION__);
 		}
 
-		return view('klaviyo.uninstalled', compact('errMessage', 'successMessage'));
+		return view('uninstalled', compact('errMessage', 'successMessage'));
 	}
 }

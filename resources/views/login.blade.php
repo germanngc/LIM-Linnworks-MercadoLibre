@@ -29,14 +29,6 @@
 						@csrf
 						<input name="token" type="hidden" value="{{ app('request')->input('token') ?? '' }}" />
 
-						<div class="mt-4">
-							<label class="block" for="klaviyo_token">Seller token</label>
-							<input id="klaviyo_token" class="w-full px-4 py-2 mt-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-zinc-600" name="klaviyo_token" placeholder="optional" />
-							@error('bad_token') 
-							<div class="text-red-600 mt-4 py-2">{{ $message }}</div>
-							@enderror 
-						</div>
-
 						@error('bad_request') 
 						<div class="text-red-600 mt-4 py-2">{{ $message }}</div>
 						@enderror

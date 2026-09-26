@@ -30,12 +30,6 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
-    'klaviyo' => [
-        'client_id' => env('KLAVIYO_CLIENT_ID'),
-        'client_secret' => env('KLAVIYO_CLIENT_SECRET'),
-        'redirect' => env('KLAVIYO_REDIRECT_URI'),
-    ],
-
     'mercadolibre' => [
         'client_id' => env('MELI_CLIENT_ID'),
         'client_secret' => env('MELI_CLIENT_SECRET'),

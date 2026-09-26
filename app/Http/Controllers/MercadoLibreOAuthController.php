@@ -94,11 +94,7 @@ class MercadoLibreOAuthController extends Controller
 		if ($token) {
 			$user = (new UserService())->AuthorizeByApplication(
 				$token,
-				'',
 				false,
-				'',
-				0,
-				'',
 				(string) config('services.mercadolibre.linnworks_app_id'),
 				(string) config('services.mercadolibre.linnworks_app_secret'),
 			);

@@ -15,19 +15,9 @@ class UserService
 
 	protected $baseUri;
 
-	/**
-	 * Authorize by Application
-	 * 
-	 * @param string $token
-	 * @param string $klaviyoToken
-	 */
 	public function AuthorizeByApplication(
-		string $token, 
-		string $klaviyoToken = '', 
+		string $token,
 		bool $validateOnly = true,
-		string $klaviyoAccessToken = '',
-		int $klaviyoExpiresIn = 0,
-		string $klaviyoRefreshToken = '',
 		string $applicationId = '',
 		string $applicationSecret = '',
 	)
@@ -55,36 +45,14 @@ class UserService
 			$user = LinnworkUser::where('email', $userData['Email'])->first();
 
 			if ($user) {
-				$updateData = ['token' => $userData['Token'], 'aplication_token' => $token];
-
-				if ($klaviyoToken) {
-					$updateData['klaviyo_token'] = $klaviyoToken;
-				}
-
-				if ($klaviyoAccessToken) {
-					$updateData['klaviyo_token'] = '';
-					$updateData['access_token'] = $klaviyoAccessToken;
-					$updateData['expires_in'] = Carbon::now()->addSeconds($klaviyoExpiresIn - 60);
-					$updateData['refresh_token'] = $klaviyoRefreshToken;
-				}
-
-				$user->update($updateData);
+				$user->update(['token' => $userData['Token'], 'aplication_token' => $token]);
 			}
 
 			if ($validateOnly) {
 				return $user;
 			}
 
-			$userData = array_merge_recursive(
-				['_custom' => [
-					'ApplicationToken' => $token, 
-					'KlaviyoToken' => $klaviyoToken ?? '',
-					'access_token' => $klaviyoAccessToken ?? '',
-					'expires_in' => $klaviyoExpiresIn ?? 0,
-					'refresh_token' => $klaviyoRefreshToken ?? '',
-				]],
-				$userData
-			);
+			$userData['_custom'] = ['ApplicationToken' => $token];
 
 			return $this->_saveUserData($userData);
 		} catch (RequestException $e) {
@@ -116,14 +84,6 @@ class UserService
 
 			if (isset($userData['_custom']['ApplicationToken'])) {
 				$validatedData['aplication_token'] = $userData['_custom']['ApplicationToken'];
-			}
-
-			$validatedData['klaviyo_token'] = $userData['_custom']['KlaviyoToken'] ?? '';
-
-			if (isset($userData['_custom']['access_token']) && $userData['_custom']['access_token']) {
-				$validatedData['access_token'] = $userData['_custom']['access_token'];
-				$validatedData['expires_in'] = Carbon::now()->addSeconds($userData['_custom']['expires_in'] - 60);
-				$validatedData['refresh_token'] = $userData['_custom']['refresh_token'];
 			}
 
 			unset($userData['_custom']);

@@ -1,7 +1,6 @@
 <?php
 
 use App\Http\Controllers\LinnworkAuthController;
-use App\Http\Controllers\KlaviyoOAuthController;
 use App\Http\Controllers\MercadoLibreOAuthController;
 use Illuminate\Support\Facades\Route;
 
@@ -23,9 +22,6 @@ Route::group(['prefix' => '/'], function () {
 	
 	Route::get('/uninstall', [LinnworkAuthController::class, 'uninstall'])->name('uninstall');
 });
-
-Route::get('/auth/klaviyo', [KlaviyoOAuthController::class, 'redirectToKlaviyo']);
-Route::get('/oauth/callback', [KlaviyoOAuthController::class, 'handleCallback']);
 
 Route::get('/auth/mercadolibre', [MercadoLibreOAuthController::class, 'redirect']);
 Route::get('/oauth/mercadolibre/callback', [MercadoLibreOAuthController::class, 'callback']);

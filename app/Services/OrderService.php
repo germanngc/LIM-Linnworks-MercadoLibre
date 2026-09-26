@@ -8,7 +8,7 @@ use App\Traits\CustomLogger;
 use Carbon\Carbon;
 use GuzzleHttp\Exception\RequestException;
 use Illuminate\Database\QueryException;
-use Illuminate\Support\Facades\Log;
+
 
 class OrderService
 {
@@ -256,9 +256,6 @@ class OrderService
 	public function _saveOrdersData(array $orderData, string $userId)
 	{
 		try {
-			$KlaviyoService = new KlaviyoService();
-			$formatEventData = $KlaviyoService->formatEventData($orderData)['properties'] ?? [];
-
 			$validatedData = [
 				'num_order_id'			=> $orderData['NumOrderId'],
 				'order_id'				=> $orderData['OrderId'],
@@ -268,7 +265,7 @@ class OrderService
 				'postal_service_name'	=> $orderData['ShippingInfo']['PostalServiceName'],
 				'received_date'			=> Carbon::parse($orderData['GeneralInfo']['ReceivedDate']),
 				'response_obj'			=> $orderData,
-				'response_obj_checksum'	=> $this->_setChecksum($formatEventData),
+				'response_obj_checksum'	=> $this->_setChecksum($orderData),
 				'shipping_address_obj'	=> $orderData['CustomerInfo']['Address'],
 				'source'				=> $orderData['GeneralInfo']['Source'],
 				'status'				=> $orderData['GeneralInfo']['Status'],
@@ -282,13 +279,6 @@ class OrderService
 
 			if (!$order && $orderData['ShippingInfo']['TrackingNumber']) {
 				$order = LinnworkOrder::create($validatedData);
-				$succeed = $KlaviyoService->KlaviyoClientEvent('Linnworks Order Processed', $validatedData);
-
-				if (!$succeed) {
-					Log::error('Failed to send order to Klaviyo, order id: ' . $orderData['OrderId']);
-					$order->delete();
-					return false;
-				}
 			}
 
 			return $order;
@@ -301,12 +291,9 @@ class OrderService
 	/**
 	 * Create a Checksum comparation for changes.
 	 * 
-	 * @param array $klaviyoData the responsed Json
-	 * 
-	 * @return string The checksum code.
 	 */
-	private function _setChecksum(array $klaviyoData): string
+	private function _setChecksum(array $orderData): string
 	{
-		return base64_encode(hash('sha256', json_encode($klaviyoData)));
+		return base64_encode(hash('sha256', json_encode($orderData)));
 	}
 }
