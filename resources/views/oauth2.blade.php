@@ -9,15 +9,19 @@
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 		<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
 	</head>
-	<body class="bg-zinc-100">
-		<div class="flex items-center justify-center min-h-screen max-w-lg mx-auto w-full">
-			<div class="bg-white mt-4 px-8 py-6 shadow-lg text-center w-full">
-				<div class="flex gap-6 items-center justify-center">
-					<img class="h-10" src="{{ asset('images/Linnworks-Logo.png') }}" alt="Linnworks" />
-					<img class="h-10" src="{{ asset('images/mercadolibre-logo.svg') }}" alt="Mercado Libre" />
+	<body class="bg-zinc-100" style="font-family:'IBM Plex Sans',sans-serif;">
+		<div class="flex items-center justify-center min-h-screen px-4">
+			<div class="bg-white shadow-lg w-full" style="max-width:44rem;padding:3.5rem 3rem;display:flex;flex-direction:column;align-items:center;">
+				<div style="display:flex;align-items:center;justify-content:center;gap:1.5rem;">
+					<img src="{{ asset('images/Linnworks-Logo.png') }}" alt="Linnworks" style="height:48px;width:auto;object-fit:contain;" />
+					<span style="color:#a1a1aa;font-size:1.75rem;line-height:1;flex-shrink:0;">+</span>
+					<img src="{{ asset('images/mercadolibre-logo-plus.png') }}" alt="Mercado Libre" style="height:72px;width:auto;object-fit:contain;" />
 				</div>
-				<p class="mt-6 text-sm text-zinc-600">Connect your Mercado Libre seller to Linnworks.</p>
-				<a class="inline-block px-6 py-2 mt-4 text-white bg-zinc-600 rounded-lg hover:bg-zinc-900" href="{{ url('/auth/mercadolibre') }}">Connect Mercado Libre</a>
+				<p style="margin:2.25rem 0 0;color:#52525b;font-size:1.05rem;line-height:1.5;text-align:center;">Connect your Mercado Libre seller to Linnworks.</p>
+				<a
+					href="{{ url('/auth/mercadolibre') }}"
+					style="display:block;margin-top:1.75rem;background:#ffe600;color:#333;padding:1rem 2.25rem;border-radius:0.6rem;font-weight:600;font-size:1.05rem;text-align:center;"
+				>Connect Mercado Libre</a>
 			</div>
 		</div>
 	</body>
