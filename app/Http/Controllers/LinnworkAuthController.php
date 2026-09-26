@@ -201,7 +201,7 @@ class LinnworkAuthController extends Controller
 		try {
 			LinnworkOrder::where('user_id', $LinnworkUser->user_id)->delete();
 			$LinnworkUser->delete();
-			$successMessage = 'Application uninstalled successfully. Please go to Klaviyo → <a href="https://www.klaviyo.com/integrations">Integrations</a>, find this app, and click "Remove".';
+			$successMessage = 'Application uninstalled successfully.';
 		} catch (QueryException $e) {
 			$errMessage = 'Unable to uninstall, please contact support.';
 			self::log($e, 'error', __CLASS__, __FUNCTION__);

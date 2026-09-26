@@ -9,7 +9,7 @@
 		<meta name="spider" content="noindex, nofollow">
 		<meta name="bot" content="noindex, nofollow">
 
-		<title>Uninstalled: Klaviyo / Linnworks Integration</title>
+		<title>Uninstalled: Mercado Libre / Linnworks</title>
 
 		<!-- CSS -->
 		<link rel="stylesheet" href="{{ asset('css/app.css') }}">
@@ -24,8 +24,8 @@
 		<div class="flex items-center justify-center min-h-screen max-w-lg mx-auto w-full">
 			<div class="bg-white mt-4 px-8 py-6 shadow-lg text-left w-full">
 				<div class="flex gap-6 items-center justify-center">
-					<img class="h-10" src="{{ asset('images/klaviyo-logo-black.png') }}" />
-					<img class="h-10" src="{{ asset('images/Linnworks-Logo.png') }}" />
+					<img class="h-10" src="{{ asset('images/Linnworks-Logo.png') }}" alt="Linnworks" />
+					<img class="h-10" src="{{ asset('images/mercadolibre-logo.svg') }}" alt="Mercado Libre" />
 				</div>
 
                 @if ($successMessage)
