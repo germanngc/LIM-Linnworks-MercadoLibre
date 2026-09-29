@@ -35,12 +35,13 @@ class ChannelConfigTest extends TestCase
 		$this->assertTrue(ChannelTenant::query()->where('linnworks_user_id', 'lw-user-1')->exists());
 	}
 
-	public function test_user_config_returns_site_field()
+	public function test_user_config_asks_to_authorize_before_ml_connect()
 	{
 		$this->postJson('/api/Config/UserConfig', [])
 			->assertOk()
 			->assertJsonPath('Error', null)
-			->assertJsonPath('ConfigItems.0.ConfigItemId', 'Site');
+			->assertJsonPath('StepName', 'AuthorizeMercadoLibre')
+			->assertJsonPath('ConfigItems.0.ConfigItemId', 'AuthorizeLink');
 	}
 
 	public function test_configurator_settings_are_public()

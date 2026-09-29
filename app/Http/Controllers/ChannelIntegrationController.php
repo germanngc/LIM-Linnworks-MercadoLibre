@@ -72,9 +72,9 @@ class ChannelIntegrationController extends Controller
 		$account = MercadoLibreAccount::query()->latest()->first();
 		if (!$account || !$meli->ensureToken($account)) {
 			return response()->json([
-				'Error' => 'Connect a Global Selling Mercado Libre seller in the SI app first (Connect Mercado Libre), then Test again.',
+				'Error' => 'Open the authorization link in this wizard, sign in to Mercado Libre, then Test again.',
 				'Success' => false,
-				'Message' => 'No Mercado Libre token.',
+				'Message' => 'Mercado Libre is not connected yet.',
 			]);
 		}
 
@@ -1042,37 +1042,84 @@ class ChannelIntegrationController extends Controller
 		]);
 	}
 
+	private function sellerConnected(): bool
+	{
+		$account = MercadoLibreAccount::query()->latest()->first();
+
+		return (bool) ($account && $account->access_token);
+	}
+
+	private function authorizeUrl(?ChannelTenant $tenant): string
+	{
+		$query = [];
+		if ($tenant && $tenant->linnworks_user_id) {
+			$query['linnwork_user_id'] = $tenant->linnworks_user_id;
+		}
+
+		return url('/auth/mercadolibre').($query ? '?'.http_build_query($query) : '');
+	}
+
 	private function buildUserConfigResponse(?ChannelTenant $tenant): array
 	{
 		$site = $tenant && $tenant->site_id ? $tenant->site_id : $this->defaultMlSite();
-		$configured = $tenant && $tenant->exists;
-		$global = $this->defaultMlSite() === 'CBT';
+		$connected = $this->sellerConnected();
+		$cbt = $this->defaultMlSite() === 'CBT';
+		$siteItem = [
+			'ConfigItemId' => 'Site',
+			'Name' => 'Mercado Libre site',
+			'Description' => $cbt ? 'Parent merchant site for Global Selling.' : 'Marketplace site ID.',
+			'GroupName' => 'Account',
+			'SortOrder' => 2,
+			'SelectedValue' => $site,
+			'RegExValidation' => null,
+			'RegExError' => null,
+			'MustBeSpecified' => true,
+			'ReadOnly' => false,
+			'ListValues' => $cbt
+				? [['Display' => 'Global Selling (CBT)', 'Value' => 'CBT']]
+				: [['Display' => 'Mexico (MLM)', 'Value' => 'MLM']],
+			'ValueType' => 'LIST',
+			'HidesHeaderAttribute' => false,
+		];
+
+		if (!$connected) {
+			return [
+				'Error' => null,
+				'StepName' => 'AuthorizeMercadoLibre',
+				'AccountName' => (string) (($tenant->linnworks_email ?? '') ?: 'Mercado Libre'),
+				'WizardStepTitle' => 'Connect Mercado Libre',
+				'WizardStepDescription' => 'Open the authorization link, sign in as your Global Selling seller, then return here and click Next.',
+				'ConfigItems' => [
+					[
+						'ConfigItemId' => 'AuthorizeLink',
+						'Name' => 'Authorization link',
+						'Description' => 'Opens Mercado Libre login. After you approve access, come back and click Next.',
+						'GroupName' => 'Mercado Libre',
+						'SortOrder' => 1,
+						'SelectedValue' => $this->authorizeUrl($tenant),
+						'RegExValidation' => null,
+						'RegExError' => null,
+						'MustBeSpecified' => false,
+						'ReadOnly' => true,
+						'ListValues' => [],
+						'ValueType' => 'STRING',
+						'HidesHeaderAttribute' => false,
+					],
+					$siteItem,
+				],
+				'GlobalConfigSettings' => [
+					'PriceTags' => [],
+				],
+			];
+		}
 
 		return [
 			'Error' => null,
-			'StepName' => $configured ? 'UserConfig' : 'AddCredentials',
+			'StepName' => 'UserConfig',
 			'AccountName' => (string) (($tenant->linnworks_email ?? '') ?: 'Mercado Libre'),
-			'WizardStepTitle' => $configured ? 'Configuration Complete' : 'Mercado Libre site',
-			'WizardStepDescription' => $global
-				? 'Global Selling (CBT) is the default. Save, then Test — a US Global Selling seller must already be connected in the SI app.'
-				: 'Mexico (MLM) is the default. Save, then Test — Mercado Libre must already be connected in the SI app.',
-			'ConfigItems' => [[
-				'ConfigItemId' => 'Site',
-				'Name' => 'Mercado Libre site',
-				'Description' => $global ? 'Parent merchant site for Global Selling.' : 'Marketplace site ID.',
-				'GroupName' => 'Account',
-				'SortOrder' => 1,
-				'SelectedValue' => $site,
-				'RegExValidation' => null,
-				'RegExError' => null,
-				'MustBeSpecified' => true,
-				'ReadOnly' => false,
-				'ListValues' => $global
-					? [['Display' => 'Global Selling (CBT)', 'Value' => 'CBT']]
-					: [['Display' => 'Mexico (MLM)', 'Value' => 'MLM']],
-				'ValueType' => 'LIST',
-				'HidesHeaderAttribute' => false,
-			]],
+			'WizardStepTitle' => 'Configuration Complete',
+			'WizardStepDescription' => 'Mercado Libre seller connected. You can finish the wizard.',
+			'ConfigItems' => [$siteItem],
 			'GlobalConfigSettings' => [
 				'PriceTags' => [],
 			],

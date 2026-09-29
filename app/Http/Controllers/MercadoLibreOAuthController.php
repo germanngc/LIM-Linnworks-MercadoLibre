@@ -82,7 +82,7 @@ class MercadoLibreOAuthController extends Controller
 			);
 		}
 
-		return redirect('/mercadolibre');
+		return view('connected');
 	}
 
 	public function dashboard(Request $request, ?string $token = null)
