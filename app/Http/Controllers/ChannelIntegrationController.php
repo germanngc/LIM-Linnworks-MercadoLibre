@@ -260,7 +260,7 @@ class ChannelIntegrationController extends Controller
 				continue;
 			}
 			if (!$account) {
-				$results[] = ['SKU' => $sku, 'Error' => 'Connect Mercado Libre in the SI app first.'];
+				$results[] = ['SKU' => $sku, 'Error' => 'Authorize Mercado Libre first.'];
 				continue;
 			}
 			$listing = $this->findListing($sku, $reference);
@@ -352,7 +352,7 @@ class ChannelIntegrationController extends Controller
 		$action = strtolower((string) $request->input('Action', $products === [] ? 'list' : 'join'));
 		if ($products === [] || $action === 'list') {
 			if (!$account) {
-				return response()->json(['Error' => 'Connect Mercado Libre in the SI app first.', 'Promotions' => []]);
+				return response()->json(['Error' => 'Authorize Mercado Libre first.', 'Promotions' => []]);
 			}
 			$list = $meli->listSellerPromotions($account);
 
@@ -506,7 +506,7 @@ class ChannelIntegrationController extends Controller
 					(int) ($listing['TemplateId'] ?? 0),
 					(string) ($listing['ExternalListingId'] ?? ''),
 					null,
-					'Connect Mercado Libre in the SI app first.'
+					'Authorize Mercado Libre first.'
 				);
 			}
 		} else {
