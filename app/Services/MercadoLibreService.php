@@ -608,7 +608,10 @@ class MercadoLibreService
 			? '/marketplace/seller-promotions/users/' . $account->ml_user_id
 			: '/seller-promotions/users/' . $account->ml_user_id;
 		$response = Http::withHeaders($this->promoHeaders($account))
-			->get($this->api() . $path, ['app_version' => 'v2']);
+			->get($this->api() . $path, [
+				'app_version' => 'v2',
+				'user_id' => (string) $account->ml_user_id,
+			]);
 		if ($response->failed()) {
 			$this->lastError = $this->errorMessage($response);
 			Log::error('ML promotions list failed', ['body' => $response->body()]);
@@ -698,6 +701,7 @@ class MercadoLibreService
 		return $this->authHeaders($account) + [
 			'version' => 'v2',
 			'X-Caller-Id' => (string) $account->ml_user_id,
+			'X-Client-Id' => (string) config('services.mercadolibre.client_id'),
 		];
 	}
 
