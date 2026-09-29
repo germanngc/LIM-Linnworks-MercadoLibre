@@ -34,7 +34,7 @@ return [
         'client_id' => env('MELI_CLIENT_ID'),
         'client_secret' => env('MELI_CLIENT_SECRET'),
         'redirect' => env('MELI_REDIRECT_URI'),
-        'auth_host' => env('MELI_AUTH_HOST', 'https://auth.mercadolibre.com.mx'),
+        'auth_host' => env('MELI_AUTH_HOST', 'https://global-selling.mercadolibre.com'),
         'api_url' => env('MELI_API_URL', 'https://api.mercadolibre.com'),
         'linnworks_app_id' => env('MELI_LINNWORKS_APP_ID'),
         'linnworks_app_secret' => env('MELI_LINNWORKS_APP_SECRET'),
