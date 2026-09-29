@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ChannelTenant;
 use App\Models\MercadoLibreAccount;
 use App\Models\MercadoLibreListing;
 use App\Models\MercadoLibreOrder;
@@ -24,9 +25,25 @@ class MercadoLibreOAuthController extends Controller
 			return response('Falta MELI_CLIENT_ID o MELI_REDIRECT_URI en .env', 500);
 		}
 
+		$lwToken = (string) $request->get('token', '');
+		$channelToken = (string) $request->get('channel_token', '');
+		$linnworkUserId = $request->get('linnwork_user_id') ?: Session::get('linnworks_user_id');
+
+		if ($channelToken) {
+			$tenant = ChannelTenant::query()->where('authorization_token', $channelToken)->where('active', true)->first();
+			if ($tenant && !$linnworkUserId) {
+				$linnworkUserId = $tenant->linnworks_user_id;
+			}
+		}
+		if ($lwToken) {
+			Session::put('linnworks_iframe_token', $lwToken);
+		}
+
 		$state = bin2hex(random_bytes(16));
 		Cache::put('meli_oauth:' . $state, [
-			'linnwork_user_id' => $request->get('linnwork_user_id') ?: Session::get('linnworks_user_id'),
+			'linnwork_user_id' => $linnworkUserId,
+			'channel_token' => $channelToken ?: null,
+			'lw_token' => $lwToken ?: null,
 		], now()->addMinutes(15));
 
 		$url = $authHost . '/authorization?' . http_build_query([
@@ -82,7 +99,7 @@ class MercadoLibreOAuthController extends Controller
 			);
 		}
 
-		return view('connected');
+		return redirect('/mercadolibre');
 	}
 
 	public function dashboard(Request $request, ?string $token = null)

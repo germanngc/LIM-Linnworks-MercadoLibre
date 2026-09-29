@@ -19,7 +19,7 @@
 				</div>
 				<p style="margin:2.25rem 0 0;color:#52525b;font-size:1.05rem;line-height:1.5;text-align:center;">Connect your Mercado Libre seller to Linnworks.</p>
 				<a
-					href="{{ url('/auth/mercadolibre') }}{{ request()->get('linnwork_user_id') ? '?linnwork_user_id='.urlencode((string) request()->get('linnwork_user_id')) : '' }}"
+					href="{{ url('/auth/mercadolibre') }}{{ ($q = http_build_query(array_filter(['token' => request('token'), 'channel_token' => request('channel_token'), 'linnwork_user_id' => request('linnwork_user_id')]))) ? '?'.$q : '' }}"
 					style="display:block;margin-top:1.75rem;background:#ffe600;color:#333;padding:1rem 2.25rem;border-radius:0.6rem;font-weight:600;font-size:1.05rem;text-align:center;"
 				>Connect Mercado Libre</a>
 			</div>

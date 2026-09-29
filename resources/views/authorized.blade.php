@@ -38,7 +38,8 @@
 					<div class="text-red-600 mt-4 py-2">{{ $message }}</div>
 					@enderror 
 
-					<div class="flex items-baseline justify-end">
+					<div class="flex items-baseline justify-end gap-3">
+						<a href="{{ url('/auth/mercadolibre') }}?token={{ urlencode(app('request')->input('token') ?? '') }}&linnwork_user_id={{ urlencode($LinnworkUser->user_id ?? '') }}" class="px-6 py-2 mt-4 rounded-lg font-semibold" style="background:#ffe600;color:#333;">Connect Mercado Libre</a>
 						<a href="/uninstall?token={{ app('request')->input('token') ?? '' }}" class="px-6 py-2 mt-4 text-white bg-red-600 rounded-lg hover:bg-red-900">Revoke Authorization</a>
 					</div>
 				</div>

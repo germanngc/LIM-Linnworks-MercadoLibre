@@ -71,10 +71,11 @@ class ChannelIntegrationController extends Controller
 
 		$account = MercadoLibreAccount::query()->latest()->first();
 		if (!$account || !$meli->ensureToken($account)) {
+			// ponytail: Test must not block install; seller OAuth is the next click in the wizard/app
 			return response()->json([
-				'Error' => 'Open the authorization link in this wizard, sign in to Mercado Libre, then Test again.',
-				'Success' => false,
-				'Message' => 'Mercado Libre is not connected yet.',
+				'Error' => null,
+				'Success' => true,
+				'Message' => 'Channel ready. Click Authorize Mercado Libre, sign in, then Test again to verify the seller.',
 			]);
 		}
 
@@ -1042,84 +1043,56 @@ class ChannelIntegrationController extends Controller
 		]);
 	}
 
-	private function sellerConnected(): bool
-	{
-		$account = MercadoLibreAccount::query()->latest()->first();
-
-		return (bool) ($account && $account->access_token);
-	}
-
-	private function authorizeUrl(?ChannelTenant $tenant): string
-	{
-		$query = [];
-		if ($tenant && $tenant->linnworks_user_id) {
-			$query['linnwork_user_id'] = $tenant->linnworks_user_id;
-		}
-
-		return url('/auth/mercadolibre').($query ? '?'.http_build_query($query) : '');
-	}
-
 	private function buildUserConfigResponse(?ChannelTenant $tenant): array
 	{
 		$site = $tenant && $tenant->site_id ? $tenant->site_id : $this->defaultMlSite();
-		$connected = $this->sellerConnected();
-		$cbt = $this->defaultMlSite() === 'CBT';
-		$siteItem = [
+		$configured = $tenant && $tenant->exists;
+		$global = $this->defaultMlSite() === 'CBT';
+		$connectQuery = array_filter([
+			'channel_token' => $tenant?->authorization_token,
+			'linnwork_user_id' => $tenant?->linnworks_user_id,
+		]);
+		$connectUrl = rtrim((string) config('app.url'), '/').'/auth/mercadolibre'.($connectQuery ? '?'.http_build_query($connectQuery) : '');
+
+		$items = [[
 			'ConfigItemId' => 'Site',
 			'Name' => 'Mercado Libre site',
-			'Description' => $cbt ? 'Parent merchant site for Global Selling.' : 'Marketplace site ID.',
+			'Description' => $global ? 'Parent merchant site for Global Selling.' : 'Marketplace site ID.',
 			'GroupName' => 'Account',
-			'SortOrder' => 2,
+			'SortOrder' => 1,
 			'SelectedValue' => $site,
 			'RegExValidation' => null,
 			'RegExError' => null,
 			'MustBeSpecified' => true,
 			'ReadOnly' => false,
-			'ListValues' => $cbt
+			'ListValues' => $global
 				? [['Display' => 'Global Selling (CBT)', 'Value' => 'CBT']]
 				: [['Display' => 'Mexico (MLM)', 'Value' => 'MLM']],
 			'ValueType' => 'LIST',
 			'HidesHeaderAttribute' => false,
-		];
-
-		if (!$connected) {
-			return [
-				'Error' => null,
-				'StepName' => 'AuthorizeMercadoLibre',
-				'AccountName' => (string) (($tenant->linnworks_email ?? '') ?: 'Mercado Libre'),
-				'WizardStepTitle' => 'Connect Mercado Libre',
-				'WizardStepDescription' => 'Open the authorization link, sign in as your Global Selling seller, then return here and click Next.',
-				'ConfigItems' => [
-					[
-						'ConfigItemId' => 'AuthorizeLink',
-						'Name' => 'Authorization link',
-						'Description' => 'Opens Mercado Libre login. After you approve access, come back and click Next.',
-						'GroupName' => 'Mercado Libre',
-						'SortOrder' => 1,
-						'SelectedValue' => $this->authorizeUrl($tenant),
-						'RegExValidation' => null,
-						'RegExError' => null,
-						'MustBeSpecified' => false,
-						'ReadOnly' => true,
-						'ListValues' => [],
-						'ValueType' => 'STRING',
-						'HidesHeaderAttribute' => false,
-					],
-					$siteItem,
-				],
-				'GlobalConfigSettings' => [
-					'PriceTags' => [],
-				],
-			];
-		}
+		], [
+			'ConfigItemId' => 'AuthorizeMercadoLibre',
+			'Name' => 'Authorize Mercado Libre',
+			'Description' => 'Open this link, sign in to Mercado Libre, then come back and click Test.',
+			'GroupName' => 'Account',
+			'SortOrder' => 2,
+			'SelectedValue' => $connectUrl,
+			'RegExValidation' => null,
+			'RegExError' => null,
+			'MustBeSpecified' => false,
+			'ReadOnly' => true,
+			'ListValues' => [],
+			'ValueType' => 'STRING',
+			'HidesHeaderAttribute' => false,
+		]];
 
 		return [
 			'Error' => null,
-			'StepName' => 'UserConfig',
+			'StepName' => $configured ? 'UserConfig' : 'AddCredentials',
 			'AccountName' => (string) (($tenant->linnworks_email ?? '') ?: 'Mercado Libre'),
-			'WizardStepTitle' => 'Configuration Complete',
-			'WizardStepDescription' => 'Mercado Libre seller connected. You can finish the wizard.',
-			'ConfigItems' => [$siteItem],
+			'WizardStepTitle' => $configured ? 'Configuration Complete' : 'Mercado Libre site',
+			'WizardStepDescription' => 'Install the channel, then click Authorize Mercado Libre (opens a login). You do not need any extra website. After signing in, click Test.',
+			'ConfigItems' => $items,
 			'GlobalConfigSettings' => [
 				'PriceTags' => [],
 			],
