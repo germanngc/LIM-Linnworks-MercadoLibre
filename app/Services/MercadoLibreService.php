@@ -19,6 +19,26 @@ class MercadoLibreService
 	/** @var array<string, string> item id => status Mercado Libre actually has after the PUT */
 	public array $lastStatusByItemId = [];
 
+	public function isGlobal(): bool
+	{
+		return strtolower((string) config('services.mercadolibre.channel_mode', 'global')) === 'global';
+	}
+
+	/** @return string[] */
+	public function globalSites(): array
+	{
+		$raw = strtoupper((string) config('services.mercadolibre.gs_sites', 'MLM,MLB,MLC,MCO'));
+
+		return array_values(array_filter(array_map('trim', explode(',', $raw))));
+	}
+
+	public function globalLogistic(): string
+	{
+		$logistic = strtolower((string) config('services.mercadolibre.gs_logistic', 'remote'));
+
+		return in_array($logistic, ['remote', 'fulfillment'], true) ? $logistic : 'remote';
+	}
+
 	private function api()
 	{
 		return rtrim(config('services.mercadolibre.api_url'), '/');
@@ -224,9 +244,13 @@ class MercadoLibreService
 		$this->lastError = null;
 		$ids = [];
 
+		$searchPath = $this->isGlobal()
+			? '/marketplace/users/' . $account->ml_user_id . '/items/search'
+			: '/users/' . $account->ml_user_id . '/items/search';
+
 		foreach (['active', 'paused', 'pending', 'under_review'] as $status) {
 			$response = Http::withHeaders($this->authHeaders($account))
-				->get($this->api() . '/users/' . $account->ml_user_id . '/items/search', [
+				->get($this->api() . $searchPath, [
 					'status' => $status,
 					'limit' => $limit,
 					'offset' => $offset,
@@ -256,8 +280,14 @@ class MercadoLibreService
 
 	public function getItem(MercadoLibreAccount $account, string $itemId): ?array
 	{
+		$path = $this->isGlobal() ? '/marketplace/items/' . $itemId : '/items/' . $itemId;
 		$response = Http::withHeaders($this->authHeaders($account))
-			->get($this->api() . '/items/' . $itemId);
+			->get($this->api() . $path);
+
+		if ($response->failed() && $this->isGlobal()) {
+			$response = Http::withHeaders($this->authHeaders($account))
+				->get($this->api() . '/items/' . $itemId);
+		}
 
 		if ($response->failed()) {
 			Log::error('ML get item failed', ['item_id' => $itemId, 'body' => $response->body()]);
@@ -270,6 +300,10 @@ class MercadoLibreService
 	public function updateItemQuantity(MercadoLibreAccount $account, string $itemId, int $quantity, ?int $variationId = null): bool
 	{
 		$this->lastError = null;
+		if ($this->isGlobal()) {
+			return $this->putJson($account, '/global/items/' . $itemId, ['available_quantity' => $quantity], 'ML global qty failed');
+		}
+
 		$payload = $variationId
 			? ['variations' => [['id' => $variationId, 'available_quantity' => $quantity]]]
 			: ['available_quantity' => $quantity];
@@ -294,9 +328,13 @@ class MercadoLibreService
 	public function updateItemTitle(MercadoLibreAccount $account, string $itemId, string $title, ?array $item = null): bool
 	{
 		$this->lastError = null;
-		$title = mb_substr(trim($title), 0, 60);
+		$title = mb_substr(trim($title), 0, $this->isGlobal() ? 150 : 60);
 		if ($title === '') {
 			return false;
+		}
+
+		if ($this->isGlobal()) {
+			return $this->putJson($account, '/global/items/' . $itemId, ['title' => $title], 'ML global title failed');
 		}
 
 		$item = is_array($item) ? $item : $this->getItem($account, $itemId);
@@ -335,6 +373,16 @@ class MercadoLibreService
 		if (!in_array($status, ['paused', 'active'], true)) {
 			$this->lastError = 'Invalid listing status';
 			return false;
+		}
+
+		if ($this->isGlobal()) {
+			$ok = $this->putJson($account, '/global/items/' . $itemId, ['status' => $status], 'ML global status failed');
+			if ($ok) {
+				$this->lastStatusItemIds = [$itemId];
+				$this->lastStatusByItemId[$itemId] = $status;
+			}
+
+			return $ok;
 		}
 
 		$ids = [$itemId];
@@ -469,6 +517,12 @@ class MercadoLibreService
 			return false;
 		}
 
+		if ($this->isGlobal()) {
+			return $this->putJson($account, '/global/items/' . $itemId, [
+				'net_proceeds' => round($price, 2),
+			], 'ML global price failed');
+		}
+
 		$response = Http::withHeaders($this->authHeaders($account))
 			->asJson()
 			->put($this->api() . '/items/' . $itemId, [
@@ -490,6 +544,167 @@ class MercadoLibreService
 		return true;
 	}
 
+	public function upsertPriceAutomation(
+		MercadoLibreAccount $account,
+		string $itemId,
+		float $minPrice,
+		?float $maxPrice = null,
+		string $ruleId = 'INT'
+	): bool {
+		$this->lastError = null;
+		$ruleId = strtoupper($ruleId);
+		if (!in_array($ruleId, ['INT', 'INT_EXT'], true)) {
+			$ruleId = 'INT';
+		}
+		if ($minPrice <= 0) {
+			$this->lastError = 'MinPrice is required';
+			return false;
+		}
+		$payload = [
+			'rule_id' => $ruleId,
+			'min_price' => round($minPrice, 2),
+		];
+		if ($maxPrice !== null && $maxPrice > 0) {
+			$payload['max_price'] = round($maxPrice, 2);
+		}
+
+		$path = $this->priceAutomationPath($itemId);
+		$existing = Http::withHeaders($this->authHeaders($account))->get($this->api() . $path);
+		if ($existing->successful() && $existing->json('status')) {
+			return $this->putJson($account, $path, $payload, 'ML price automation update failed');
+		}
+
+		$response = Http::withHeaders($this->authHeaders($account))
+			->asJson()
+			->post($this->api() . $path, $payload);
+		if ($response->failed()) {
+			$this->lastError = $this->errorMessage($response);
+			Log::error('ML price automation create failed', ['path' => $path, 'body' => $response->body()]);
+			return false;
+		}
+
+		return true;
+	}
+
+	public function deletePriceAutomation(MercadoLibreAccount $account, string $itemId): bool
+	{
+		$this->lastError = null;
+		$path = $this->priceAutomationPath($itemId);
+		$response = Http::withHeaders($this->authHeaders($account))->delete($this->api() . $path);
+		if ($response->failed() && $response->status() !== 404) {
+			$this->lastError = $this->errorMessage($response);
+			Log::error('ML price automation delete failed', ['path' => $path, 'body' => $response->body()]);
+			return false;
+		}
+
+		return true;
+	}
+
+	/** @return array<int, mixed>|null */
+	public function listSellerPromotions(MercadoLibreAccount $account): ?array
+	{
+		$this->lastError = null;
+		$path = $this->isGlobal()
+			? '/marketplace/seller-promotions/users/' . $account->ml_user_id
+			: '/seller-promotions/users/' . $account->ml_user_id;
+		$response = Http::withHeaders($this->promoHeaders($account))
+			->get($this->api() . $path, [
+				'app_version' => 'v2',
+				'user_id' => (string) $account->ml_user_id,
+			]);
+		if ($response->failed()) {
+			$this->lastError = $this->errorMessage($response);
+			Log::error('ML promotions list failed', ['body' => $response->body()]);
+			return null;
+		}
+
+		$json = $response->json();
+
+		return is_array($json['results'] ?? null) ? $json['results'] : (is_array($json) ? $json : []);
+	}
+
+	public function joinItemPromotion(
+		MercadoLibreAccount $account,
+		string $itemId,
+		string $promotionId,
+		string $promotionType,
+		?float $dealPrice = null
+	): bool {
+		$this->lastError = null;
+		$payload = [
+			'promotion_id' => $promotionId,
+			'promotion_type' => strtoupper($promotionType),
+		];
+		if ($dealPrice !== null && $dealPrice > 0) {
+			$payload['deal_price'] = round($dealPrice, 2);
+		}
+		[$path, $query] = $this->itemPromotionRequest($account, $itemId);
+		$response = Http::withHeaders($this->promoHeaders($account))
+			->asJson()
+			->post($this->api() . $path . ($query ? '?' . http_build_query($query) : ''), $payload);
+		if ($response->failed()) {
+			$this->lastError = $this->errorMessage($response);
+			Log::error('ML promotion join failed', ['item_id' => $itemId, 'body' => $response->body()]);
+			return false;
+		}
+
+		return true;
+	}
+
+	public function leaveItemPromotion(
+		MercadoLibreAccount $account,
+		string $itemId,
+		?string $promotionId = null,
+		?string $promotionType = null
+	): bool {
+		$this->lastError = null;
+		[$path, $query] = $this->itemPromotionRequest($account, $itemId);
+		if ($promotionId) {
+			$query['promotion_id'] = $promotionId;
+		}
+		if ($promotionType) {
+			$query['promotion_type'] = strtoupper($promotionType);
+		}
+		$response = Http::withHeaders($this->promoHeaders($account))
+			->delete($this->api() . $path . ($query ? '?' . http_build_query($query) : ''));
+		if ($response->failed() && $response->status() !== 404) {
+			$this->lastError = $this->errorMessage($response);
+			Log::error('ML promotion leave failed', ['item_id' => $itemId, 'body' => $response->body()]);
+			return false;
+		}
+
+		return true;
+	}
+
+	private function priceAutomationPath(string $itemId): string
+	{
+		return $this->isGlobal()
+			? '/marketplace/items/' . $itemId . '/prices/automate'
+			: '/pricing-automation/items/' . $itemId . '/automation';
+	}
+
+	/** @return array{0:string,1:array<string,string>} */
+	private function itemPromotionRequest(MercadoLibreAccount $account, string $itemId): array
+	{
+		if ($this->isGlobal()) {
+			return [
+				'/marketplace/seller-promotions/items/' . $itemId,
+				['user_id' => (string) $account->ml_user_id, 'app_version' => 'v2'],
+			];
+		}
+
+		return ['/seller-promotions/items/' . $itemId, ['app_version' => 'v2']];
+	}
+
+	private function promoHeaders(MercadoLibreAccount $account): array
+	{
+		return $this->authHeaders($account) + [
+			'version' => 'v2',
+			'X-Caller-Id' => (string) $account->ml_user_id,
+			'X-Client-Id' => (string) config('services.mercadolibre.client_id'),
+		];
+	}
+
 	public function updateItemPictures(MercadoLibreAccount $account, string $itemId, array $pictureUrls): bool
 	{
 		$pictures = [];
@@ -500,7 +715,9 @@ class MercadoLibreService
 			return false;
 		}
 
-		return $this->putJson($account, '/items/' . $itemId, ['pictures' => $pictures], 'ML update item pictures failed');
+		$path = $this->isGlobal() ? '/global/items/' . $itemId : '/items/' . $itemId;
+
+		return $this->putJson($account, $path, ['pictures' => $pictures], 'ML update item pictures failed');
 	}
 
 	public function getItemDescription(MercadoLibreAccount $account, string $itemId): ?string
@@ -605,6 +822,14 @@ class MercadoLibreService
 	 */
 	public function listingDefaults(MercadoLibreAccount $account): ?array
 	{
+		if ($this->isGlobal()) {
+			return [
+				'site_id' => 'CBT',
+				'currency_id' => 'USD',
+				'listing_type_id' => 'gold_special',
+			];
+		}
+
 		$site = $account->site_id ?: 'MLM';
 		$siteRes = Http::acceptJson()->get($this->api() . '/sites/' . $site);
 		$currency = $siteRes->json('default_currency_id');
@@ -639,7 +864,7 @@ class MercadoLibreService
 
 	public function predictCategory(MercadoLibreAccount $account, string $title): ?array
 	{
-		$site = $account->site_id ?: 'MLM';
+		$site = $this->isGlobal() ? ($this->globalSites()[0] ?? 'MLM') : ($account->site_id ?: 'MLM');
 		$response = Http::withHeaders($this->authHeaders($account))
 			->get($this->api() . '/sites/' . $site . '/domain_discovery/search', [
 				'q' => $title,
@@ -728,9 +953,10 @@ class MercadoLibreService
 	public function createItem(MercadoLibreAccount $account, array $payload): ?array
 	{
 		$this->lastError = null;
+		$path = $this->isGlobal() ? '/marketplace/items' : '/items';
 		$response = Http::withHeaders($this->authHeaders($account))
 			->asJson()
-			->post($this->api() . '/items', $payload);
+			->post($this->api() . $path, $payload);
 
 		if ($response->failed()) {
 			$this->lastError = $this->errorMessage($response);
@@ -755,7 +981,31 @@ class MercadoLibreService
 			$pictures[] = ['source' => $url];
 		}
 
-		$title = mb_substr(trim($title), 0, 60);
+		$title = mb_substr(trim($title), 0, $this->isGlobal() ? 150 : 60);
+
+		if ($this->isGlobal()) {
+			$sites = [];
+			foreach ($this->globalSites() as $site) {
+				$sites[] = [
+					'site_id' => $site,
+					'logistic_type' => $this->globalLogistic(),
+					'pictures' => $pictures,
+				];
+			}
+
+			return [
+				'title' => $title,
+				'category_id' => $categoryId,
+				'price' => round($price, 2),
+				'currency_id' => 'USD',
+				'available_quantity' => $qty,
+				'buying_mode' => 'buy_it_now',
+				'condition' => 'new',
+				'listing_type_id' => $defaults['listing_type_id'] ?? 'gold_special',
+				'sites_to_sell' => $sites,
+				'attributes' => $attributes,
+			];
+		}
 
 		return [
 			'family_name' => $title,

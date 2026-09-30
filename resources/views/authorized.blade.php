@@ -4,7 +4,7 @@
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 
-		<title>Authorized: Klaviyo / Linnworks Integration</title>
+		<title>Authorized: Mercado Libre / Linnworks</title>
 
 		<!-- CSS -->
 		<link rel="stylesheet" href="{{ asset('css/app.css') }}">
@@ -19,8 +19,9 @@
 		<div class="flex items-center justify-center min-h-screen max-w-lg mx-auto w-full">
 			<div class="bg-white mt-4 px-8 py-6 shadow-lg text-left w-full">
 				<div class="flex gap-6 items-center justify-center">
-					<img class="h-10" src="{{ asset('images/klaviyo-logo-black.png') }}" />
-					<img class="h-10" src="{{ asset('images/Linnworks-Logo.png') }}" />
+					<img src="{{ asset('images/Linnworks-Logo.png') }}" alt="Linnworks" style="height:38px;width:auto;max-width:160px;object-fit:contain;" />
+					<span class="text-zinc-300" style="font-size:1.35rem;line-height:1;">+</span>
+					<img src="{{ asset('images/mercadolibre-logo-plus.png') }}" alt="Mercado Libre" style="height:38px;width:auto;max-width:180px;object-fit:contain;" />
 				</div>
 
 				<div class="mt-8 text-center text-lg">
@@ -37,7 +38,8 @@
 					<div class="text-red-600 mt-4 py-2">{{ $message }}</div>
 					@enderror 
 
-					<div class="flex items-baseline justify-end">
+					<div class="flex items-baseline justify-end gap-3">
+						<a href="{{ url('/auth/mercadolibre') }}?token={{ urlencode(app('request')->input('token') ?? '') }}&linnwork_user_id={{ urlencode($LinnworkUser->user_id ?? '') }}" class="px-6 py-2 mt-4 rounded-lg font-semibold" style="background:#ffe600;color:#333;">Connect Mercado Libre</a>
 						<a href="/uninstall?token={{ app('request')->input('token') ?? '' }}" class="px-6 py-2 mt-4 text-white bg-red-600 rounded-lg hover:bg-red-900">Revoke Authorization</a>
 					</div>
 				</div>

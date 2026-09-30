@@ -41,6 +41,8 @@ Route::middleware('lw.auth')->group(function () {
 	Route::post('/Product/Products', [ChannelIntegrationController::class, 'products']);
 	Route::post('/Product/InventoryUpdate', [ChannelIntegrationController::class, 'inventoryUpdate']);
 	Route::post('/Product/PriceUpdate', [ChannelIntegrationController::class, 'priceUpdate']);
+	Route::post('/Product/PriceAutomation', [ChannelIntegrationController::class, 'priceAutomation']);
+	Route::post('/Product/Promotions', [ChannelIntegrationController::class, 'promotions']);
 
 	Route::post('/Listing/GetCategories', [ChannelIntegrationController::class, 'getCategories']);
 	Route::post('/Listing/GetAttributesByCategory', [ChannelIntegrationController::class, 'getAttributesByCategory']);

@@ -115,14 +115,6 @@ return [
         'emergency' => [
             'path' => storage_path('logs/laravel.log'),
         ],
-
-        'klaviyo_refresh_token' => [
-            'driver' => 'daily',
-            'path' => storage_path('logs/klaviyo_refresh_token.log'),
-            'level' => env('LOG_LEVEL', 'debug'),
-            'days' => 14,
-            'permission' => 0664,
-        ],
     ],
 
 ];

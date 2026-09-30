@@ -29,12 +29,10 @@
 						<span class="text-zinc-600">+</span>
 						<img
 							class="h-10"
-							src="https://http2.mlstatic.com/frontend-assets/ml-web-navigation/ui-navigation/6.6.92/mercadolibre/logo__large_plus@2x.png"
+							src="{{ asset('images/mercadolibre-logo-plus.png') }}"
 							alt="Mercado Libre"
 							style="height:2.5rem;width:auto;"
-							onerror="this.style.display='none';document.getElementById('meli-fallback').style.display='inline';"
 						/>
-						<span id="meli-fallback" class="font-bold text-lg" style="display:none;color:#333;">Mercado Libre</span>
 					</div>
 					@if ($account)
 						<span class="text-sm text-green-600 font-bold">Connected</span>

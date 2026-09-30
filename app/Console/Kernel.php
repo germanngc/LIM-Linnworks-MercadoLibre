@@ -17,7 +17,6 @@ class Kernel extends ConsoleKernel
     {
         $schedule->command('LinnworksTokenRefresh:task')->everyFifteenMinutes()->withoutOverlapping();
         $schedule->command('IntegrationProcessedOrders:task')->everyFifteenMinutes()->withoutOverlapping();
-        $schedule->command('klaviyo:refresh-token')->everyFiveMinutes()->withoutOverlapping();
         $schedule->command('MercadoLibreTokenRefresh:task')->hourly()->withoutOverlapping();
         $schedule->command('MercadoLibreSync:task')->everyFifteenMinutes()->withoutOverlapping();
         $schedule->command('MercadoLibreInventorySync:task')->everyFifteenMinutes()->withoutOverlapping();

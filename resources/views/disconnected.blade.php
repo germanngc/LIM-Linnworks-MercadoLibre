@@ -13,7 +13,7 @@
 <body>
     <div class="message">
         <h1>You've successfully disconnected this app from your account.</h1>
-        <p>To complete the uninstall, please go to <strong>Klaviyo → Integrations</strong>, find this app, and click "Remove".</p>
+        <p>This app has been disconnected from your account.</p>
     </div>
 </body>
 </html> 

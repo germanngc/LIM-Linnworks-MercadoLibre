@@ -1,0 +1,135 @@
+[2026-09-01 02:56:02] local.ERROR: SQLSTATE[HY000] [2002] Connection refused (SQL: select * from `linnwork_users` where `refresh_token` is not null and `expires_in` <= 2026-09-01 03:11:02) {"exception":"[object] (Illuminate\\Database\\QueryException(code: 2002): SQLSTATE[HY000] [2002] Connection refused (SQL: select * from `linnwork_users` where `refresh_token` is not null and `expires_in` <= 2026-09-01 03:11:02) at /var/www/vendor/laravel/framework/src/Illuminate/Database/Connection.php:760)
+[stacktrace]
+#0 /var/www/vendor/laravel/framework/src/Illuminate/Database/Connection.php(899): Illuminate\\Database\\Connection->runQueryCallback('select * from `...', Array, Object(Closure))
+#1 /var/www/vendor/laravel/framework/src/Illuminate/Database/Connection.php(879): Illuminate\\Database\\Connection->tryAgainIfCausedByLostConnection(Object(Illuminate\\Database\\QueryException), 'select * from `...', Array, Object(Closure))
+#2 /var/www/vendor/laravel/framework/src/Illuminate/Database/Connection.php(723): Illuminate\\Database\\Connection->handleQueryException(Object(Illuminate\\Database\\QueryException), 'select * from `...', Array, Object(Closure))
+#3 /var/www/vendor/laravel/framework/src/Illuminate/Database/Connection.php(422): Illuminate\\Database\\Connection->run('select * from `...', Array, Object(Closure))
+#4 /var/www/vendor/laravel/framework/src/Illuminate/Database/Query/Builder.php(2706): Illuminate\\Database\\Connection->select('select * from `...', Array, true)
+#5 /var/www/vendor/laravel/framework/src/Illuminate/Database/Query/Builder.php(2694): Illuminate\\Database\\Query\\Builder->runSelect()
+#6 /var/www/vendor/laravel/framework/src/Illuminate/Database/Query/Builder.php(3230): Illuminate\\Database\\Query\\Builder->Illuminate\\Database\\Query\\{closure}()
+#7 /var/www/vendor/laravel/framework/src/Illuminate/Database/Query/Builder.php(2695): Illuminate\\Database\\Query\\Builder->onceWithColumns(Array, Object(Closure))
+#8 /var/www/vendor/laravel/framework/src/Illuminate/Database/Eloquent/Builder.php(710): Illuminate\\Database\\Query\\Builder->get(Array)
+#9 /var/www/vendor/laravel/framework/src/Illuminate/Database/Eloquent/Builder.php(694): Illuminate\\Database\\Eloquent\\Builder->getModels(Array)
+#10 /var/www/app/Console/Commands/KlaviyoTokenRefreshTask.php(40): Illuminate\\Database\\Eloquent\\Builder->get()
+#11 /var/www/vendor/laravel/framework/src/Illuminate/Container/BoundMethod.php(36): App\\Console\\Commands\\KlaviyoTokenRefreshTask->handle(Object(App\\Http\\Controllers\\KlaviyoOAuthController))
+#12 /var/www/vendor/laravel/framework/src/Illuminate/Container/Util.php(41): Illuminate\\Container\\BoundMethod::Illuminate\\Container\\{closure}()
+#13 /var/www/vendor/laravel/framework/src/Illuminate/Container/BoundMethod.php(93): Illuminate\\Container\\Util::unwrapIfClosure(Object(Closure))
+#14 /var/www/vendor/laravel/framework/src/Illuminate/Container/BoundMethod.php(37): Illuminate\\Container\\BoundMethod::callBoundMethod(Object(Illuminate\\Foundation\\Application), Array, Object(Closure))
+#15 /var/www/vendor/laravel/framework/src/Illuminate/Container/Container.php(661): Illuminate\\Container\\BoundMethod::call(Object(Illuminate\\Foundation\\Application), Array, Array, NULL)
+#16 /var/www/vendor/laravel/framework/src/Illuminate/Console/Command.php(183): Illuminate\\Container\\Container->call(Array)
+#17 /var/www/vendor/symfony/console/Command/Command.php(312): Illuminate\\Console\\Command->execute(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Illuminate\\Console\\OutputStyle))
+#18 /var/www/vendor/laravel/framework/src/Illuminate/Console/Command.php(153): Symfony\\Component\\Console\\Command\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Illuminate\\Console\\OutputStyle))
+#19 /var/www/vendor/symfony/console/Application.php(1022): Illuminate\\Console\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#20 /var/www/vendor/symfony/console/Application.php(314): Symfony\\Component\\Console\\Application->doRunCommand(Object(App\\Console\\Commands\\KlaviyoTokenRefreshTask), Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#21 /var/www/vendor/symfony/console/Application.php(168): Symfony\\Component\\Console\\Application->doRun(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#22 /var/www/vendor/laravel/framework/src/Illuminate/Console/Application.php(102): Symfony\\Component\\Console\\Application->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#23 /var/www/vendor/laravel/framework/src/Illuminate/Foundation/Console/Kernel.php(155): Illuminate\\Console\\Application->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#24 /var/www/artisan(37): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#25 {main}
+
+[previous exception] [object] (PDOException(code: 2002): SQLSTATE[HY000] [2002] Connection refused at /var/www/vendor/laravel/framework/src/Illuminate/Database/Connectors/Connector.php:70)
+[stacktrace]
+#0 /var/www/vendor/laravel/framework/src/Illuminate/Database/Connectors/Connector.php(70): PDO->__construct('mysql:host=db;p...', 'dev_linnwork_kl...', 'iRv5H]9e<A6F', Array)
+#1 /var/www/vendor/laravel/framework/src/Illuminate/Database/Connectors/Connector.php(100): Illuminate\\Database\\Connectors\\Connector->createPdoConnection('mysql:host=db;p...', 'dev_linnwork_kl...', 'iRv5H]9e<A6F', Array)
+#2 /var/www/vendor/laravel/framework/src/Illuminate/Database/Connectors/Connector.php(50): Illuminate\\Database\\Connectors\\Connector->tryAgainIfCausedByLostConnection(Object(PDOException), 'mysql:host=db;p...', 'dev_linnwork_kl...', 'iRv5H]9e<A6F', Array)
+#3 /var/www/vendor/laravel/framework/src/Illuminate/Database/Connectors/MySqlConnector.php(24): Illuminate\\Database\\Connectors\\Connector->createConnection('mysql:host=db;p...', Array, Array)
+#4 /var/www/vendor/laravel/framework/src/Illuminate/Database/Connectors/ConnectionFactory.php(184): Illuminate\\Database\\Connectors\\MySqlConnector->connect(Array)
+#5 [internal function]: Illuminate\\Database\\Connectors\\ConnectionFactory->Illuminate\\Database\\Connectors\\{closure}()
+#6 /var/www/vendor/laravel/framework/src/Illuminate/Database/Connection.php(1181): call_user_func(Object(Closure))
+#7 /var/www/vendor/laravel/framework/src/Illuminate/Database/Connection.php(1217): Illuminate\\Database\\Connection->getPdo()
+#8 /var/www/vendor/laravel/framework/src/Illuminate/Database/Connection.php(486): Illuminate\\Database\\Connection->getReadPdo()
+#9 /var/www/vendor/laravel/framework/src/Illuminate/Database/Connection.php(414): Illuminate\\Database\\Connection->getPdoForSelect(true)
+#10 /var/www/vendor/laravel/framework/src/Illuminate/Database/Connection.php(753): Illuminate\\Database\\Connection->Illuminate\\Database\\{closure}('select * from `...', Array)
+#11 /var/www/vendor/laravel/framework/src/Illuminate/Database/Connection.php(899): Illuminate\\Database\\Connection->runQueryCallback('select * from `...', Array, Object(Closure))
+#12 /var/www/vendor/laravel/framework/src/Illuminate/Database/Connection.php(879): Illuminate\\Database\\Connection->tryAgainIfCausedByLostConnection(Object(Illuminate\\Database\\QueryException), 'select * from `...', Array, Object(Closure))
+#13 /var/www/vendor/laravel/framework/src/Illuminate/Database/Connection.php(723): Illuminate\\Database\\Connection->handleQueryException(Object(Illuminate\\Database\\QueryException), 'select * from `...', Array, Object(Closure))
+#14 /var/www/vendor/laravel/framework/src/Illuminate/Database/Connection.php(422): Illuminate\\Database\\Connection->run('select * from `...', Array, Object(Closure))
+#15 /var/www/vendor/laravel/framework/src/Illuminate/Database/Query/Builder.php(2706): Illuminate\\Database\\Connection->select('select * from `...', Array, true)
+#16 /var/www/vendor/laravel/framework/src/Illuminate/Database/Query/Builder.php(2694): Illuminate\\Database\\Query\\Builder->runSelect()
+#17 /var/www/vendor/laravel/framework/src/Illuminate/Database/Query/Builder.php(3230): Illuminate\\Database\\Query\\Builder->Illuminate\\Database\\Query\\{closure}()
+#18 /var/www/vendor/laravel/framework/src/Illuminate/Database/Query/Builder.php(2695): Illuminate\\Database\\Query\\Builder->onceWithColumns(Array, Object(Closure))
+#19 /var/www/vendor/laravel/framework/src/Illuminate/Database/Eloquent/Builder.php(710): Illuminate\\Database\\Query\\Builder->get(Array)
+#20 /var/www/vendor/laravel/framework/src/Illuminate/Database/Eloquent/Builder.php(694): Illuminate\\Database\\Eloquent\\Builder->getModels(Array)
+#21 /var/www/app/Console/Commands/KlaviyoTokenRefreshTask.php(40): Illuminate\\Database\\Eloquent\\Builder->get()
+#22 /var/www/vendor/laravel/framework/src/Illuminate/Container/BoundMethod.php(36): App\\Console\\Commands\\KlaviyoTokenRefreshTask->handle(Object(App\\Http\\Controllers\\KlaviyoOAuthController))
+#23 /var/www/vendor/laravel/framework/src/Illuminate/Container/Util.php(41): Illuminate\\Container\\BoundMethod::Illuminate\\Container\\{closure}()
+#24 /var/www/vendor/laravel/framework/src/Illuminate/Container/BoundMethod.php(93): Illuminate\\Container\\Util::unwrapIfClosure(Object(Closure))
+#25 /var/www/vendor/laravel/framework/src/Illuminate/Container/BoundMethod.php(37): Illuminate\\Container\\BoundMethod::callBoundMethod(Object(Illuminate\\Foundation\\Application), Array, Object(Closure))
+#26 /var/www/vendor/laravel/framework/src/Illuminate/Container/Container.php(661): Illuminate\\Container\\BoundMethod::call(Object(Illuminate\\Foundation\\Application), Array, Array, NULL)
+#27 /var/www/vendor/laravel/framework/src/Illuminate/Console/Command.php(183): Illuminate\\Container\\Container->call(Array)
+#28 /var/www/vendor/symfony/console/Command/Command.php(312): Illuminate\\Console\\Command->execute(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Illuminate\\Console\\OutputStyle))
+#29 /var/www/vendor/laravel/framework/src/Illuminate/Console/Command.php(153): Symfony\\Component\\Console\\Command\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Illuminate\\Console\\OutputStyle))
+#30 /var/www/vendor/symfony/console/Application.php(1022): Illuminate\\Console\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#31 /var/www/vendor/symfony/console/Application.php(314): Symfony\\Component\\Console\\Application->doRunCommand(Object(App\\Console\\Commands\\KlaviyoTokenRefreshTask), Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#32 /var/www/vendor/symfony/console/Application.php(168): Symfony\\Component\\Console\\Application->doRun(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#33 /var/www/vendor/laravel/framework/src/Illuminate/Console/Application.php(102): Symfony\\Component\\Console\\Application->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#34 /var/www/vendor/laravel/framework/src/Illuminate/Foundation/Console/Kernel.php(155): Illuminate\\Console\\Application->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#35 /var/www/artisan(37): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#36 {main}
+"} 
+[2026-09-01 03:00:10] local.ERROR: Client error: `POST https://us-ext.linnworks.net/api/Main/ping` resulted in a `401 Unauthorized` response:
+{"Code":null,"Message":"Token is wrong."}
+ {"class":"App\\Services\\LinnworkApiMainPing","function":"_linnworksPing","file":"/var/www/vendor/guzzlehttp/guzzle/src/Exception/RequestException.php","line":113} 
+[2026-09-01 03:00:10] local.ERROR: :Integration error in [RefreshLinworksToken] for userlinnworks@limmedia.io {"class":"App\\Console\\Commands\\LinnworksTokenRefreshTask","function":"refreshLinnworkUser","file":"/var/www/app/Console/Commands/LinnworksTokenRefreshTask.php","line":59} 
+[2026-09-01 03:00:12] local.ERROR: Client error: `POST https://us-ext.linnworks.net/api/Inventory/GetStockLocations` resulted in a `401 Unauthorized` response:
+{"Code":null,"Message":"Token is wrong."}
+ {"class":"App\\Services\\InventoryService","function":"GetStockLocations","file":"/var/www/vendor/guzzlehttp/guzzle/src/Exception/RequestException.php","line":113} 
+[2026-09-01 03:00:12] local.ERROR: :Integration error in [StockLocations] for userlinnworks@limmedia.io {"class":"App\\Console\\Commands\\IntegrationProcessedOrders","function":"handle","file":"/var/www/app/Console/Commands/IntegrationProcessedOrders.php","line":56} 
+[2026-09-01 03:00:14] local.ERROR: ML token refresh failed for user 3608229310 {"class":"App\\Console\\Commands\\MercadoLibreTokenRefreshTask","function":"handle","file":"/var/www/app/Console/Commands/MercadoLibreTokenRefreshTask.php","line":29} 
+[2026-09-01 03:15:36] local.ERROR: Client error: `POST https://us-ext.linnworks.net/api/Main/ping` resulted in a `401 Unauthorized` response:
+{"Code":null,"Message":"Token is wrong."}
+ {"class":"App\\Services\\LinnworkApiMainPing","function":"_linnworksPing","file":"/var/www/vendor/guzzlehttp/guzzle/src/Exception/RequestException.php","line":113} 
+[2026-09-01 03:15:37] local.ERROR: :Integration error in [RefreshLinworksToken] for userlinnworks@limmedia.io {"class":"App\\Console\\Commands\\LinnworksTokenRefreshTask","function":"refreshLinnworkUser","file":"/var/www/app/Console/Commands/LinnworksTokenRefreshTask.php","line":59} 
+[2026-09-01 03:15:38] local.ERROR: Client error: `POST https://us-ext.linnworks.net/api/Inventory/GetStockLocations` resulted in a `401 Unauthorized` response:
+{"Code":null,"Message":"Token is wrong."}
+ {"class":"App\\Services\\InventoryService","function":"GetStockLocations","file":"/var/www/vendor/guzzlehttp/guzzle/src/Exception/RequestException.php","line":113} 
+[2026-09-01 03:15:38] local.ERROR: :Integration error in [StockLocations] for userlinnworks@limmedia.io {"class":"App\\Console\\Commands\\IntegrationProcessedOrders","function":"handle","file":"/var/www/app/Console/Commands/IntegrationProcessedOrders.php","line":56} 
+[2026-09-01 03:30:02] local.ERROR: Client error: `POST https://us-ext.linnworks.net/api/Main/ping` resulted in a `401 Unauthorized` response:
+{"Code":null,"Message":"Token is wrong."}
+ {"class":"App\\Services\\LinnworkApiMainPing","function":"_linnworksPing","file":"/var/www/vendor/guzzlehttp/guzzle/src/Exception/RequestException.php","line":113} 
+[2026-09-01 03:30:02] local.ERROR: :Integration error in [RefreshLinworksToken] for userlinnworks@limmedia.io {"class":"App\\Console\\Commands\\LinnworksTokenRefreshTask","function":"refreshLinnworkUser","file":"/var/www/app/Console/Commands/LinnworksTokenRefreshTask.php","line":59} 
+[2026-09-01 03:30:03] local.ERROR: Client error: `POST https://us-ext.linnworks.net/api/Inventory/GetStockLocations` resulted in a `401 Unauthorized` response:
+{"Code":null,"Message":"Token is wrong."}
+ {"class":"App\\Services\\InventoryService","function":"GetStockLocations","file":"/var/www/vendor/guzzlehttp/guzzle/src/Exception/RequestException.php","line":113} 
+[2026-09-01 03:30:03] local.ERROR: :Integration error in [StockLocations] for userlinnworks@limmedia.io {"class":"App\\Console\\Commands\\IntegrationProcessedOrders","function":"handle","file":"/var/www/app/Console/Commands/IntegrationProcessedOrders.php","line":56} 
+[2026-09-01 03:45:20] local.ERROR: Client error: `POST https://us-ext.linnworks.net/api/Main/ping` resulted in a `401 Unauthorized` response:
+{"Code":null,"Message":"Token is wrong."}
+ {"class":"App\\Services\\LinnworkApiMainPing","function":"_linnworksPing","file":"/var/www/vendor/guzzlehttp/guzzle/src/Exception/RequestException.php","line":113} 
+[2026-09-01 03:45:20] local.ERROR: :Integration error in [RefreshLinworksToken] for userlinnworks@limmedia.io {"class":"App\\Console\\Commands\\LinnworksTokenRefreshTask","function":"refreshLinnworkUser","file":"/var/www/app/Console/Commands/LinnworksTokenRefreshTask.php","line":59} 
+[2026-09-01 03:45:21] local.ERROR: Client error: `POST https://us-ext.linnworks.net/api/Inventory/GetStockLocations` resulted in a `401 Unauthorized` response:
+{"Code":null,"Message":"Token is wrong."}
+ {"class":"App\\Services\\InventoryService","function":"GetStockLocations","file":"/var/www/vendor/guzzlehttp/guzzle/src/Exception/RequestException.php","line":113} 
+[2026-09-01 03:45:21] local.ERROR: :Integration error in [StockLocations] for userlinnworks@limmedia.io {"class":"App\\Console\\Commands\\IntegrationProcessedOrders","function":"handle","file":"/var/www/app/Console/Commands/IntegrationProcessedOrders.php","line":56} 
+[2026-09-01 04:00:42] local.ERROR: Client error: `POST https://us-ext.linnworks.net/api/Main/ping` resulted in a `401 Unauthorized` response:
+{"Code":null,"Message":"Token is wrong."}
+ {"class":"App\\Services\\LinnworkApiMainPing","function":"_linnworksPing","file":"/var/www/vendor/guzzlehttp/guzzle/src/Exception/RequestException.php","line":113} 
+[2026-09-01 04:00:42] local.ERROR: :Integration error in [RefreshLinworksToken] for userlinnworks@limmedia.io {"class":"App\\Console\\Commands\\LinnworksTokenRefreshTask","function":"refreshLinnworkUser","file":"/var/www/app/Console/Commands/LinnworksTokenRefreshTask.php","line":59} 
+[2026-09-01 04:00:44] local.ERROR: Client error: `POST https://us-ext.linnworks.net/api/Inventory/GetStockLocations` resulted in a `401 Unauthorized` response:
+{"Code":null,"Message":"Token is wrong."}
+ {"class":"App\\Services\\InventoryService","function":"GetStockLocations","file":"/var/www/vendor/guzzlehttp/guzzle/src/Exception/RequestException.php","line":113} 
+[2026-09-01 04:00:44] local.ERROR: :Integration error in [StockLocations] for userlinnworks@limmedia.io {"class":"App\\Console\\Commands\\IntegrationProcessedOrders","function":"handle","file":"/var/www/app/Console/Commands/IntegrationProcessedOrders.php","line":56} 
+[2026-09-01 04:00:47] local.ERROR: ML token refresh failed for user 3608229310 {"class":"App\\Console\\Commands\\MercadoLibreTokenRefreshTask","function":"handle","file":"/var/www/app/Console/Commands/MercadoLibreTokenRefreshTask.php","line":29} 
+[2026-09-01 04:15:06] local.ERROR: Client error: `POST https://us-ext.linnworks.net/api/Main/ping` resulted in a `401 Unauthorized` response:
+{"Code":null,"Message":"Token is wrong."}
+ {"class":"App\\Services\\LinnworkApiMainPing","function":"_linnworksPing","file":"/var/www/vendor/guzzlehttp/guzzle/src/Exception/RequestException.php","line":113} 
+[2026-09-01 04:15:06] local.ERROR: :Integration error in [RefreshLinworksToken] for userlinnworks@limmedia.io {"class":"App\\Console\\Commands\\LinnworksTokenRefreshTask","function":"refreshLinnworkUser","file":"/var/www/app/Console/Commands/LinnworksTokenRefreshTask.php","line":59} 
+[2026-09-01 04:15:08] local.ERROR: Client error: `POST https://us-ext.linnworks.net/api/Inventory/GetStockLocations` resulted in a `401 Unauthorized` response:
+{"Code":null,"Message":"Token is wrong."}
+ {"class":"App\\Services\\InventoryService","function":"GetStockLocations","file":"/var/www/vendor/guzzlehttp/guzzle/src/Exception/RequestException.php","line":113} 
+[2026-09-01 04:15:08] local.ERROR: :Integration error in [StockLocations] for userlinnworks@limmedia.io {"class":"App\\Console\\Commands\\IntegrationProcessedOrders","function":"handle","file":"/var/www/app/Console/Commands/IntegrationProcessedOrders.php","line":56} 
+[2026-09-01 04:30:32] local.ERROR: Client error: `POST https://us-ext.linnworks.net/api/Main/ping` resulted in a `401 Unauthorized` response:
+{"Code":null,"Message":"Token is wrong."}
+ {"class":"App\\Services\\LinnworkApiMainPing","function":"_linnworksPing","file":"/var/www/vendor/guzzlehttp/guzzle/src/Exception/RequestException.php","line":113} 
+[2026-09-01 04:30:32] local.ERROR: :Integration error in [RefreshLinworksToken] for userlinnworks@limmedia.io {"class":"App\\Console\\Commands\\LinnworksTokenRefreshTask","function":"refreshLinnworkUser","file":"/var/www/app/Console/Commands/LinnworksTokenRefreshTask.php","line":59} 
+[2026-09-01 04:30:33] local.ERROR: Client error: `POST https://us-ext.linnworks.net/api/Inventory/GetStockLocations` resulted in a `401 Unauthorized` response:
+{"Code":null,"Message":"Token is wrong."}
+ {"class":"App\\Services\\InventoryService","function":"GetStockLocations","file":"/var/www/vendor/guzzlehttp/guzzle/src/Exception/RequestException.php","line":113} 
+[2026-09-01 04:30:33] local.ERROR: :Integration error in [StockLocations] for userlinnworks@limmedia.io {"class":"App\\Console\\Commands\\IntegrationProcessedOrders","function":"handle","file":"/var/www/app/Console/Commands/IntegrationProcessedOrders.php","line":56} 
+[2026-09-01 04:45:54] local.ERROR: Client error: `POST https://us-ext.linnworks.net/api/Main/ping` resulted in a `401 Unauthorized` response:
+{"Code":null,"Message":"Token is wrong."}
+ {"class":"App\\Services\\LinnworkApiMainPing","function":"_linnworksPing","file":"/var/www/vendor/guzzlehttp/guzzle/src/Exception/RequestException.php","line":113} 
+[2026-09-01 04:45:54] local.ERROR: :Integration error in [RefreshLinworksToken] for userlinnworks@limmedia.io {"class":"App\\Console\\Commands\\LinnworksTokenRefreshTask","function":"refreshLinnworkUser","file":"/var/www/app/Console/Commands/LinnworksTokenRefreshTask.php","line":59} 
+[2026-09-01 04:45:55] local.ERROR: Client error: `POST https://us-ext.linnworks.net/api/Inventory/GetStockLocations` resulted in a `401 Unauthorized` response:
+{"Code":null,"Message":"Token is wrong."}
+ {"class":"App\\Services\\InventoryService","function":"GetStockLocations","file":"/var/www/vendor/guzzlehttp/guzzle/src/Exception/RequestException.php","line":113} 
+[2026-09-01 04:45:55] local.ERROR: :Integration error in [StockLocations] for userlinnworks@limmedia.io {"class":"App\\Console\\Commands\\IntegrationProcessedOrders","function":"handle","file":"/var/www/app/Console/Commands/IntegrationProcessedOrders.php","line":56} 

@@ -1,0 +1,7 @@
+[2026-09-11 21:20:55] testing.INFO: Channel AddNewUser {"tenant_id":1,"user_id":"lw-user-1"} 
+[2026-09-11 21:20:55] testing.WARNING: Channel missing AuthorizationToken {"path":"api/Config/ConfigTest"} 
+[2026-09-11 21:21:15] testing.INFO: Channel AddNewUser {"tenant_id":1,"user_id":"lw-user-1"} 
+[2026-09-11 21:21:15] testing.WARNING: Channel missing AuthorizationToken {"path":"api/Config/ConfigTest"} 
+[2026-09-11 21:21:27] testing.INFO: Channel ListingUpdate {"tenant_id":1,"operation":"create","skus":["LW-TEST-SKU"],"quantities":[0]} 
+[2026-09-11 21:21:27] testing.ERROR: ML update item description failed {"item_id":"CBT3360000001","body":"{\"cause\":[],\"message\":\"User must be logged to perform this operation.\",\"error\":\"forbidden\",\"status\":403}"} 
+[2026-09-11 21:21:28] testing.INFO: Channel Orders {"page":1,"count":1} 
